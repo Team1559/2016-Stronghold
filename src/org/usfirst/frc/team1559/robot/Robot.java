@@ -32,6 +32,7 @@ public class Robot extends IterativeRobot {
 	Talon right;
 	Talon left;
 	double last_accel_X;
+	final double kp = 0.1;
 	double lastx = 0.0;
 	double lasty = 0.0;
 	double lastz = 0.0;
@@ -41,7 +42,11 @@ public class Robot extends IterativeRobot {
 	double yaw = 0.0;
 	double last_accel_Y;
 	int countx = 0;
+	final double maxError = .5;
+	final double tolerance = .001;
 	int length = 0;
+	double yawError;
+	int angleLength = 0;
 	final static double kCollisionThreshold_DeltaG = 0.5f;
 	final double yawposthreshold = 2;
 	final double yawnegthreshold = 2;
@@ -85,62 +90,78 @@ public class Robot extends IterativeRobot {
 	public void autonomousInit() {
 		ahrs.reset();
 		length = 0;
-		yaw = 0.0;
+		right.setInverted(false);
+		left.setInverted(false);
 	}
 
 	/**
 	 * This function is called periodically during autonomous
 	 */
 	public void autonomousPeriodic() {
-		final double kp = -0.75;
 		final double kp2 = kp * -1;
 		yaw = ahrs.getYaw();
-		double yawerror = 0 - yaw;
+		//double yawerror = 0 - yaw;
 		double correctVal = 0;
 		double maxyaw = 0.0;
-		
+
 		board.putNumber("Gyro X: ", lastgyrox);
 		board.putNumber("Gyro Y: ", lastgyroy);
 		board.putNumber("Gyro Z: ", lastgyroz);
 		board.putNumber("Accel X: ", lastx);
 		board.putNumber("Accel Y: ", lasty);
 		board.putNumber("Accel Z: ", lastz);
-		board.putNumber("Yaw: ", yaw);	// The important one
-		
-		
-		if (length >= 400) { // fifty counts = 1 seconds
-			myRobot.arcadeDrive(0, 0);
-		} else {
-			if (yaw > maxyaw) {
-				maxyaw = yaw;
-			}
-			if (yaw > 1.5) { 
-				double correction = yawerror * kp;
-				correctVal = correction / 3.5;
-				
-				
-				
-				if (correctVal > 0.5) {
-					correctVal = 0.5;
+		board.putNumber("Yaw: ", yaw); // The important one
+
+		drive1(0, 5);
+		drive(180, 5, 5);
+		//drive(180, 5, 7);
+	}
+
+	public void drive1(int angle, double seconds) {
+		drive(angle, seconds, 0);
+	}
+
+	public void drive(int angle, double seconds, double startTime) {
+		yawError = ahrs.getYaw() - angle;
+		if (length > startTime * 50 && length < (seconds + startTime) * 50) 
+			if (Math.abs(yawError) > tolerance) {
+				if (Math.abs(yawError * kp) < maxError) {
+					myRobot.drive(.3, -(yawError * kp));
+				} else {
+					if (yawError < 0)
+						myRobot.drive(.3, maxError);
+					else
+						myRobot.drive(.3, -maxError);
+
 				}
-				
-			} else if (yaw < -1.5) {
-				double correction = yawerror * kp;
-				correctVal = correction / 3.5;
-				
-				if (correctVal < -0.5) {
-					correctVal = -0.5;
-				}
+			} else {
+				myRobot.drive(.3, 0);
 			}
-			myRobot.arcadeDrive(.6, correctVal);
-			board.putNumber("Correction: ", correctVal);
-			board.putNumber("Max: ", maxyaw);
-		}
 		length++;
 	}
 
+	/**
+	 * if (length >= 400) { // fifty counts = 1 seconds //angleLength = (int)
+	 * ahrs.getYaw(); myRobot.arcadeDrive(0, 0); /**if (angleLength >= 90) {
+	 * myRobot.arcadeDrive(0, 0); } else { myRobot.arcadeDrive(0, 0.3); }
+	 * 
+	 * } else { if (yaw > maxyaw) { maxyaw = yaw; } if (yaw > 1.5) { double
+	 * correction = yawerror * kp; correctVal = correction / 3.5;
+	 * 
+	 * if (correctVal > 0.5) { correctVal = 0.5; }
+	 * 
+	 * } else if (yaw < -1.5) { double correction = yawerror * kp; correctVal =
+	 * correction / 3.5;
+	 * 
+	 * if (correctVal < -0.5) { correctVal = -0.5; } } myRobot.arcadeDrive(.6,
+	 * correctVal); board.putNumber("Correction: ", correctVal);
+	 * board.putNumber("Max: ", maxyaw); } length++;
+	 **/
+
 	public void teleopInit() {
 		ahrs.reset();
+		right.setInverted(true);
+		left.setInverted(true);
 	}
 
 	/**
@@ -158,7 +179,6 @@ public class Robot extends IterativeRobot {
 		double current_yaw = ahrs.getYaw();
 
 		countx++;
-
 		myRobot.arcadeDrive(stick);
 
 		if (countx == 50) {
@@ -180,7 +200,7 @@ public class Robot extends IterativeRobot {
 				board.putNumber("Accel X: ", lastx);
 				board.putNumber("Accel Y: ", lasty);
 				board.putNumber("Accel Z: ", lastz);
-				board.putNumber("Yaw: ", current_yaw);	// The important one
+				board.putNumber("Yaw: ", current_yaw); // The important one
 				board.putNumber("Gyro X Diff: ", current_gyro_x - lastgyrox);
 				board.putNumber("Gyro Y Diff: ", current_gyro_y - lastgyroy);
 				board.putNumber("Gyro Z Diff: ", current_gyro_z - lastgyroz);
@@ -218,7 +238,7 @@ public class Robot extends IterativeRobot {
 	}
 
 	public void disabledPeriodic() {
-
+		yawError = ahrs.getYaw();
 	}
 
 	public void disabledInit() {
