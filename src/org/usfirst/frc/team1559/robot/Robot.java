@@ -34,6 +34,7 @@ public class Robot extends IterativeRobot {
 	double last_accel_X;
 	final double kp = 0.1;
 	double lastx = 0.0;
+	double time = 0.0;
 	double lasty = 0.0;
 	double lastz = 0.0;
 	double lastgyrox = 0.0;
@@ -42,7 +43,7 @@ public class Robot extends IterativeRobot {
 	double yaw = 0.0;
 	double last_accel_Y;
 	int countx = 0;
-	final double maxError = .5;
+	final double maxError = .9;
 	final double tolerance = .001;
 	int length = 0;
 	double yawError;
@@ -92,6 +93,7 @@ public class Robot extends IterativeRobot {
 		length = 0;
 		right.setInverted(false);
 		left.setInverted(false);
+		time = 0.0;
 	}
 
 	/**
@@ -100,9 +102,11 @@ public class Robot extends IterativeRobot {
 	public void autonomousPeriodic() {
 		final double kp2 = kp * -1;
 		yaw = ahrs.getYaw();
-		//double yawerror = 0 - yaw;
+		// double yawerror = 0 - yaw;
 		double correctVal = 0;
 		double maxyaw = 0.0;
+		time++;
+		double timeSec = time / 50;
 
 		board.putNumber("Gyro X: ", lastgyrox);
 		board.putNumber("Gyro Y: ", lastgyroy);
@@ -111,33 +115,42 @@ public class Robot extends IterativeRobot {
 		board.putNumber("Accel Y: ", lasty);
 		board.putNumber("Accel Z: ", lastz);
 		board.putNumber("Yaw: ", yaw); // The important one
+		board.putNumber("Time:", timeSec);
+		
 
-		drive1(0, 5);
-		drive(180, 5, 5);
-		//drive(180, 5, 7);
+		drive(90, 3, 0, .4);
+		drive(0,3,4,.4);
+		drive(-90, 3, 8, .4);
+		drive(-175,3,12,.4);
+		length++;
 	}
 
 	public void drive1(int angle, double seconds) {
-		drive(angle, seconds, 0);
+		drive(angle, seconds, 0, .4);
 	}
 
-	public void drive(int angle, double seconds, double startTime) {
-		yawError = ahrs.getYaw() - angle;
-		if (length > startTime * 50 && length < (seconds + startTime) * 50) 
-			if (Math.abs(yawError) > tolerance) {
-				if (Math.abs(yawError * kp) < maxError) {
-					myRobot.drive(.3, -(yawError * kp));
+	public void drive(int angle, double seconds, double startTime, double speed) {
+		yawError = (ahrs.getYaw() - angle);
+		if ((length >= startTime * 50) && (length <= (seconds + startTime) * 50))
+		{
+			if ((Math.abs(yawError)) > tolerance) {
+				if ((Math.abs(yawError * kp)) < maxError) {
+					myRobot.drive(speed, -(yawError * kp));
 				} else {
 					if (yawError < 0)
-						myRobot.drive(.3, maxError);
+						myRobot.drive(speed, maxError);
 					else
-						myRobot.drive(.3, -maxError);
+						myRobot.drive(speed, -maxError);
 
 				}
 			} else {
-				myRobot.drive(.3, 0);
+				myRobot.drive(speed, 0);
 			}
-		length++;
+		}
+		board.putNumber("Seconds Running: ", seconds);
+		board.putNumber("Start Time: ", startTime);
+		
+		board.putNumber("length: ", length);
 	}
 
 	/**
