@@ -1,5 +1,7 @@
 package org.usfirst.frc.team1559.robot;
 
+import java.io.FileReader;
+
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
@@ -24,29 +26,38 @@ public class Robot extends IterativeRobot {
 	final String defaultAuto = "Default";
 	final String customAuto = "My Auto";
 	String autoSelected;
-	SendableChooser chooser;
 	AHRS ahrs;
 	SmartDashboard board;
 	RobotDrive myRobot;
 	Joystick stick;
 	Talon right;
 	Talon left;
+	// FileReader reader = new FileReader("");
 	double last_accel_X;
-	final double kp = 0.1;
+
 	double lastx = 0.0;
-	double time = 0.0;
 	double lasty = 0.0;
 	double lastz = 0.0;
+	
 	double lastgyrox = 0.0;
 	double lastgyroy = 0.0;
 	double lastgyroz = 0.0;
-	double yaw = 0.0;
+
 	double last_accel_Y;
 	int countx = 0;
-	final double maxError = .9;
+	// Gyro Stuff\\
+	double time = 0.0;
+	double yaw = 0.0;
+	final double kpturn = 0.009;
+	double gyro_yaw;
+	final double kp = 0.1;
+	final double maxError = 1;
 	final double tolerance = .001;
 	int length = 0;
 	double yawError;
+	double unchangedYawError;
+	double gyro_angle;
+	// End of gyro\\
 	int angleLength = 0;
 	final static double kCollisionThreshold_DeltaG = 0.5f;
 	final double yawposthreshold = 2;
@@ -116,60 +127,54 @@ public class Robot extends IterativeRobot {
 		board.putNumber("Accel Z: ", lastz);
 		board.putNumber("Yaw: ", yaw); // The important one
 		board.putNumber("Time:", timeSec);
-		
 
-		drive(90, 3, 0, .4);
-		drive(0,3,4,.4);
-		drive(-90, 3, 8, .4);
-		drive(-175,3,12,.4);
+		drive(180, 4, 0, .6);
+		drive(-90, 3, 5, .6);
 		length++;
 	}
 
-	public void drive1(int angle, double seconds) {
-		drive(angle, seconds, 0, .4);
-	}
-
 	public void drive(int angle, double seconds, double startTime, double speed) {
-		yawError = (ahrs.getYaw() - angle);
-		if ((length >= startTime * 50) && (length <= (seconds + startTime) * 50))
-		{
-			if ((Math.abs(yawError)) > tolerance) {
-				if ((Math.abs(yawError * kp)) < maxError) {
-					myRobot.drive(speed, -(yawError * kp));
-				} else {
-					if (yawError < 0)
-						myRobot.drive(speed, maxError);
-					else
-						myRobot.drive(speed, -maxError);
+		// yawError = (ahrs.getYaw() - angle);
 
+		if ((angle == 180) && (yaw < -0.1)) {
+			yaw = 360 + ahrs.getYaw();
+		} else if ((angle == -180) && (yaw > 0.1)) {
+			yaw = ahrs.getYaw() - 360;
+		}
+		
+		unchangedYawError = ahrs.getYaw() - angle;
+		yawError = yaw - angle;
+		
+		if (yawError >= 180) {
+			yawError = -(yawError - 180);
+		} else if (yawError <= -180) {
+			yawError = (yawError + 180);	
+		}
+		// gyro_angle = ahrs.getAngle() - angle;
+
+		if ((length >= startTime * 50) && (length <= (seconds + startTime) * 50)) {
+			if ((Math.abs(yawError)) >= tolerance) {
+				if ((Math.abs(yawError * kpturn)) < maxError) {
+					myRobot.drive(speed, -(yawError * kpturn));
+				} else {
+					if (yawError < 0) {
+						myRobot.drive(speed, maxError);
+					} else {
+						myRobot.drive(speed, -maxError);
+					}
 				}
 			} else {
 				myRobot.drive(speed, 0);
 			}
 		}
+
 		board.putNumber("Seconds Running: ", seconds);
 		board.putNumber("Start Time: ", startTime);
-		
-		board.putNumber("length: ", length);
-	}
+		board.putNumber("YawError", yawError);
 
-	/**
-	 * if (length >= 400) { // fifty counts = 1 seconds //angleLength = (int)
-	 * ahrs.getYaw(); myRobot.arcadeDrive(0, 0); /**if (angleLength >= 90) {
-	 * myRobot.arcadeDrive(0, 0); } else { myRobot.arcadeDrive(0, 0.3); }
-	 * 
-	 * } else { if (yaw > maxyaw) { maxyaw = yaw; } if (yaw > 1.5) { double
-	 * correction = yawerror * kp; correctVal = correction / 3.5;
-	 * 
-	 * if (correctVal > 0.5) { correctVal = 0.5; }
-	 * 
-	 * } else if (yaw < -1.5) { double correction = yawerror * kp; correctVal =
-	 * correction / 3.5;
-	 * 
-	 * if (correctVal < -0.5) { correctVal = -0.5; } } myRobot.arcadeDrive(.6,
-	 * correctVal); board.putNumber("Correction: ", correctVal);
-	 * board.putNumber("Max: ", maxyaw); } length++;
-	 **/
+		SmartDashboard.putNumber("length: ", length);
+		SmartDashboard.putNumber("Unchanged Yaw Error", unchangedYawError);
+	}
 
 	public void teleopInit() {
 		ahrs.reset();
@@ -251,7 +256,7 @@ public class Robot extends IterativeRobot {
 	}
 
 	public void disabledPeriodic() {
-		yawError = ahrs.getYaw();
+		// yawError = ahrs.getYaw();
 	}
 
 	public void disabledInit() {
