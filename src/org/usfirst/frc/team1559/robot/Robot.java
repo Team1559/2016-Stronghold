@@ -1,70 +1,99 @@
-//I think the school computer works.
+
 package org.usfirst.frc.team1559.robot;
 
+//import com.kauailabs.navx.frc.AHRS;
+
+import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.RobotDrive;
+import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Robot extends IterativeRobot {
+//	AHRS ahrs;
+	RobotDrive robot;
+	CANTalon leftF;
+	//CANTalon leftR;
+	CANTalon rightF;
+	//CANTalon rightR;
+	Joystick stick;
+	Timer timer;
+	boolean isInverted;
+	Solenoid shift1;
+	Solenoid shift2;
 
+//Comments are for a 4 motor drive system whereas uncommented code just does 2
+	
+	public void robotInit() {
+//		ahrs = new AHRS(SPI.Port.kMXP);
+		leftF = new CANTalon(10);
+		rightF = new CANTalon(11);
+	    //leftR = new CANTalon(12);
+        //rightR = new CANTalon(13);
+		robot = new RobotDrive(leftF,rightF);
+		//robot = new RobotDrive(leftF,leftR,rightF,rightR);
+		stick = new Joystick(0);
+		shift1 = new Solenoid(1);
+		shift2 = new Solenoid(2);
+	}
 
-	//Called before robot runs. Instantiate your variables here...
-    public void robotInit() {
+	public void autonomousInit() {
 
-    }
+	}
 
-    //Run once before autonomous loop chunk
-    public void autonomousInit() {
+	public void autonomousPeriodic() {
 
-    }
+	}
 
-    //Autonomous loop
-    public void autonomousPeriodic() {
+	public void teleopInit() {
+		isInverted = true;
+		leftF.setInverted(isInverted);
+		
+	}
 
-    }
-    
-    //run once before the teleop loop
-    public void teleopInit(){
-    	
-    }
-    
-    //the teleop loop
-    public void teleopPeriodic() {
-        
-    }
-    
-    //testing only
-    public void testInit(){
-    	
-    }
-    
-    //testing
-    public void testPeriodic() {
-    
-    }
-    
-    //not necessary, but useful.
-    public void disabledInit(){
-    	
-    	/*
-    	 * 
-    	 * DON'T DO ANYTHING DANGEROUS HERE!
-    	 * The 2014 Robot had some issues with transitioning from Disabled to Teleop during matches :(
-    	 * Reading sensors and calculating PID values are very bad ideas...
-    	 * 
-    	 */
-    	
-    }
-    
-    public void disabledPeriodic(){
-    	
-    	/*
-    	 * 
-    	 * Reserved for bling!
-    	 * 
-    	 */
-    	
-    }
-    
+	public void teleopPeriodic() {
+		robot.arcadeDrive(stick);
+		if (stick.getRawButton(6)) {
+
+			gear1();
+
+		} else if (stick.getRawButton(5)) {
+
+			gear2();
+
+		}
+	}
+
+	public void gear1() {
+
+		shift1.set(false);
+		shift2.set(true);
+		System.out.println("GEAR 1");
+
+	}
+
+	public void gear2() {
+
+		shift1.set(true);
+		shift2.set(false);
+		System.out.println("GEAR 1");
+
+	}
+	public void testInit() {
+
+	}
+
+	public void testPeriodic() {
+
+	}
+
+	public void disabledInit() {
+
+	}
+
+	public void disabledPeriodic() {
+
+	}
 }
