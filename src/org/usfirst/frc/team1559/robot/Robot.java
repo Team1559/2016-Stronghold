@@ -28,15 +28,15 @@ public class Robot extends IterativeRobot {
 	
 	public void robotInit() {
 //		ahrs = new AHRS(SPI.Port.kMXP);
-		leftF = new CANTalon(10);
-		rightF = new CANTalon(11);
-	    //leftR = new CANTalon(12);
-        //rightR = new CANTalon(13);
+		leftF = new CANTalon(Wiring.LEFT_FRONT_CAN_TALON);
+		rightF = new CANTalon(Wiring.RIGHT_FRONT_CAN_TALON);
+//	    leftR = new CANTalon(Wiring.LEFT_REAR_CAN_TALON);
+        //rightR = new CANTalon(Wiring.RIGHT_REAR_CAN_TALON);
 		robot = new RobotDrive(leftF,rightF);
 		//robot = new RobotDrive(leftF,leftR,rightF,rightR);
-		stick = new Joystick(0);
-		shift1 = new Solenoid(1);
-		shift2 = new Solenoid(2);
+		stick = new Joystick(Wiring.JOYSTICK0);
+		shift1 = new Solenoid(Wiring.SHIFT_1);
+		shift2 = new Solenoid(Wiring.SHIFT_2);
 	}
 
 	public void autonomousInit() {
