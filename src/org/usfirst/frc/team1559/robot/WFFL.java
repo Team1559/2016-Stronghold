@@ -10,7 +10,7 @@ public class WFFL {
 	Scanner s;
 	File file;
 	
-	public WFFL(String path) throws FileNotFoundException{
+	public WFFL(String path){
 		this.path = path;
 		file = new File(path);
 		try {
@@ -81,6 +81,15 @@ public class WFFL {
 			printAll();
 		}
 		
+	}
+	
+	public void reset(){
+		try {
+			s = new Scanner(file);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 }
