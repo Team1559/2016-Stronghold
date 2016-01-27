@@ -1,11 +1,17 @@
 package org.usfirst.frc.team1559.robot;
 
+import java.io.File;
 import java.io.FileReader;
+import java.io.IOException;
+import java.io.Reader;
+
+import javax.print.DocFlavor.READER;
 
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.SerialPort;
@@ -28,17 +34,19 @@ public class Robot extends IterativeRobot {
 	String autoSelected;
 	AHRS ahrs;
 	SmartDashboard board;
+	StringBuilder directions = new StringBuilder();
 	RobotDrive myRobot;
 	Joystick stick;
 	Talon right;
 	Talon left;
-	// FileReader reader = new FileReader("");
+	File filename = new File("/home/lvuser/juan.txt");
+
 	double last_accel_X;
 
 	double lastx = 0.0;
 	double lasty = 0.0;
 	double lastz = 0.0;
-	
+
 	double lastgyrox = 0.0;
 	double lastgyroy = 0.0;
 	double lastgyroz = 0.0;
@@ -57,16 +65,19 @@ public class Robot extends IterativeRobot {
 	double yawError;
 	double unchangedYawError;
 	double gyro_angle;
+	PIDController pid;
 	// End of gyro\\
 	int angleLength = 0;
+	WFFL waffle = new WFFL("/home/lvuser/juan.txt");
+	char [] a;
 	final static double kCollisionThreshold_DeltaG = 0.5f;
+	
 	final double yawposthreshold = 2;
 	final double yawnegthreshold = 2;
 
 	public Robot() {
 		try {
 			ahrs = new AHRS(SPI.Port.kMXP);
-
 		} catch (Exception e) {
 			e.getMessage();
 		}
@@ -81,8 +92,6 @@ public class Robot extends IterativeRobot {
 	public void robotInit() {
 		board = new SmartDashboard();
 		ahrs.reset();
-		ahrs.resetDisplacement();
-		System.out.println(ahrs.getFirmwareVersion());
 		right = new Talon(1);
 		left = new Talon(0);
 		myRobot = new RobotDrive(left, right);
@@ -100,24 +109,36 @@ public class Robot extends IterativeRobot {
 	 * SendableChooser make sure to add them to the chooser code above as well.
 	 */
 	public void autonomousInit() {
+		
 		ahrs.reset();
 		length = 0;
 		right.setInverted(false);
 		left.setInverted(false);
 		time = 0.0;
+		yawError = 0.0;
+		
+		
 	}
 
 	/**
 	 * This function is called periodically during autonomous
 	 */
+	@SuppressWarnings("static-access")
 	public void autonomousPeriodic() {
-		final double kp2 = kp * -1;
+		waffle = new WFFL("/home/lvuser/juan.txt");
 		yaw = ahrs.getYaw();
-		// double yawerror = 0 - yaw;
-		double correctVal = 0;
-		double maxyaw = 0.0;
 		time++;
 		double timeSec = time / 50;
+		
+		
+		try {
+			waffle.printAll();
+			waffle = null;
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 
 		board.putNumber("Gyro X: ", lastgyrox);
 		board.putNumber("Gyro Y: ", lastgyroy);
@@ -128,11 +149,15 @@ public class Robot extends IterativeRobot {
 		board.putNumber("Yaw: ", yaw); // The important one
 		board.putNumber("Time:", timeSec);
 
-		drive(180, 4, 0, .6);
-		drive(-90, 3, 5, .6);
+		//drive(180, 2, 0, .6);
+		//drive(-90, 2, 2, .4);
+		//drive(0, 2, 4, .4);
 		length++;
+		// go distance="4" <-- time
+		// turn 180 <-- degrees
 	}
 
+	@SuppressWarnings("static-access")
 	public void drive(int angle, double seconds, double startTime, double speed) {
 		// yawError = (ahrs.getYaw() - angle);
 
@@ -141,18 +166,17 @@ public class Robot extends IterativeRobot {
 		} else if ((angle == -180) && (yaw > 0.1)) {
 			yaw = ahrs.getYaw() - 360;
 		}
-		
+
 		unchangedYawError = ahrs.getYaw() - angle;
 		yawError = yaw - angle;
-		
-		if (yawError >= 180) {
-			yawError = -(yawError - 180);
-		} else if (yawError <= -180) {
-			yawError = (yawError + 180);	
-		}
-		// gyro_angle = ahrs.getAngle() - angle;
 
-		if ((length >= startTime * 50) && (length <= (seconds + startTime) * 50)) {
+		if (yawError > 180) {
+			yawError = yawError - 360;
+		} else if (yawError < -180) {
+			yawError = (yawError + 360);
+
+		if ((length >= startTime * 50)
+				&& (length <= (seconds + startTime) * 50)) {
 			if ((Math.abs(yawError)) >= tolerance) {
 				if ((Math.abs(yawError * kpturn)) < maxError) {
 					myRobot.drive(speed, -(yawError * kpturn));
@@ -175,6 +199,9 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putNumber("length: ", length);
 		SmartDashboard.putNumber("Unchanged Yaw Error", unchangedYawError);
 	}
+	}
+	
+	
 
 	public void teleopInit() {
 		ahrs.reset();
@@ -185,8 +212,8 @@ public class Robot extends IterativeRobot {
 	/**
 	 * This function is called periodically during operator control
 	 */
+	@SuppressWarnings("static-access")
 	public void teleopPeriodic() {
-		boolean collision = false;
 
 		double current_accel_x = ahrs.getRawAccelX();
 		double current_accel_y = ahrs.getRawAccelY();
