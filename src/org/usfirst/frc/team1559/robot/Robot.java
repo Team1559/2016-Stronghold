@@ -23,6 +23,7 @@ public class Robot extends IterativeRobot {
 	boolean isInverted;
 	Solenoid shift1;
 	Solenoid shift2;
+	WFFL waffle;
 
 //Comments are for a 4 motor drive system whereas uncommented code just does 2
 	
@@ -31,16 +32,17 @@ public class Robot extends IterativeRobot {
 		leftF = new CANTalon(Wiring.LEFT_FRONT_CAN_TALON);
 		rightF = new CANTalon(Wiring.RIGHT_FRONT_CAN_TALON);
 //	    leftR = new CANTalon(Wiring.LEFT_REAR_CAN_TALON);
-        //rightR = new CANTalon(Wiring.RIGHT_REAR_CAN_TALON);
+//      rightR = new CANTalon(Wiring.RIGHT_REAR_CAN_TALON);
 		robot = new RobotDrive(leftF,rightF);
 		//robot = new RobotDrive(leftF,leftR,rightF,rightR);
 		stick = new Joystick(Wiring.JOYSTICK0);
 		shift1 = new Solenoid(Wiring.SHIFT_1);
 		shift2 = new Solenoid(Wiring.SHIFT_2);
+		waffle = new WFFL("/home/lvuser/format.wffl");
 	}
 
 	public void autonomousInit() {
-
+		waffle.interpret();
 	}
 
 	public void autonomousPeriodic() {
