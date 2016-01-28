@@ -9,6 +9,16 @@ public class WFFL {
 	String path;
 	Scanner s;
 	File file;
+
+	String time;
+	String dist;
+	String speed;
+	String id;
+	String temp;
+	String angle; //clockwise
+	boolean active;
+	String pattern;
+	
 	
 	public WFFL(String path){
 		this.path = path;
@@ -19,23 +29,16 @@ public class WFFL {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		String raw = s.nextLine() + " "; //pads the string so this next stuff works.
+		String command = raw.substring(0,raw.indexOf(" "));
 
 		
 	}
 	
 	public void interpret(){
 		
-		String raw = s.nextLine() + " "; //pads the string so this next stuff works.
-		String command = raw.substring(0,raw.indexOf(" "));
-		String time;
-		String dist;
-		String speed;
-		String id;
-		String temp;
-		String angle; //clockwise
-		boolean active;
-		String pattern;
-		
+	
 		if(command.equals("GO")){
 			temp = raw.substring(13);
 			temp = temp.substring(0, temp.indexOf("\""));
