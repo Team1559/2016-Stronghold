@@ -1,7 +1,7 @@
 
 package org.usfirst.frc.team1559.robot;
 
-//import com.kauailabs.navx.frc.AHRS;
+import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.IterativeRobot;
@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.Timer;
 
 public class Robot extends IterativeRobot {
-//	AHRS ahrs;
+	AHRS ahrs;
 	RobotDrive robot;
 	CANTalon leftF;
 	//CANTalon leftR;
@@ -28,7 +28,7 @@ public class Robot extends IterativeRobot {
 //Comments are for a 4 motor drive system whereas uncommented code just does 2
 	
 	public void robotInit() {
-//		ahrs = new AHRS(SPI.Port.kMXP);
+		ahrs = new AHRS(SPI.Port.kMXP);
 		leftF = new CANTalon(Wiring.LEFT_FRONT_CAN_TALON);
 		rightF = new CANTalon(Wiring.RIGHT_FRONT_CAN_TALON);
 //	    leftR = new CANTalon(Wiring.LEFT_REAR_CAN_TALON);
