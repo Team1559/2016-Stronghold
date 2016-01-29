@@ -44,12 +44,12 @@ public class WFFL {
 
 	}
 
-	String time;
-	String dist;
-	String speed;
+	double time;
+	double dist;
+	double speed;
 	String id;
 	String temp;
-	String angle; // clockwise
+	double angle; // clockwise
 	boolean active;
 	String pattern;
 
@@ -61,16 +61,22 @@ public class WFFL {
 		if (command.equals("GO")) {
 			temp = raw.substring(13);
 			temp = temp.substring(0, temp.indexOf("\""));
-			dist = temp;
+			dist = Double.valueOf(temp);
 			System.out.println(dist);
 			temp = raw.substring(raw.indexOf("speed=\"") + 7, raw.length() - 2);
-			speed = temp;
+			speed = Double.valueOf(temp);
+			
+			drive(0,dist,0,speed);
+			
 		} else if (command.equals("WAIT")) {
 			temp = raw.substring(raw.indexOf(" ") + 1);
-			time = temp;
+			time = Double.valueOf(temp);
 		} else if (command.equals("TURN")) {
 			temp = raw.substring(raw.indexOf(" ") + 1);
-			angle = temp;
+			angle = Double.valueOf(temp);
+			
+			drive(angle,0,0,Wiring.OPTIMAL_TURNT_SPEED);
+			
 		} else if (command.equals("SHOOT")) {
 			System.out.println("SHOOT!");
 		} else if (command.equals("DEFENSE")) {
