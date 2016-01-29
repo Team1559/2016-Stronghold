@@ -13,10 +13,10 @@ import edu.wpi.first.wpilibj.Timer;
 
 public class Robot extends IterativeRobot {
 	AHRS ahrs;
-	RobotDrive robot;
-	CANTalon leftF;
+	//RobotDrive robot;
+	//CANTalon leftF;
 	//CANTalon leftR;
-	CANTalon rightF;
+	//CANTalon rightF;
 	//CANTalon rightR;
 	Joystick stick;
 	Timer timer;
@@ -28,11 +28,11 @@ public class Robot extends IterativeRobot {
 	
 	public void robotInit() {
 		ahrs = new AHRS(SPI.Port.kMXP);
-		leftF = new CANTalon(Wiring.LEFT_FRONT_CAN_TALON);
-		rightF = new CANTalon(Wiring.RIGHT_FRONT_CAN_TALON);
+		//leftF = new CANTalon(Wiring.LEFT_FRONT_CAN_TALON);
+		//rightF = new CANTalon(Wiring.RIGHT_FRONT_CAN_TALON);
 //	    leftR = new CANTalon(Wiring.LEFT_REAR_CAN_TALON);
 //      rightR = new CANTalon(Wiring.RIGHT_REAR_CAN_TALON);
-		robot = new RobotDrive(leftF,rightF);
+		//robot = new RobotDrive(leftF,rightF);
 		//robot = new RobotDrive(leftF,leftR,rightF,rightR);
 		stick = new Joystick(Wiring.JOYSTICK0);
 		tranny = new Transmission();
@@ -40,21 +40,23 @@ public class Robot extends IterativeRobot {
 	}
 
 	public void autonomousInit() {
+		waffle.reset();
 		waffle.interpret();
 	}
 
 	public void autonomousPeriodic() {
-
+		
 	}
 
 	public void teleopInit() {
 		isInverted = true;
-		leftF.setInverted(isInverted);
+		//leftF.setInverted(isInverted);
 		
 	}
 
 	public void teleopPeriodic() {
-		robot.arcadeDrive(stick);
+		//robot.arcadeDrive(stick);
+		waffle.myRobot.arcadeDrive(stick);
 		if (stick.getRawButton(6)) {
 
 			tranny.gear1();

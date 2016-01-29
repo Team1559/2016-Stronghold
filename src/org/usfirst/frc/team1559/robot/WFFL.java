@@ -13,6 +13,8 @@ import edu.wpi.first.wpilibj.Talon;
 
 public class WFFL {
 
+	String raw;
+	String command;
 	String path;
 	Scanner s;
 	File file;
@@ -31,6 +33,15 @@ public class WFFL {
 	Talon left = new Talon(0);
 	RobotDrive myRobot = new RobotDrive(left, right);
 
+	double time;
+	double dist;
+	double speed;
+	String id;
+	String temp;
+	double angle; // clockwise
+	boolean active;
+	String pattern;
+
 	public WFFL(String path) {
 		this.path = path;
 		file = new File(path);
@@ -44,19 +55,10 @@ public class WFFL {
 
 	}
 
-	double time;
-	double dist;
-	double speed;
-	String id;
-	String temp;
-	double angle; // clockwise
-	boolean active;
-	String pattern;
-
 	public void interpret() {
-		String raw = s.nextLine() + " "; // pads the string so this next stuff
-											// works.
-		String command = raw.substring(0, raw.indexOf(" "));
+		raw = s.nextLine() + " "; // pads the string so this next stuff
+									// works.
+		command = raw.substring(0, raw.indexOf(" "));
 
 		if (command.equals("GO")) {
 			temp = raw.substring(13);
@@ -65,18 +67,18 @@ public class WFFL {
 			System.out.println(dist);
 			temp = raw.substring(raw.indexOf("speed=\"") + 7, raw.length() - 2);
 			speed = Double.valueOf(temp);
-			
-			drive(0,dist,0,speed);
-			
+
+			drive(0, dist, 0, speed);
+
 		} else if (command.equals("WAIT")) {
 			temp = raw.substring(raw.indexOf(" ") + 1);
 			time = Double.valueOf(temp);
 		} else if (command.equals("TURN")) {
 			temp = raw.substring(raw.indexOf(" ") + 1);
 			angle = Double.valueOf(temp);
-			
-			drive(angle,0,0,Wiring.OPTIMAL_TURNT_SPEED);
-			
+
+			drive(angle, 5, dist, Wiring.OPTIMAL_TURNT_SPEED);
+
 		} else if (command.equals("SHOOT")) {
 			System.out.println("SHOOT!");
 		} else if (command.equals("DEFENSE")) {
@@ -159,7 +161,7 @@ public class WFFL {
 		} else if (yawError < -180) {
 			yawError = (yawError + 360);
 		}
-
+		
 		if ((length >= startTime * 50)
 				&& (length <= (seconds + startTime) * 50)) {
 			if ((Math.abs(yawError)) >= tolerance) {
@@ -176,5 +178,7 @@ public class WFFL {
 				myRobot.drive(speed, 0);
 			}
 		}
+		
+		length++;
 	}
 }
