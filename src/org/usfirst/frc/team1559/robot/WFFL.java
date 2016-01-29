@@ -18,6 +18,8 @@ public class WFFL {
 	String angle; //clockwise
 	boolean active;
 	String pattern;
+	String command;
+	String raw;
 	
 	
 	public WFFL(String path){
@@ -30,8 +32,8 @@ public class WFFL {
 			e.printStackTrace();
 		}
 		
-		String raw = s.nextLine() + " "; //pads the string so this next stuff works.
-		String command = raw.substring(0,raw.indexOf(" "));
+		raw = s.nextLine() + " "; //pads the string so this next stuff works.
+		command = raw.substring(0,raw.indexOf(" "));
 
 		
 	}
