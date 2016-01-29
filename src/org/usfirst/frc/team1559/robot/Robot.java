@@ -21,9 +21,8 @@ public class Robot extends IterativeRobot {
 	Joystick stick;
 	Timer timer;
 	boolean isInverted;
-	Solenoid shift1;
-	Solenoid shift2;
 	WFFL waffle;
+	Transmission tranny;
 
 //Comments are for a 4 motor drive system whereas uncommented code just does 2
 	
@@ -36,8 +35,7 @@ public class Robot extends IterativeRobot {
 		robot = new RobotDrive(leftF,rightF);
 		//robot = new RobotDrive(leftF,leftR,rightF,rightR);
 		stick = new Joystick(Wiring.JOYSTICK0);
-		shift1 = new Solenoid(Wiring.SHIFT_1);
-		shift2 = new Solenoid(Wiring.SHIFT_2);
+		tranny = new Transmission();
 		waffle = new WFFL("/home/lvuser/format.wffl");
 	}
 
@@ -59,30 +57,15 @@ public class Robot extends IterativeRobot {
 		robot.arcadeDrive(stick);
 		if (stick.getRawButton(6)) {
 
-			gear1();
+			tranny.gear1();
 
 		} else if (stick.getRawButton(5)) {
 
-			gear2();
+			tranny.gear2();
 
 		}
 	}
 
-	public void gear1() {
-
-		shift1.set(false);
-		shift2.set(true);
-		System.out.println("GEAR 1");
-
-	}
-
-	public void gear2() {
-
-		shift1.set(true);
-		shift2.set(false);
-		System.out.println("GEAR 1");
-
-	}
 	public void testInit() {
 
 	}
