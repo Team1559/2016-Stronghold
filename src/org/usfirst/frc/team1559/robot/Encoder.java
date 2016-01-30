@@ -4,7 +4,13 @@ public class Encoder {
 
 	public Encoder(){
 		
-		//stuff
+		
+		
+	}
+	
+	public double getSpeed(){
+		
+		return 10.1; //someone please fill this!
 		
 	}
 	

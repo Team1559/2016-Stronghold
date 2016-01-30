@@ -35,7 +35,7 @@ public class Robot extends IterativeRobot {
 		//robot = new RobotDrive(leftF,rightF);
 		//robot = new RobotDrive(leftF,leftR,rightF,rightR);
 		stick = new Joystick(Wiring.JOYSTICK0);
-		tranny = new Transmission();
+		tranny = new Transmission(stick);
 		waffle = new WFFL("/home/lvuser/format.wffl");
 	}
 
