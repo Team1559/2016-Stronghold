@@ -20,12 +20,14 @@ public class WFFL {
 	String path;
 	Scanner s;
 	File file;
+	boolean keepRunning = true;
 	double yaw = 0.0;
 	final double kpturn = 0.009;
 	double gyro_yaw;
 	double kpBase = 0.05;
 	final double maxError = 1;
 	final double tolerance = .001;
+	final double turnTolerance = 1;
 	int length = 0;
 	double yawError;
 	double unchangedYawError;
@@ -48,8 +50,6 @@ public class WFFL {
 	public WFFL(String path) {
 		this.path = path;
 		file = new File(path);
-		left.setInverted(true);
-		right.setInverted(true);
 		try {
 			s = new Scanner(file);
 			ahrs = new AHRS(SPI.Port.kMXP);
@@ -74,44 +74,49 @@ public class WFFL {
 			temp = raw.substring(raw.indexOf("speed=\"") + 7, raw.length() - 2);
 			speed = Double.valueOf(temp);
 			global_startTime = System.currentTimeMillis() / 1000;
-			
-			//(String command, double dist, double speed, double time, double angle, String id, boolean active, String pattern)
+
+			// (String command, double dist, double speed, double time, double
+			// angle, String id, boolean active, String pattern)
 			list.add(new Command("GO", dist, speed, 0, 0, "", false, ""));
 		} else if (command.equals("WAIT")) {
 			temp = raw.substring(raw.indexOf(" ") + 1);
 			time = Double.valueOf(temp);
-			
-			//(String command, double dist, double speed, double time, double angle, String id, boolean active, String pattern)
+
+			// (String command, double dist, double speed, double time, double
+			// angle, String id, boolean active, String pattern)
 			list.add(new Command("WAIT", 0, 0, time, 0, "", false, ""));
 		} else if (command.equals("TURN")) {
 			temp = raw.substring(raw.indexOf(" ") + 1);
 			angle = Double.valueOf(temp);
 			global_startTime = System.currentTimeMillis() / 1000;
-			
-			//(String command, double dist, double speed, double time, double angle, String id, boolean active, String pattern)
+
+			// (String command, double dist, double speed, double time, double
+			// angle, String id, boolean active, String pattern)
 			list.add(new Command("TURN", 0, Wiring.OPTIMAL_TURNT_SPEED, 0, angle, "", false, ""));
 
 		} else if (command.equals("SHOOT")) {
-//			System.out.println("SHOOT!");
-			
-			//(String command, double dist, double speed, double time, double angle, String id, boolean active, String pattern)
+			// System.out.println("SHOOT!");
+
+			// (String command, double dist, double speed, double time, double
+			// angle, String id, boolean active, String pattern)
 			list.add(new Command("SHOOT", 0, 0, 0, 0, "", false, ""));
 		} else if (command.equals("DEFENSE")) {
 			temp = raw.substring(12);
 			temp = temp.substring(0, temp.indexOf("\""));
 			id = temp;
 
-			temp = raw
-					.substring(raw.indexOf("active=\"") + 8, raw.length() - 2);
+			temp = raw.substring(raw.indexOf("active=\"") + 8, raw.length() - 2);
 			active = Boolean.valueOf(temp);
-			
-			//(String command, double dist, double speed, double time, double angle, String id, boolean active, String pattern)
+
+			// (String command, double dist, double speed, double time, double
+			// angle, String id, boolean active, String pattern)
 			list.add(new Command("DEFENSE", 0, 0, 0, 0, id, active, ""));
 		} else if (command.equals("LIGHTS")) {
 			temp = raw.substring(raw.indexOf("\"") + 1, raw.length() - 2);
 			pattern = temp;
-			
-			//(String command, double dist, double speed, double time, double angle, String id, boolean active, String pattern)
+
+			// (String command, double dist, double speed, double time, double
+			// angle, String id, boolean active, String pattern)
 			list.add(new Command("LIGHTS", 0, 0, 0, 0, "", false, pattern));
 		} else if (command.equals("PRINT")) {
 			temp = raw.substring(raw.indexOf(" ") + 1);
@@ -142,9 +147,48 @@ public class WFFL {
 		}
 	}
 
-	public boolean drive(double angle, double seconds, double startTime,
-			double speed) {
+	public void turnToAngle(double angle) {
+		double kpturn = 0.;
+		yaw = ahrs.getYaw();
+
+		if ((angle == 180) && (yaw < -0.1)) {
+			yaw = 360 + ahrs.getYaw();
+		} else if ((angle == -180) && (yaw > 0.1)) {
+			yaw = ahrs.getYaw() - 360;
+		}
+
+		yawError = yaw - angle;
+
+		if (yawError > 180) {
+			yawError = yawError - 360;
+		} else if (yawError < -180) {
+			yawError = (yawError + 360);
+		}
+
+		double correctionTurn = kpturn * Math.abs(yawError);
+		if (correctionTurn < .5) {
+			correctionTurn = .5;
+		}
+		//TODO: remove abs of yawError and place if
+
+		if (Math.abs(yawError) > turnTolerance) {
+			if (yawError > 0) {
+				left.set(correctionTurn * -Wiring.OPTIMAL_TURNT_SPEED);
+				right.set(correctionTurn * -Wiring.OPTIMAL_TURNT_SPEED);
+			} else if (yawError < 0) {
+				left.set(correctionTurn * Wiring.OPTIMAL_TURNT_SPEED);
+				right.set(correctionTurn * Wiring.OPTIMAL_TURNT_SPEED);
+
+			}
+		} else {
+			left.set(0);
+			right.set(0);
+		}
+	}
+
+	public void drive(double angle, double seconds, double startTime, double speed) {
 		double kp = 0;
+		yaw = ahrs.getYaw();
 
 		if ((angle == 180) && (yaw < -0.1)) {
 			yaw = 360 + ahrs.getYaw();
@@ -178,9 +222,10 @@ public class WFFL {
 		} else if (yawError < -180) {
 			yawError = (yawError + 360);
 		}
-		if ((length >= startTime * 50)
-				&& (length <= (seconds + startTime) * 50)) {
+		if ((length >= startTime * 50) && (length <= (seconds + startTime) * 50)) {
+			keepRunning = true;
 			if ((Math.abs(yawError)) >= tolerance) {
+				System.out.println("CORRECTION YES");
 				if ((Math.abs(yawError * kp)) < maxError) {
 					myRobot.drive(speed, -(yawError * kp));
 				} else {
@@ -191,13 +236,23 @@ public class WFFL {
 					}
 				}
 			} else {
+				System.out.println("CORRECTION NO");
 				myRobot.drive(speed, 0);
+
 			}
+		} else {
+			keepRunning = false;
 		}
-		if ((System.currentTimeMillis() / 1000) < (seconds + global_startTime)) {
-			drive(0, seconds, global_startTime, speed);
-			return true;
-		}
-		return false;
+		// if ((System.currentTimeMillis() / 1000) < (seconds +
+		// global_startTime)) {
+		// drive(0, seconds, global_startTime, speed);
+		// return true;
+		// }
+		//
+		//
+		//
+		//
+		//
+		//
 	}
 }

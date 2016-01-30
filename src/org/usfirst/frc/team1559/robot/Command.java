@@ -12,6 +12,7 @@ public class Command {
 	boolean active;
 	String pattern;
 	
+	boolean done;
 	
 	public Command(String command, double dist, double speed, double time, double angle, String id, boolean active, String pattern) {
 		

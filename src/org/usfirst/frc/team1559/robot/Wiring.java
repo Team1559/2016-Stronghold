@@ -32,6 +32,6 @@ public class Wiring {
 	public static final int JOYSTICK3 = 3;
 	
 	//NAVx stuff
-	public static final double OPTIMAL_TURNT_SPEED = .6;
+	public static final double OPTIMAL_TURNT_SPEED = .4;
 	
 }

@@ -1,4 +1,3 @@
-
 package org.usfirst.frc.team1559.robot;
 
 import com.kauailabs.navx.frc.AHRS;
@@ -10,58 +9,80 @@ import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Robot extends IterativeRobot {
 	AHRS ahrs;
-	//RobotDrive robot;
-	//CANTalon leftF;
-	//CANTalon leftR;
-	//CANTalon rightF;
-	//CANTalon rightR;
+	// RobotDrive robot;
+	// CANTalon leftF;
+	// CANTalon leftR;
+	// CANTalon rightF;
+	// CANTalon rightR;
 	Joystick stick;
 	Timer timer;
 	boolean isInverted;
 	WFFL waffle;
 	Transmission tranny;
+	int listPos = 0;
+	SmartDashboard smrt = new SmartDashboard();
 
-//Comments are for a 4 motor drive system whereas uncommented code just does 2
-	
+	// Comments are for a 4 motor drive system whereas uncommented code just
+	// does 2
+
 	public void robotInit() {
 		ahrs = new AHRS(SPI.Port.kMXP);
-		//leftF = new CANTalon(Wiring.LEFT_FRONT_CAN_TALON);
-		//rightF = new CANTalon(Wiring.RIGHT_FRONT_CAN_TALON);
-//	    leftR = new CANTalon(Wiring.LEFT_REAR_CAN_TALON);
-//      rightR = new CANTalon(Wiring.RIGHT_REAR_CAN_TALON);
-		//robot = new RobotDrive(leftF,rightF);
-		//robot = new RobotDrive(leftF,leftR,rightF,rightR);
+		// leftF = new CANTalon(Wiring.LEFT_FRONT_CAN_TALON);
+		// rightF = new CANTalon(Wiring.RIGHT_FRONT_CAN_TALON);
+		// leftR = new CANTalon(Wiring.LEFT_REAR_CAN_TALON);
+		// rightR = new CANTalon(Wiring.RIGHT_REAR_CAN_TALON);
+		// robot = new RobotDrive(leftF,rightF);
+		// robot = new RobotDrive(leftF,leftR,rightF,rightR);
 		stick = new Joystick(Wiring.JOYSTICK0);
 		tranny = new Transmission(stick);
 		waffle = new WFFL("/home/lvuser/format.wffl");
-		
+
 	}
 
 	public void autonomousInit() {
 		waffle.reset();
+		ahrs.reset();
 		waffle.interpret();
+		waffle.left.setInverted(false);
+		waffle.right.setInverted(false);
 	}
 
 	public void autonomousPeriodic() {
-		System.out.println(System.currentTimeMillis() / 1000);
 		
+		smrt.putNumber("Yaw:" , waffle.yaw);
+
+		Command current = waffle.list.get(listPos);
+		if (current.command == "TURN") {
+			waffle.turnToAngle(current.angle);
+			System.out.println("Works YAY");
+		} else if (current.command == "GO") {
+			System.out.println("Works Drive");
+			waffle.drive(current.angle, current.dist, 0, current.speed);
+			if(waffle.keepRunning == false) {
+				System.out.println("Works stop now");
+				current.done = true;
+			}
+		}
 		
-		
-		waffle.drive(waffle.angle, waffle.dist, 0, waffle.speed);
-		
+		if (current.done == true) {
+			listPos++;
+		}
+		waffle.length++;
 	}
 
 	public void teleopInit() {
 		isInverted = true;
-		//leftF.setInverted(isInverted);
-		
+		waffle.left.setInverted(true);
+		waffle.right.setInverted(true);
+		// leftF.setInverted(isInverted);
+
 	}
 
 	public void teleopPeriodic() {
-		//robot.arcadeDrive(stick);
 		waffle.myRobot.arcadeDrive(stick);
 		if (stick.getRawButton(6)) {
 
