@@ -9,7 +9,6 @@ public class Transmission {
 	Solenoid shift1;
 	Solenoid shift2;
 	PowerDistributionPanel pdp;
-	Encoder encoder = new Encoder();
 	int gear;
 	Joystick joy;
 
