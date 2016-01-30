@@ -32,7 +32,7 @@ public class WFFL {
 	Talon right = new Talon(1);
 	Talon left = new Talon(0);
 	RobotDrive myRobot = new RobotDrive(left, right);
-
+	long StartTime = System.currentTimeMillis() / 1000;
 	double time;
 	double dist;
 	double speed;
@@ -67,8 +67,8 @@ public class WFFL {
 			System.out.println(dist);
 			temp = raw.substring(raw.indexOf("speed=\"") + 7, raw.length() - 2);
 			speed = Double.valueOf(temp);
-
-			drive(0, dist, 0, speed);
+			StartTime = System.currentTimeMillis() / 1000;
+			drive(0, dist, StartTime, speed);
 
 		} else if (command.equals("WAIT")) {
 			temp = raw.substring(raw.indexOf(" ") + 1);
@@ -126,9 +126,10 @@ public class WFFL {
 
 	public void drive(double angle, double seconds, double startTime,
 			double speed) {
-		// yawError = (ahrs.getYaw() - angle);
 		double kp = 0;
 
+		
+		
 		if ((angle == 180) && (yaw < -0.1)) {
 			yaw = 360 + ahrs.getYaw();
 		} else if ((angle == -180) && (yaw > 0.1)) {
@@ -141,8 +142,8 @@ public class WFFL {
 			kp = kpBase;
 		} else if (Math.abs(speed) == .7) {
 			kp = kpBase * .33;
-		} else if (Math.abs(speed) >= .8 && Math.abs(speed) <= .1) {
-			kp = kpBase / 20;
+		} else if (Math.abs(speed) >= .8 && Math.abs(speed) <= 1) {
+			kp = kpBase * .05;
 		}
 
 		if (speed < 0) {
@@ -152,6 +153,9 @@ public class WFFL {
 		// .5-.6 alone
 		// .7 *.33
 		// .8-1 /20
+		
+		
+		
 
 		unchangedYawError = ahrs.getYaw() - angle;
 		yawError = yaw - angle;
@@ -178,7 +182,8 @@ public class WFFL {
 				myRobot.drive(speed, 0);
 			}
 		}
-		
-		length++;
+		if ((System.currentTimeMillis() / 1000) < (seconds + startTime)) {
+			drive(0,dist,StartTime,speed);
+		}
 	}
 }
