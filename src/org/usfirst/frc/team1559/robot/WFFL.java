@@ -1,8 +1,9 @@
 package org.usfirst.frc.team1559.robot;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Scanner;
 
 import com.kauailabs.navx.frc.AHRS;
@@ -13,6 +14,7 @@ import edu.wpi.first.wpilibj.Talon;
 
 public class WFFL {
 
+	byte everything;
 	String raw;
 	String command;
 	String path;
@@ -41,6 +43,7 @@ public class WFFL {
 	double angle; // clockwise
 	boolean active;
 	String pattern;
+	ArrayList<Command> list = new ArrayList<Command>();
 
 	public WFFL(String path) {
 		this.path = path;
@@ -60,8 +63,7 @@ public class WFFL {
 	public void interpret() {
 		raw = s.nextLine() + " "; // pads the string so this next stuff
 
-		
-									// works.
+		// works.
 		command = raw.substring(0, raw.indexOf(" "));
 
 		if (command.equals("GO")) {
@@ -72,19 +74,28 @@ public class WFFL {
 			temp = raw.substring(raw.indexOf("speed=\"") + 7, raw.length() - 2);
 			speed = Double.valueOf(temp);
 			global_startTime = System.currentTimeMillis() / 1000;
-			drive(0, dist, global_startTime, speed);
-
+			
+			//(String command, double dist, double speed, double time, double angle, String id, boolean active, String pattern)
+			list.add(new Command("GO", dist, speed, 0, 0, "", false, ""));
 		} else if (command.equals("WAIT")) {
 			temp = raw.substring(raw.indexOf(" ") + 1);
 			time = Double.valueOf(temp);
+			
+			//(String command, double dist, double speed, double time, double angle, String id, boolean active, String pattern)
+			list.add(new Command("WAIT", 0, 0, time, 0, "", false, ""));
 		} else if (command.equals("TURN")) {
 			temp = raw.substring(raw.indexOf(" ") + 1);
 			angle = Double.valueOf(temp);
-
-			drive(angle, 5, dist, Wiring.OPTIMAL_TURNT_SPEED);
+			global_startTime = System.currentTimeMillis() / 1000;
+			
+			//(String command, double dist, double speed, double time, double angle, String id, boolean active, String pattern)
+			list.add(new Command("TURN", 0, Wiring.OPTIMAL_TURNT_SPEED, 0, angle, "", false, ""));
 
 		} else if (command.equals("SHOOT")) {
-			System.out.println("SHOOT!");
+//			System.out.println("SHOOT!");
+			
+			//(String command, double dist, double speed, double time, double angle, String id, boolean active, String pattern)
+			list.add(new Command("SHOOT", 0, 0, 0, 0, "", false, ""));
 		} else if (command.equals("DEFENSE")) {
 			temp = raw.substring(12);
 			temp = temp.substring(0, temp.indexOf("\""));
@@ -93,9 +104,15 @@ public class WFFL {
 			temp = raw
 					.substring(raw.indexOf("active=\"") + 8, raw.length() - 2);
 			active = Boolean.valueOf(temp);
+			
+			//(String command, double dist, double speed, double time, double angle, String id, boolean active, String pattern)
+			list.add(new Command("DEFENSE", 0, 0, 0, 0, id, active, ""));
 		} else if (command.equals("LIGHTS")) {
 			temp = raw.substring(raw.indexOf("\"") + 1, raw.length() - 2);
 			pattern = temp;
+			
+			//(String command, double dist, double speed, double time, double angle, String id, boolean active, String pattern)
+			list.add(new Command("LIGHTS", 0, 0, 0, 0, "", false, pattern));
 		} else if (command.equals("PRINT")) {
 			temp = raw.substring(raw.indexOf(" ") + 1);
 			System.out.println(temp);
@@ -104,7 +121,6 @@ public class WFFL {
 		} else {
 			System.err.println("UNKNOWN COMMAND!");
 		}
-
 		if (s.hasNextLine()) {
 			interpret();
 		}
@@ -115,7 +131,6 @@ public class WFFL {
 		if (s.hasNextLine()) {
 			printAll();
 		}
-
 	}
 
 	public void reset() {
@@ -123,17 +138,14 @@ public class WFFL {
 		try {
 			s = new Scanner(file);
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 
-	public void drive(double angle, double seconds, double startTime,
+	public boolean drive(double angle, double seconds, double startTime,
 			double speed) {
 		double kp = 0;
 
-		
-		
 		if ((angle == 180) && (yaw < -0.1)) {
 			yaw = 360 + ahrs.getYaw();
 		} else if ((angle == -180) && (yaw > 0.1)) {
@@ -142,24 +154,21 @@ public class WFFL {
 
 		if (Math.abs(speed) >= .1 && Math.abs(speed) <= .4) {
 			kp = kpBase * 7;
-		} else if (Math.abs(speed) >= .5 && Math.abs(speed) <= .6) {
+		} else if (Math.abs(speed) > .4 && Math.abs(speed) <= .6) {
 			kp = kpBase;
-		} else if (Math.abs(speed) == .7) {
+		} else if (Math.abs(speed) > .6 && Math.abs(speed) <= .7) {
 			kp = kpBase * .33;
-		} else if (Math.abs(speed) >= .8 && Math.abs(speed) <= 1) {
+		} else if (Math.abs(speed) > .7 && Math.abs(speed) <= 1) {
 			kp = kpBase * .05;
 		}
 
 		if (speed < 0) {
 			kp *= -1;
 		}
-		// .1-.4 x7
-		// .5-.6 alone
-		// .7 *.33
-		// .8-1 /20
-		
-		
-		
+		// 0.1 - 0.4 x7
+		// 0.4 - 0.6 x1
+		// 0.6 - 0.7 x.33
+		// 0.7 - 1.0 /20
 
 		unchangedYawError = ahrs.getYaw() - angle;
 		yawError = yaw - angle;
@@ -169,7 +178,6 @@ public class WFFL {
 		} else if (yawError < -180) {
 			yawError = (yawError + 360);
 		}
-		
 		if ((length >= startTime * 50)
 				&& (length <= (seconds + startTime) * 50)) {
 			if ((Math.abs(yawError)) >= tolerance) {
@@ -187,7 +195,9 @@ public class WFFL {
 			}
 		}
 		if ((System.currentTimeMillis() / 1000) < (seconds + global_startTime)) {
-			drive(0 ,dist, global_startTime, speed);
+			drive(0, seconds, global_startTime, speed);
+			return true;
 		}
+		return false;
 	}
 }

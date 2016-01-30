@@ -47,6 +47,11 @@ public class Robot extends IterativeRobot {
 
 	public void autonomousPeriodic() {
 		System.out.println(System.currentTimeMillis() / 1000);
+		
+		
+		
+		waffle.drive(waffle.angle, waffle.dist, 0, waffle.speed);
+		
 	}
 
 	public void teleopInit() {
