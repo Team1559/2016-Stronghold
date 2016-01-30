@@ -45,6 +45,8 @@ public class WFFL {
 	public WFFL(String path) {
 		this.path = path;
 		file = new File(path);
+		left.setInverted(true);
+		right.setInverted(true);
 		try {
 			s = new Scanner(file);
 			ahrs = new AHRS(SPI.Port.kMXP);

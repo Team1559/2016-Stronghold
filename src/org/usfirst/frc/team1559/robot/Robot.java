@@ -37,6 +37,7 @@ public class Robot extends IterativeRobot {
 		stick = new Joystick(Wiring.JOYSTICK0);
 		tranny = new Transmission(stick);
 		waffle = new WFFL("/home/lvuser/format.wffl");
+		
 	}
 
 	public void autonomousInit() {
