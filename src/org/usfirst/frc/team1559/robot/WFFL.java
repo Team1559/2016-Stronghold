@@ -32,7 +32,7 @@ public class WFFL {
 	Talon right = new Talon(1);
 	Talon left = new Talon(0);
 	RobotDrive myRobot = new RobotDrive(left, right);
-	long StartTime = System.currentTimeMillis() / 1000;
+	long global_startTime = System.currentTimeMillis() / 1000;
 	double time;
 	double dist;
 	double speed;
@@ -59,6 +59,8 @@ public class WFFL {
 
 	public void interpret() {
 		raw = s.nextLine() + " "; // pads the string so this next stuff
+
+		
 									// works.
 		command = raw.substring(0, raw.indexOf(" "));
 
@@ -69,8 +71,8 @@ public class WFFL {
 			System.out.println(dist);
 			temp = raw.substring(raw.indexOf("speed=\"") + 7, raw.length() - 2);
 			speed = Double.valueOf(temp);
-			StartTime = System.currentTimeMillis() / 1000;
-			drive(0, dist, StartTime, speed);
+			global_startTime = System.currentTimeMillis() / 1000;
+			drive(0, dist, global_startTime, speed);
 
 		} else if (command.equals("WAIT")) {
 			temp = raw.substring(raw.indexOf(" ") + 1);
@@ -184,8 +186,8 @@ public class WFFL {
 				myRobot.drive(speed, 0);
 			}
 		}
-		if ((System.currentTimeMillis() / 1000) < (seconds + startTime)) {
-			drive(0,dist,StartTime,speed);
+		if ((System.currentTimeMillis() / 1000) < (seconds + global_startTime)) {
+			drive(0 ,dist, global_startTime, speed);
 		}
 	}
 }

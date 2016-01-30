@@ -46,7 +46,7 @@ public class Robot extends IterativeRobot {
 	}
 
 	public void autonomousPeriodic() {
-		
+		System.out.println(System.currentTimeMillis() / 1000);
 	}
 
 	public void teleopInit() {
