@@ -24,6 +24,9 @@ public class Wiring {
 	//Transmission
 	public static final int SHIFT_1 = 0;
 	public static final int SHIFT_2 = 1;
+	//determined after consulting Mr. Petilli
+	public static final double SHIFT_UP_SPEED = 4.6; // m/s
+	public static final double SHIFT_DOWN_SPEED = 4.4; // m/s
 	
 	//Joysticks
 	public static final int JOYSTICK0 = 0;
