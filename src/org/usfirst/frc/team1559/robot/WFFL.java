@@ -27,7 +27,7 @@ public class WFFL {
 	double kpBase = 0.05;
 	final double maxError = 1;
 	final double tolerance = .001;
-	final double turnTolerance = 1;
+	final double turnTolerance = .5;
 	int length = 0;
 	double yawError;
 	double unchangedYawError;
@@ -148,7 +148,7 @@ public class WFFL {
 	}
 
 	public void turnToAngle(double angle) {
-		double kpturn = 0.;
+		double kpturn = 0.09;
 		yaw = ahrs.getYaw();
 
 		if ((angle == 180) && (yaw < -0.1)) {
@@ -156,6 +156,8 @@ public class WFFL {
 		} else if ((angle == -180) && (yaw > 0.1)) {
 			yaw = ahrs.getYaw() - 360;
 		}
+		
+		
 
 		yawError = yaw - angle;
 
@@ -165,16 +167,22 @@ public class WFFL {
 			yawError = (yawError + 360);
 		}
 
-		double correctionTurn = kpturn * Math.abs(yawError);
-		if (correctionTurn < .5) {
-			correctionTurn = .5;
+		double correctionTurn = -kpturn * yawError;
+		if (correctionTurn > 0.3) {
+			correctionTurn = 0.3;
+		} else if (correctionTurn < -0.3) {
+			correctionTurn = -0.3;
+		} else if (correctionTurn < .01 && correctionTurn > 0) {
+			correctionTurn = .01;
+		} else if (correctionTurn > -.01 && correctionTurn < 0) {
+			correctionTurn = -.01;
 		}
 		//TODO: remove abs of yawError and place if
 
 		if (Math.abs(yawError) > turnTolerance) {
 			if (yawError > 0) {
-				left.set(correctionTurn * -Wiring.OPTIMAL_TURNT_SPEED);
-				right.set(correctionTurn * -Wiring.OPTIMAL_TURNT_SPEED);
+				left.set(correctionTurn * Wiring.OPTIMAL_TURNT_SPEED);
+				right.set(correctionTurn * Wiring.OPTIMAL_TURNT_SPEED);
 			} else if (yawError < 0) {
 				left.set(correctionTurn * Wiring.OPTIMAL_TURNT_SPEED);
 				right.set(correctionTurn * Wiring.OPTIMAL_TURNT_SPEED);
