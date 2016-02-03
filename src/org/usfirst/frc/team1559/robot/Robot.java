@@ -1,6 +1,6 @@
 package org.usfirst.frc.team1559.robot;
 
-//import com.kauailabs.navx.frc.AHRS;
+import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.IterativeRobot;
@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Robot extends IterativeRobot {
 //	AHRS ahrs;
 	 RobotDrive robot;
+	 boolean shootDone = false;
 	 CANTalon leftF;
 	 CANTalon leftR;
 	 CANTalon rightF;
@@ -31,16 +32,17 @@ public class Robot extends IterativeRobot {
 	// does 2
 
 	public void robotInit() {
-		//ahrs = new AHRS(SPI.Port.kMXP);
+//		ahrs = new AHRS(SPI.Port.kMXP);
 		 leftF = new CANTalon(Wiring.LEFT_FRONT_CAN_TALON);
 		 rightF = new CANTalon(Wiring.RIGHT_FRONT_CAN_TALON);
-		 leftR = new CANTalon(Wiring.LEFT_REAR_CAN_TALON);
-		 rightR = new CANTalon(Wiring.RIGHT_REAR_CAN_TALON);
+//		 leftR = new CANTalon(Wiring.LEFT_REAR_CAN_TALON);
+//		 rightR = new CANTalon(Wiring.RIGHT_REAR_CAN_TALON);
 		 robot = new RobotDrive(leftF,rightF);
-		 robot = new RobotDrive(leftF,leftR,rightF,rightR);
+//		 robot = new RobotDrive(leftF,leftR,rightF,rightR);
 		stick = new Joystick(Wiring.JOYSTICK0);
 		tranny = new Transmission(stick);
 		waffle = new WFFL("/home/lvuser/format.wffl");
+						//will eventually be at /media/sda0/filename.wffl
 
 	}
 
@@ -59,6 +61,7 @@ public class Robot extends IterativeRobot {
 		Command current = waffle.list.get(listPos);
 		if (current.command == "TURN") {
 			waffle.turnToAngle(current.angle);
+			current.done = true;
 			System.out.println("Works YAY");
 		} else if (current.command == "GO") {
 			System.out.println("Works Drive");
@@ -67,10 +70,19 @@ public class Robot extends IterativeRobot {
 				System.out.println("Works stop now");
 				current.done = true;
 			}
+		} else if(current.command == "SHOOT"){
+			sendRecieveCenterValues();
+			boolean shootDone = waffle.center();
+			if(shootDone){
+				current.done = true;
+				System.out.println("DONE SHOOTING!");
+			}
+			
 		}
 		
 		if (current.done == true) {
 			listPos++;
+			current.done = false;
 		}
 		waffle.length++;
 	}
@@ -84,9 +96,7 @@ public class Robot extends IterativeRobot {
 	}
 
 	public void teleopPeriodic() {
-		String [] center = sc.read();
-		int cx = Integer.parseInt(center[0]);
-		int cy = Integer.parseInt(center[1]);
+		sendRecieveCenterValues();
 		waffle.myRobot.arcadeDrive(stick);
 		waffle.Traction();
 		if (stick.getRawButton(6)) {
@@ -98,16 +108,16 @@ public class Robot extends IterativeRobot {
 			tranny.gear2();
 
 		}
-		if(isWithinThresh(cx, 310, 330)){
-//			shoot code goes here
-		} else if (cx < 310){
-		} else {
-			
-		}
 	}
-	public boolean isWithinThresh(int x, int low, int high){
-		return (low < x && x < high);
+	
+	public void sendRecieveCenterValues(){
+		String [] center = sc.read();
+		int cx = Integer.parseInt(center[0]);
+		int cy = Integer.parseInt(center[1]);
+		waffle.cx = cx;
+		waffle.cy = cy;
 	}
+	
 
 	public void testInit() {
 

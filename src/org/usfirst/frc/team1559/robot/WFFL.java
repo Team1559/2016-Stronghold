@@ -48,6 +48,9 @@ public class WFFL {
 	boolean active;
 	String pattern;
 	ArrayList<Command> list = new ArrayList<Command>();
+	SocketClient sc = new SocketClient();
+	public int cx;
+	public int cy;
 
 	public WFFL(String path) {
 		this.path = path;
@@ -98,7 +101,7 @@ public class WFFL {
 
 		} else if (command.equals("SHOOT")) {
 			// System.out.println("SHOOT!");
-
+			
 			// (String command, double dist, double speed, double time, double
 			// angle, String id, boolean active, String pattern)
 			list.add(new Command("SHOOT", 0, 0, 0, 0, "", false, ""));
@@ -283,4 +286,23 @@ public class WFFL {
 		runTime++;
 	}
 	
+	public boolean isWithinThresh(int x, int low, int high){
+		return (low < x && x < high);
+	}
+	public boolean center(){
+		if(isWithinThresh(cx, 310, 330)){
+			left.set(0);
+			right.set(0);
+//			shoot code goes here
+			return true;
+		} else if (cx < 310){
+			left.set(Wiring.OPTIMAL_TURNT_SPEED);
+			right.set(Wiring.OPTIMAL_TURNT_SPEED);
+			return false;
+		} else {
+			left.set(-Wiring.OPTIMAL_TURNT_SPEED);
+			right.set(-Wiring.OPTIMAL_TURNT_SPEED);
+			return false;
+		}
+	}
 }
