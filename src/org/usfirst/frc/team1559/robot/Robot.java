@@ -1,6 +1,6 @@
 package org.usfirst.frc.team1559.robot;
 
-import com.kauailabs.navx.frc.AHRS;
+//import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.IterativeRobot;
@@ -12,12 +12,12 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Robot extends IterativeRobot {
-	AHRS ahrs;
-	// RobotDrive robot;
-	// CANTalon leftF;
-	// CANTalon leftR;
-	// CANTalon rightF;
-	// CANTalon rightR;
+//	AHRS ahrs;
+	 RobotDrive robot;
+	 CANTalon leftF;
+	 CANTalon leftR;
+	 CANTalon rightF;
+	 CANTalon rightR;
 	Joystick stick;
 	Timer timer;
 	boolean isInverted;
@@ -25,18 +25,19 @@ public class Robot extends IterativeRobot {
 	Transmission tranny;
 	int listPos = 0;
 	SmartDashboard smrt = new SmartDashboard();
+	SocketClient sc = new SocketClient();
 
 	// Comments are for a 4 motor drive system whereas uncommented code just
 	// does 2
 
 	public void robotInit() {
-		ahrs = new AHRS(SPI.Port.kMXP);
-		// leftF = new CANTalon(Wiring.LEFT_FRONT_CAN_TALON);
-		// rightF = new CANTalon(Wiring.RIGHT_FRONT_CAN_TALON);
-		// leftR = new CANTalon(Wiring.LEFT_REAR_CAN_TALON);
-		// rightR = new CANTalon(Wiring.RIGHT_REAR_CAN_TALON);
-		// robot = new RobotDrive(leftF,rightF);
-		// robot = new RobotDrive(leftF,leftR,rightF,rightR);
+		//ahrs = new AHRS(SPI.Port.kMXP);
+		 leftF = new CANTalon(Wiring.LEFT_FRONT_CAN_TALON);
+		 rightF = new CANTalon(Wiring.RIGHT_FRONT_CAN_TALON);
+		 leftR = new CANTalon(Wiring.LEFT_REAR_CAN_TALON);
+		 rightR = new CANTalon(Wiring.RIGHT_REAR_CAN_TALON);
+		 robot = new RobotDrive(leftF,rightF);
+		 robot = new RobotDrive(leftF,leftR,rightF,rightR);
 		stick = new Joystick(Wiring.JOYSTICK0);
 		tranny = new Transmission(stick);
 		waffle = new WFFL("/home/lvuser/format.wffl");
@@ -45,7 +46,7 @@ public class Robot extends IterativeRobot {
 
 	public void autonomousInit() {
 		waffle.reset();
-		ahrs.reset();
+		//ahrs.reset();
 		waffle.interpret();
 		waffle.left.setInverted(false);
 		waffle.right.setInverted(false);
@@ -83,6 +84,9 @@ public class Robot extends IterativeRobot {
 	}
 
 	public void teleopPeriodic() {
+		String [] center = sc.read();
+		int cx = Integer.parseInt(center[0]);
+		int cy = Integer.parseInt(center[1]);
 		waffle.myRobot.arcadeDrive(stick);
 		if (stick.getRawButton(6)) {
 
@@ -93,6 +97,15 @@ public class Robot extends IterativeRobot {
 			tranny.gear2();
 
 		}
+		if(isWithinThresh(cx, 310, 330)){
+//			shoot code goes here
+		} else if (cx < 310){
+		} else {
+			
+		}
+	}
+	public boolean isWithinThresh(int x, int low, int high){
+		return (low < x && x < high);
 	}
 
 	public void testInit() {
