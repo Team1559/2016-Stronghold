@@ -84,7 +84,7 @@ public class Robot extends IterativeRobot {
 		if ((current.done == true)) {
 			current.done = false;
 			
-			if(waffle.list.size() > 0){
+			if(waffle.list.size() > listPos - 1){
 				listPos++;
 			} else {
 				//stop
