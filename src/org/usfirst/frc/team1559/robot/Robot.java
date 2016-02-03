@@ -88,6 +88,7 @@ public class Robot extends IterativeRobot {
 		int cx = Integer.parseInt(center[0]);
 		int cy = Integer.parseInt(center[1]);
 		waffle.myRobot.arcadeDrive(stick);
+		waffle.Traction();
 		if (stick.getRawButton(6)) {
 
 			tranny.gear1();

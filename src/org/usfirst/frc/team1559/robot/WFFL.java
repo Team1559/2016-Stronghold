@@ -8,6 +8,7 @@ import java.util.Scanner;
 
 import com.kauailabs.navx.frc.AHRS;
 
+import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.Talon;
@@ -20,6 +21,7 @@ public class WFFL {
 	String path;
 	Scanner s;
 	File file;
+	PowerDistributionPanel pdp = new PowerDistributionPanel();
 	boolean keepRunning = true;
 	double yaw = 0.0;
 	final double kpturn = 0.009;
@@ -251,16 +253,34 @@ public class WFFL {
 		} else {
 			keepRunning = false;
 		}
-		// if ((System.currentTimeMillis() / 1000) < (seconds +
-		// global_startTime)) {
-		// drive(0, seconds, global_startTime, speed);
-		// return true;
-		// }
-		//
-		//
-		//
-		//
-		//
-		//
 	}
+	
+	public void Traction() {
+		double accelVals[] = new double[25];
+		int runTime = 0;
+		int average = 0;
+		double avg = 0;
+		boolean slip;
+		//1.25
+		
+		accelVals[runTime] = ahrs.getWorldLinearAccelY();
+		for (int i = 0; i < accelVals.length; i++) {
+			avg += accelVals[i];
+		}
+		
+		avg /= accelVals.length;
+		
+		if (Math.abs(avg) < .1 && pdp.getCurrent(0) > 1.25) {
+			slip = true;
+		} else{
+			slip = false;
+		}
+			
+		if (runTime == (int) accelVals.length) {
+			runTime = 0;
+		}
+			
+		runTime++;
+	}
+	
 }
