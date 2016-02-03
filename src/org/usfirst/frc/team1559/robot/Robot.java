@@ -111,11 +111,11 @@ public class Robot extends IterativeRobot {
 	}
 	
 	public void sendRecieveCenterValues(){
-		String [] center = sc.read();
-		int cx = Integer.parseInt(center[0]);
-		int cy = Integer.parseInt(center[1]);
-		waffle.cx = cx;
-		waffle.cy = cy;
+		//String [] center = sc.read();
+		//int cx = Integer.parseInt(center[0]);
+		//int cy = Integer.parseInt(center[1]);
+		//waffle.cx = cx;
+		//waffle.cy = cy;
 	}
 	
 

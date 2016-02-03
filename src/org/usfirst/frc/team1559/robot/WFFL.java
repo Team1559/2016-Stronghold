@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.Talon;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class WFFL {
 
@@ -273,7 +274,7 @@ public class WFFL {
 		
 		avg /= accelVals.length;
 		
-		if (Math.abs(avg) < .1 && pdp.getCurrent(0) > 1.25) {
+		if (Math.abs(avg) < .02 && pdp.getCurrent(0) > 8) {
 			slip = true;
 		} else{
 			slip = false;
@@ -282,7 +283,10 @@ public class WFFL {
 		if (runTime == (int) accelVals.length) {
 			runTime = 0;
 		}
-			
+		
+		SmartDashboard.putBoolean("Slip: ", slip);
+		SmartDashboard.putNumber("AVG: ", avg);
+		SmartDashboard.putNumber("Current: ", pdp.getCurrent(0));
 		runTime++;
 	}
 	
