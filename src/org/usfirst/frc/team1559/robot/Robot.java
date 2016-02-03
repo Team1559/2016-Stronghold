@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Robot extends IterativeRobot {
-//	AHRS ahrs;
+	AHRS ahrs;
 	 RobotDrive robot;
 	 boolean shootDone = false;
 	 CANTalon leftF;
@@ -32,7 +32,7 @@ public class Robot extends IterativeRobot {
 	// does 2
 
 	public void robotInit() {
-//		ahrs = new AHRS(SPI.Port.kMXP);
+		ahrs = new AHRS(SPI.Port.kMXP);
 		 leftF = new CANTalon(Wiring.LEFT_FRONT_CAN_TALON);
 		 rightF = new CANTalon(Wiring.RIGHT_FRONT_CAN_TALON);
 //		 leftR = new CANTalon(Wiring.LEFT_REAR_CAN_TALON);
@@ -80,9 +80,16 @@ public class Robot extends IterativeRobot {
 			
 		}
 		
-		if (current.done == true) {
-			listPos++;
+		
+		if ((current.done == true)) {
 			current.done = false;
+			
+			if(waffle.list.size() > 0){
+				listPos++;
+			} else {
+				//stop
+			}
+			
 		}
 		waffle.length++;
 	}
@@ -108,6 +115,7 @@ public class Robot extends IterativeRobot {
 			tranny.gear2();
 
 		}
+		SmartDashboard.putNumber("Yaw:", ahrs.getYaw());
 	}
 	
 	public void sendRecieveCenterValues(){
