@@ -1,6 +1,6 @@
 package org.usfirst.frc.team1559.robot;
 
-//import com.kauailabs.navx.frc.AHRS;
+import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.IterativeRobot;
@@ -32,7 +32,7 @@ public class Robot extends IterativeRobot {
 	// does 2
 
 	public void robotInit() {
-		//ahrs = new AHRS(SPI.Port.kMXP);
+//		ahrs = new AHRS(SPI.Port.kMXP);
 		 leftF = new CANTalon(Wiring.LEFT_FRONT_CAN_TALON);
 		 rightF = new CANTalon(Wiring.RIGHT_FRONT_CAN_TALON);
 //		 leftR = new CANTalon(Wiring.LEFT_REAR_CAN_TALON);
@@ -42,6 +42,7 @@ public class Robot extends IterativeRobot {
 		stick = new Joystick(Wiring.JOYSTICK0);
 		tranny = new Transmission(stick);
 		waffle = new WFFL("/home/lvuser/format.wffl");
+						//will eventually be at /media/sda0/filename.wffl
 
 	}
 
@@ -70,11 +71,7 @@ public class Robot extends IterativeRobot {
 				current.done = true;
 			}
 		} else if(current.command == "SHOOT"){
-			String [] center = sc.read();
-			int cx = Integer.parseInt(center[0]);
-			int cy = Integer.parseInt(center[1]);
-			waffle.cx = cx;
-			waffle.cy = cy;
+			sendRecieveCenterValues();
 			boolean shootDone = waffle.center();
 			if(shootDone){
 				current.done = true;
@@ -99,11 +96,7 @@ public class Robot extends IterativeRobot {
 	}
 
 	public void teleopPeriodic() {
-		String [] center = sc.read();
-		int cx = Integer.parseInt(center[0]);
-		int cy = Integer.parseInt(center[1]);
-		waffle.cx = cx;
-		waffle.cy = cy;
+		sendRecieveCenterValues();
 		waffle.myRobot.arcadeDrive(stick);
 		if (stick.getRawButton(6)) {
 
@@ -114,6 +107,14 @@ public class Robot extends IterativeRobot {
 			tranny.gear2();
 
 		}
+	}
+	
+	public void sendRecieveCenterValues(){
+		String [] center = sc.read();
+		int cx = Integer.parseInt(center[0]);
+		int cy = Integer.parseInt(center[1]);
+		waffle.cx = cx;
+		waffle.cy = cy;
 	}
 	
 
