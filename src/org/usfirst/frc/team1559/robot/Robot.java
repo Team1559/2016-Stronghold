@@ -48,7 +48,7 @@ public class Robot extends IterativeRobot {
 
 	public void autonomousInit() {
 		waffle.reset();
-		//ahrs.reset();
+		waffle.ahrs.reset();
 		waffle.interpret();
 		waffle.left.setInverted(false);
 		waffle.right.setInverted(false);
@@ -61,7 +61,9 @@ public class Robot extends IterativeRobot {
 		Command current = waffle.list.get(listPos);
 		if (current.command == "TURN") {
 			waffle.turnToAngle(current.angle);
-			current.done = true;
+			if(waffle.keepTurning == false) {
+				current.done = true;
+			}
 			System.out.println("Works YAY");
 		} else if (current.command == "GO") {
 			System.out.println("Works Drive");
@@ -84,7 +86,7 @@ public class Robot extends IterativeRobot {
 		if ((current.done == true)) {
 			current.done = false;
 			
-			if(waffle.list.size() > listPos - 1){
+			if(waffle.list.size() - 1 > listPos){
 				listPos++;
 			} else {
 				//stop

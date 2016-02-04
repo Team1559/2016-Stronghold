@@ -25,6 +25,7 @@ public class WFFL {
 	File file;
 	PowerDistributionPanel pdp = new PowerDistributionPanel();
 	boolean keepRunning = true;
+	boolean keepTurning = true;
 	double yaw = 0.0;
 	final double kpturn = 0.009;
 	double gyro_yaw;
@@ -155,7 +156,7 @@ public class WFFL {
 	}
 
 	public void turnToAngle(double angle) {
-		double kpturn = 0.09;
+		double kpturn = 0.1;
 		yaw = ahrs.getYaw();
 
 		if ((angle == 180) && (yaw < -0.1)) {
@@ -185,6 +186,7 @@ public class WFFL {
 		// TODO: remove abs of yawError and place if
 
 		if (Math.abs(yawError) > turnTolerance) {
+			keepTurning = true;
 			if (yawError > 0) {
 				left.set(correctionTurn * Wiring.OPTIMAL_TURNT_SPEED);
 				right.set(correctionTurn * Wiring.OPTIMAL_TURNT_SPEED);
@@ -196,6 +198,7 @@ public class WFFL {
 		} else {
 			left.set(0);
 			right.set(0);
+			keepTurning = false;
 		}
 	}
 
