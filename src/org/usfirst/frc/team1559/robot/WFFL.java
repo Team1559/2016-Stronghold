@@ -21,6 +21,7 @@ public class WFFL {
 	String command;
 	String path;
 	Scanner s;
+	double distance = 0;
 	File file;
 	PowerDistributionPanel pdp = new PowerDistributionPanel();
 	boolean keepRunning = true;
@@ -308,4 +309,14 @@ public class WFFL {
 			return false;
 		}
 	}
+	
+	public void estimateDistance() {
+		double v = ahrs.getVelocityY();
+		double d = ahrs.getDisplacementY();
+		
+		double deltaDistance = v * .02;
+		distance += deltaDistance;
+		
+	}
+	
 }
