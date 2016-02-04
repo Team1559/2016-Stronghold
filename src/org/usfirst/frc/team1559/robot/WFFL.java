@@ -102,7 +102,7 @@ public class WFFL {
 
 		} else if (command.equals("SHOOT")) {
 			// System.out.println("SHOOT!");
-			
+
 			// (String command, double dist, double speed, double time, double
 			// angle, String id, boolean active, String pattern)
 			list.add(new Command("SHOOT", 0, 0, 0, 0, "", false, ""));
@@ -162,8 +162,6 @@ public class WFFL {
 		} else if ((angle == -180) && (yaw > 0.1)) {
 			yaw = ahrs.getYaw() - 360;
 		}
-		
-		
 
 		yawError = yaw - angle;
 
@@ -183,7 +181,7 @@ public class WFFL {
 		} else if (correctionTurn > -.01 && correctionTurn < 0) {
 			correctionTurn = -.01;
 		}
-		//TODO: remove abs of yawError and place if
+		// TODO: remove abs of yawError and place if
 
 		if (Math.abs(yawError) > turnTolerance) {
 			if (yawError > 0) {
@@ -258,48 +256,49 @@ public class WFFL {
 			keepRunning = false;
 		}
 	}
-	
+
 	public void Traction() {
 		double accelVals[] = new double[25];
 		int runTime = 0;
 		int average = 0;
 		double avg = 0;
 		boolean slip;
-		//1.25
-		
+		// 1.25
+
 		accelVals[runTime] = ahrs.getWorldLinearAccelY();
 		for (int i = 0; i < accelVals.length; i++) {
 			avg += accelVals[i];
 		}
-		
+
 		avg /= accelVals.length;
-		
+
 		if (Math.abs(avg) < .02 && pdp.getCurrent(0) > 8) {
 			slip = true;
-		} else{
+		} else {
 			slip = false;
 		}
-			
+
 		if (runTime == (int) accelVals.length) {
 			runTime = 0;
 		}
-		
+
 		SmartDashboard.putBoolean("Slip: ", slip);
 		SmartDashboard.putNumber("AVG: ", avg);
 		SmartDashboard.putNumber("Current: ", pdp.getCurrent(0));
 		runTime++;
 	}
-	
-	public boolean isWithinThresh(int x, int low, int high){
+
+	public boolean isWithinThresh(int x, int low, int high) {
 		return (low < x && x < high);
 	}
-	public boolean center(){
-		if(isWithinThresh(cx, 310, 330)){
+
+	public boolean center() {
+		if (isWithinThresh(cx, 310, 330)) {
 			left.set(0);
 			right.set(0);
-//			shoot code goes here
+			// shoot code goes here
 			return true;
-		} else if (cx < 310){
+		} else if (cx < 310) {
 			left.set(Wiring.OPTIMAL_TURNT_SPEED);
 			right.set(Wiring.OPTIMAL_TURNT_SPEED);
 			return false;
