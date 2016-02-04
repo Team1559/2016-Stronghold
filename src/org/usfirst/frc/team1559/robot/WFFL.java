@@ -73,7 +73,7 @@ public class WFFL {
 
 		// works.
 		command = raw.substring(0, raw.indexOf(" "));
-
+		
 		if (command.equals("GO")) {
 			temp = raw.substring(13);
 			temp = temp.substring(0, temp.indexOf("\""));

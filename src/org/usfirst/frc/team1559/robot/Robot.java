@@ -16,9 +16,9 @@ public class Robot extends IterativeRobot {
 	 RobotDrive robot;
 	 boolean shootDone = false;
 	 CANTalon leftF;
-	 CANTalon leftR;
+//	 CANTalon leftR;
 	 CANTalon rightF;
-	 CANTalon rightR;
+//	 CANTalon rightR;
 	Joystick stick;
 	Timer timer;
 	boolean isInverted;
@@ -107,6 +107,7 @@ public class Robot extends IterativeRobot {
 	public void teleopPeriodic() {
 		sendRecieveCenterValues();
 		waffle.myRobot.arcadeDrive(stick);
+		//robot.arcadeDrive(stick);
 		waffle.Traction();
 		if (stick.getRawButton(6)) {
 
