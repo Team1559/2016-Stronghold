@@ -74,7 +74,11 @@ public class WFFL {
 		// works.
 		command = raw.substring(0, raw.indexOf(" "));
 		
-		if (command.equals("GO")) {
+		if(raw.equals("<<START>>")){
+			//do nothing
+		} else if(raw.equals("<<STOP>>")){
+			list.add(new Command("STOP", 0, 0, 0, 0, "", false, ""));
+		} else if (command.equals("GO")) {
 			temp = raw.substring(13);
 			temp = temp.substring(0, temp.indexOf("\""));
 			dist = Double.valueOf(temp);
@@ -185,7 +189,7 @@ public class WFFL {
 		}
 		// TODO: remove abs of yawError and place if
 
-		if (Math.abs(yawError) > turnTolerance) {
+		if ((Math.abs(yawError) > turnTolerance)) {
 			keepTurning = true;
 			if (yawError > 0) {
 				left.set(correctionTurn * Wiring.OPTIMAL_TURNT_SPEED);
