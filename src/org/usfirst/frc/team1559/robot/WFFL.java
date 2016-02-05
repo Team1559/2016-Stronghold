@@ -256,7 +256,7 @@ public class WFFL {
 				}
 			} else {
 				myRobot.drive(speed, 0);
-
+				keepRunning = false;
 			}
 		} else {
 			keepRunning = false;
