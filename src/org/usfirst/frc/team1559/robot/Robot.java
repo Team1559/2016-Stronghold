@@ -89,20 +89,24 @@ public class Robot extends IterativeRobot {
 			}
 
 		} else if (current.command.equals("STOP")) {
+			System.out.println("I AM STOPPING...");
 			waffle.left.set(0);
 			waffle.right.set(0);
 		}
 
 		if ((current.done == true)) {
-			System.out.println("MOVING ON...nothing to see here");
+			System.out.println("MOVING ON...nothing to see here..." + current.command);
 			current.done = false;
 
 			if (waffle.list.size() - 1 > listPos) {
 				listPos++;
-			} else {
 				waffle.keepRunning = true;
 				waffle.keepTurning = true;
+			} else {
+				waffle.left.set(0);
+				waffle.right.set(0);
 			}
+			
 
 		}
 		smrt.putNumber("Angle it be: ", current.angle);
