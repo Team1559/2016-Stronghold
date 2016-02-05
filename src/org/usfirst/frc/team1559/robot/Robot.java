@@ -73,7 +73,6 @@ public class Robot extends IterativeRobot {
 			}
 			System.out.println("Works YAY");
 		} else if (current.command.equals("GO")) {
-			System.out.println("Works Drive");
 			waffle.drive(desiredHeading, current.dist, 0, current.speed);
 			if (waffle.keepRunning == false) {
 				System.out.println("Works stop now");
@@ -98,7 +97,7 @@ public class Robot extends IterativeRobot {
 			System.out.println("MOVING ON...nothing to see here..." + current.command);
 			current.done = false;
 
-			if (waffle.list.size() - 1 > listPos) {
+			if (waffle.list.size() - 1 >= listPos) {
 				listPos++;
 				waffle.keepRunning = true;
 				waffle.keepTurning = true;

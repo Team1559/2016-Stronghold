@@ -74,9 +74,9 @@ public class WFFL {
 		// works.
 		command = raw.substring(0, raw.indexOf(" "));
 		
-		if(raw.equals("<<START>>")){
+		if(raw.equals("START")){
 			//do nothing
-		} else if(raw.equals("<<STOP>>")){
+		} else if(raw.equals("STOP")){
 			list.add(new Command("STOP", 0, 0, 0, 0, "", false, ""));
 		} else if (command.equals("GO")) {
 			temp = raw.substring(13);
@@ -245,7 +245,6 @@ public class WFFL {
 		if ((length >= startTime * 50) && (length <= (seconds + startTime) * 50)) {
 			keepRunning = true;
 			if ((Math.abs(yawError)) >= tolerance) {
-				System.out.println("CORRECTION YES");
 				if ((Math.abs(yawError * kp)) < maxError) {
 					myRobot.drive(speed, -(yawError * kp));
 				} else {
@@ -256,7 +255,6 @@ public class WFFL {
 					}
 				}
 			} else {
-				System.out.println("CORRECTION NO");
 				myRobot.drive(speed, 0);
 
 			}
