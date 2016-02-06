@@ -42,7 +42,8 @@ public class Robot extends IterativeRobot {
 		// robot = new RobotDrive(leftF,leftR,rightF,rightR);
 		stick = new Joystick(Wiring.JOYSTICK0);
 		tranny = new Transmission(stick);
-		waffle = new WFFL("/home/lvuser/format.wffl");
+//		waffle = new WFFL("/home/lvuser/format.wffl");
+		waffle = new WFFL("/media/sda1/runthis.wffl");
 		// will eventually be at /media/sda0/filename.wffl
 
 	}
