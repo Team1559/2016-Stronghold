@@ -131,7 +131,7 @@ public class Robot extends IterativeRobot {
 			tranny.gear2();
 
 		}
-		SmartDashboard.putNumber("Yaw:", ahrs.getYaw());
+//		SmartDashboard.putNumber("Yaw:", ahrs.getYaw());
 	}
 
 	public void sendRecieveCenterValues() {
