@@ -15,10 +15,10 @@ public class Robot extends IterativeRobot {
 	AHRS ahrs;
 	RobotDrive robot;
 	boolean shootDone = false;
-	CANTalon leftF;
-	// CANTalon leftR;
-	CANTalon rightF;
-	// CANTalon rightR;
+	 CANTalon leftM;
+	 CANTalon leftS;
+	 CANTalon rightM;
+	 CANTalon rightS;
 	Joystick stick;
 	Timer timer;
 	double desiredHeading = 0;
@@ -34,17 +34,22 @@ public class Robot extends IterativeRobot {
 
 	public void robotInit() {
 		ahrs = new AHRS(SPI.Port.kMXP);
-		leftF = new CANTalon(Wiring.LEFT_FRONT_CAN_TALON);
-		rightF = new CANTalon(Wiring.RIGHT_FRONT_CAN_TALON);
-		// leftR = new CANTalon(Wiring.LEFT_REAR_CAN_TALON);
-		// rightR = new CANTalon(Wiring.RIGHT_REAR_CAN_TALON);
-		robot = new RobotDrive(leftF, rightF);
-		// robot = new RobotDrive(leftF,leftR,rightF,rightR);
+		leftM = new CANTalon(Wiring.LEFT_MASTER_TALON);
+		rightM = new CANTalon(Wiring.RIGHT_MASTER_TALON);
+		leftS = new CANTalon(Wiring.LEFT_SLAVE_TALON);
+		rightS = new CANTalon(Wiring.RIGHT_SLAVE_TALON);
+		leftS.changeControlMode(CANTalon.TalonControlMode.Follower);// sets
+		// motor to follower
+		leftS.set(Wiring.LEFT_MASTER_TALON);// sets to ID of master(leftM)
+		rightS.changeControlMode(CANTalon.TalonControlMode.Follower);
+		rightS.set(Wiring.RIGHT_MASTER_TALON);
+		robot = new RobotDrive(leftM, rightM);
 		stick = new Joystick(Wiring.JOYSTICK0);
 		tranny = new Transmission(stick);
-//		waffle = new WFFL("/home/lvuser/format.wffl");
 		waffle = new WFFL("/media/sda1/runthis.wffl");
-		// will eventually be at /media/sda0/filename.wffl
+		
+		leftM.setInverted(true);
+		rightM.setInverted(false);
 
 	}
 
@@ -120,8 +125,8 @@ public class Robot extends IterativeRobot {
 
 	public void teleopPeriodic() {
 		sendRecieveCenterValues();
-		waffle.myRobot.arcadeDrive(stick);
-		// robot.arcadeDrive(stick);
+//		waffle.myRobot.arcadeDrive(stick); //FOR THE TEST CHASSIS
+		 robot.arcadeDrive(stick);
 		waffle.Traction();
 		if (stick.getRawButton(6)) {
 
