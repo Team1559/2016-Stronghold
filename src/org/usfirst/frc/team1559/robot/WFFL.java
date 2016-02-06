@@ -242,6 +242,7 @@ public class WFFL {
 		} else if (yawError < -180) {
 			yawError = (yawError + 360);
 		}
+		
 		if ((length >= startTime * 50) && (length <= (seconds + startTime) * 50)) {
 			keepRunning = true;
 			if ((Math.abs(yawError)) >= tolerance) {
@@ -256,7 +257,6 @@ public class WFFL {
 				}
 			} else {
 				myRobot.drive(speed, 0);
-				keepRunning = false;
 			}
 		} else {
 			keepRunning = false;

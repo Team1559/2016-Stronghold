@@ -62,7 +62,8 @@ public class Robot extends IterativeRobot {
 		smrt.putBoolean("keepTurning: ", waffle.keepTurning);
 		smrt.putBoolean("keepRunning: ", waffle.keepRunning);
 		smrt.putNumber("Yaw:", waffle.yaw);
-
+		smrt.putNumber("listPos", listPos);
+		
 		Command current = waffle.list.get(listPos);
 		if (current.command.equals("TURN")) {
 			waffle.turnToAngle(current.angle);
@@ -77,7 +78,6 @@ public class Robot extends IterativeRobot {
 			if (waffle.keepRunning == false) {
 				System.out.println("Works stop now");
 				current.done = true;
-				waffle.length = 0;
 			}
 		} else if (current.command.equals("SHOOT")) {
 			sendRecieveCenterValues();
@@ -97,8 +97,9 @@ public class Robot extends IterativeRobot {
 			System.out.println("MOVING ON...nothing to see here..." + current.command);
 			current.done = false;
 
-			if (waffle.list.size() - 1 >= listPos) {
+			if (waffle.list.size() - 1 > listPos) {
 				listPos++;
+				waffle.length = 0;
 				waffle.keepRunning = true;
 				waffle.keepTurning = true;
 			} else {
