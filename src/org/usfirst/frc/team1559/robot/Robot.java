@@ -48,7 +48,7 @@ public class Robot extends IterativeRobot {
 		tranny = new Transmission(stick);
 //		waffle = new WFFL("/media/sda1/runthis.wffl");
 		
-		leftM.setInverted(true);
+		leftM.setInverted(false);
 		rightM.setInverted(false);
 
 	}
