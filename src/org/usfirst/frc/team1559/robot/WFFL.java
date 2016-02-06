@@ -270,7 +270,7 @@ public class WFFL {
 		int runTime = 0;
 		int average = 0;
 		double avg = 0;
-		boolean slip;
+		boolean slip = false;
 		// 1.25
 
 		accelVals[runTime] = ahrs.getWorldLinearAccelY();
@@ -280,10 +280,12 @@ public class WFFL {
 
 		avg /= accelVals.length;
 
-		if (Math.abs(avg) < .02 && pdp.getCurrent(0) > 8) {
+		if (Math.abs(avg) < .007 && pdp.getCurrent(0) > 40) {
 			slip = true;
-		} else {
-			slip = false;
+			left.set(left.get() * .5);
+		} else if (Math.abs(avg) < .007 && pdp.getCurrent(1) > 40) {
+			slip = true;
+			right.set(right.get() * .5);
 		}
 
 		if (runTime == (int) accelVals.length) {
