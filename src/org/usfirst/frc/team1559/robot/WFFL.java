@@ -74,9 +74,10 @@ public class WFFL {
 		// works.
 		command = raw.substring(0, raw.indexOf(" "));
 		
-		if(raw.equals("START")){
-			//do nothing
-		} else if(raw.equals("STOP")){
+		if(raw.trim().equals("START")){
+			System.out.println("START");
+		} else if(raw.trim().equals("STOP")){
+			System.out.println("STOP");
 			list.add(new Command("STOP", 0, 0, 0, 0, "", false, ""));
 		} else if (command.equals("GO")) {
 			temp = raw.substring(13);
@@ -136,7 +137,7 @@ public class WFFL {
 		} else if (command.equals("NOTE")) {
 			System.out.println(raw);
 		} else {
-			System.err.println("UNKNOWN COMMAND!");
+			System.err.println("UNKNOWN COMMAND:" + raw);
 		}
 		if (s.hasNextLine()) {
 			interpret();

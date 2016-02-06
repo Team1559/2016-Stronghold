@@ -58,11 +58,7 @@ public class Robot extends IterativeRobot {
 	}
 
 	public void autonomousPeriodic() {
-		
-		smrt.putBoolean("keepTurning: ", waffle.keepTurning);
-		smrt.putBoolean("keepRunning: ", waffle.keepRunning);
 		smrt.putNumber("Yaw:", waffle.yaw);
-		smrt.putNumber("listPos", listPos);
 		
 		Command current = waffle.list.get(listPos);
 		if (current.command.equals("TURN")) {
@@ -76,7 +72,6 @@ public class Robot extends IterativeRobot {
 		} else if (current.command.equals("GO")) {
 			waffle.drive(desiredHeading, current.dist, 0, current.speed);
 			if (waffle.keepRunning == false) {
-				System.out.println("Works stop now");
 				current.done = true;
 			}
 		} else if (current.command.equals("SHOOT")) {
@@ -88,13 +83,15 @@ public class Robot extends IterativeRobot {
 			}
 
 		} else if (current.command.equals("STOP")) {
-			System.out.println("I AM STOPPING...");
 			waffle.left.set(0);
 			waffle.right.set(0);
+		} else if (current.command.equals("WAIT")){
+			System.out.println("waiting...");
+			Timer.delay(current.time);
+			current.done = true;
 		}
 
 		if ((current.done == true)) {
-			System.out.println("MOVING ON...nothing to see here..." + current.command);
 			current.done = false;
 
 			if (waffle.list.size() - 1 > listPos) {
@@ -109,7 +106,6 @@ public class Robot extends IterativeRobot {
 			
 
 		}
-		smrt.putNumber("Angle it be: ", current.angle);
 		waffle.length++;
 	}
 
