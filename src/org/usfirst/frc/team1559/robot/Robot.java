@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Robot extends IterativeRobot {
-	AHRS ahrs;
+//	AHRS ahrs;
 	RobotDrive robot;
 	boolean shootDone = false;
 	 CANTalon leftM;
@@ -33,7 +33,7 @@ public class Robot extends IterativeRobot {
 	// does 2
 
 	public void robotInit() {
-		ahrs = new AHRS(SPI.Port.kMXP);
+//		ahrs = new AHRS(SPI.Port.kMXP);
 		leftM = new CANTalon(Wiring.LEFT_MASTER_TALON);
 		rightM = new CANTalon(Wiring.RIGHT_MASTER_TALON);
 		leftS = new CANTalon(Wiring.LEFT_SLAVE_TALON);
@@ -46,7 +46,7 @@ public class Robot extends IterativeRobot {
 		robot = new RobotDrive(leftM, rightM);
 		stick = new Joystick(Wiring.JOYSTICK0);
 		tranny = new Transmission(stick);
-		waffle = new WFFL("/media/sda1/runthis.wffl");
+//		waffle = new WFFL("/media/sda1/runthis.wffl");
 		
 		leftM.setInverted(true);
 		rightM.setInverted(false);
@@ -117,22 +117,22 @@ public class Robot extends IterativeRobot {
 
 	public void teleopInit() {
 		isInverted = true;
-		waffle.left.setInverted(true);
-		waffle.right.setInverted(true);
+//		waffle.left.setInverted(true);
+//		waffle.right.setInverted(true);
 		// leftF.setInverted(isInverted);
 
 	}
 
 	public void teleopPeriodic() {
-		sendRecieveCenterValues();
+//		sendRecieveCenterValues();
 //		waffle.myRobot.arcadeDrive(stick); //FOR THE TEST CHASSIS
 		 robot.arcadeDrive(stick);
-		waffle.Traction();
-		if (stick.getRawButton(6)) {
+//		waffle.Traction();
+		if (stick.getRawButton(3)) {
 
 			tranny.gear1();
 
-		} else if (stick.getRawButton(5)) {
+		} else if (stick.getRawButton(4)) {
 
 			tranny.gear2();
 

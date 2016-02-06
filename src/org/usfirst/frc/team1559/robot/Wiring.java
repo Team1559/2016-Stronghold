@@ -15,21 +15,15 @@ public class Wiring {
 	 * 
 	 */
 	
-	//Drive System
-	public static final int LEFT_FRONT_CAN_TALON = 10;
-	public static final int RIGHT_FRONT_CAN_TALON = 11;
-	public static final int LEFT_REAR_CAN_TALON = 12;
-	public static final int RIGHT_REAR_CAN_TALON = 13;
-	
 	//Talon Slavery
-	public static final int LEFT_MASTER_TALON = 15;
-	public static final int RIGHT_MASTER_TALON = 16;
-	public static final int LEFT_SLAVE_TALON = 17;
-	public static final int RIGHT_SLAVE_TALON = 18;
+	public static final int LEFT_MASTER_TALON = 13;
+	public static final int RIGHT_MASTER_TALON = 12;
+	public static final int LEFT_SLAVE_TALON = 11;
+	public static final int RIGHT_SLAVE_TALON = 10;
 	
 	//Transmission
-	public static final int SHIFT_1 = 0;
-//	public static final int SHIFT_2 = 1;
+	public static final int SHIFT_1 = 3;
+	public static final int SHIFT_2 = 4;
 	//determined after consulting Mr. Petilli
 	public static final double SHIFT_UP_SPEED = 4.6; // m/s
 	public static final double SHIFT_DOWN_SPEED = 4.4; // m/s
