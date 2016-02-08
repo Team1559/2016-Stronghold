@@ -2,7 +2,9 @@ package org.usfirst.frc.team1559.robot;
 
 import com.kauailabs.navx.frc.AHRS;
 
+import edu.wpi.first.wpilibj.CANSpeedController;
 import edu.wpi.first.wpilibj.CANTalon;
+import edu.wpi.first.wpilibj.CANTalon.FeedbackDevice;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.RobotDrive;
@@ -50,6 +52,10 @@ public class Robot extends IterativeRobot {
 		
 		leftM.setInverted(false);
 		rightM.setInverted(false);
+		
+		//encoder stuff
+		leftM.setFeedbackDevice(FeedbackDevice.QuadEncoder);
+		rightM.setFeedbackDevice(FeedbackDevice.QuadEncoder);
 
 	}
 
@@ -137,7 +143,7 @@ public class Robot extends IterativeRobot {
 			tranny.gear2();
 
 		}
-//		SmartDashboard.putNumber("Yaw:", ahrs.getYaw());
+		SmartDashboard.putNumber("Encoder", rightM.getEncPosition());
 	}
 
 	public void sendRecieveCenterValues() {
