@@ -54,8 +54,7 @@ public class Robot extends IterativeRobot {
 		rightM.setInverted(false);
 		
 		//encoder stuff
-		leftM.setFeedbackDevice(FeedbackDevice.QuadEncoder);
-		rightM.setFeedbackDevice(FeedbackDevice.QuadEncoder);
+		rightM.configEncoderCodesPerRev(256);
 
 	}
 
@@ -143,6 +142,7 @@ public class Robot extends IterativeRobot {
 			tranny.gear2();
 
 		}
+		
 		SmartDashboard.putNumber("Encoder", rightM.getEncPosition());
 	}
 
