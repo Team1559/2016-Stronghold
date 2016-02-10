@@ -189,13 +189,18 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putNumber("Current", leftM.getOutputCurrent());
 	}
 
-	public void sendRecieveCenterValues() {
-		// String [] center = sc.read();
-		// int cx = Integer.parseInt(center[0]);
-		// int cy = Integer.parseInt(center[1]);
-		// waffle.cx = cx;
-		// waffle.cy = cy;
+	public void sendRecieveCenterValues(String in) {
+    	String cx = in.substring(0, (in.indexOf(",")));
+    	String cy = in.substring(in.indexOf(",") + 1);
+    	System.out.println(cx + " " + cy);
+    	try{
+    		waffle.cx = Integer.parseInt(cx);
+    		waffle.cy = Integer.parseInt(cy);
+    	} catch (NumberFormatException e){
+    		return;
+    	}
 	}
+	
 
 	public void testInit() {
 
