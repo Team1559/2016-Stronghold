@@ -41,4 +41,9 @@ public class Wiring {
 	public static final int VOLTAGE_RAMP_RATE = 80;
 	public static final int PULSES_PER_INCH = 256;
 	
+	// gatherer/shooter controls
+	public static final int BTN_GATHERER_TO_TOP = 7;
+	public static final int BTN_GATHERER_TO_MID = 5;
+	public static final int BTN_GATHERER_TO_BOT = 8;
+	public static final int BTN_SHOOT = 0;
 }
