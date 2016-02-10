@@ -5,6 +5,8 @@ import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.CANSpeedController;
 import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.CANTalon.FeedbackDevice;
+import edu.wpi.first.wpilibj.CANTalon.TalonControlMode;
+import edu.wpi.first.wpilibj.RobotDrive.MotorType;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.RobotDrive;
@@ -30,6 +32,7 @@ public class Robot extends IterativeRobot {
 	int listPos = 0;
 	SmartDashboard smrt = new SmartDashboard();
 	SocketClient sc = new SocketClient();
+	double leftVelocity, rightVelocity;
 
 	// Comments are for a 4 motor drive system whereas uncommented code just
 	// does 2
@@ -50,11 +53,43 @@ public class Robot extends IterativeRobot {
 		tranny = new Transmission(stick);
 //		waffle = new WFFL("/media/sda1/runthis.wffl");
 		
-		leftM.setInverted(false);
-		rightM.setInverted(false);
+//		leftM.setInverted(true);
+//		rightM.setInverted(false);
 		
 		//encoder stuff
-		rightM.configEncoderCodesPerRev(256);
+		leftM.configEncoderCodesPerRev(Wiring.PULSES_PER_INCH);
+		rightM.configEncoderCodesPerRev(Wiring.PULSES_PER_INCH);
+		
+		leftM.enableBrakeMode(true);
+		rightM.enableBrakeMode(true);
+		leftS.enableBrakeMode(true);
+		rightS.enableBrakeMode(true);
+		
+		rightM.setVoltageRampRate(Wiring.VOLTAGE_RAMP_RATE);
+		leftM.setVoltageRampRate(Wiring.VOLTAGE_RAMP_RATE);
+		robot.setExpiration(1000000);
+		
+		leftM.changeControlMode(TalonControlMode.Speed);
+		leftM.setFeedbackDevice(FeedbackDevice.CtreMagEncoder_Relative);
+		leftM.reverseSensor(false);
+		leftM.configNominalOutputVoltage(+0.0f, -0.0f);
+		leftM.configPeakOutputVoltage(+12.0f, -12.0f);
+		leftM.setProfile(0);
+		leftM.setF(1);
+		leftM.setP(0);
+		leftM.setI(0);
+		leftM.setD(0);
+		
+		rightM.changeControlMode(TalonControlMode.Speed);
+		rightM.setFeedbackDevice(FeedbackDevice.CtreMagEncoder_Relative);
+		rightM.reverseSensor(false);
+		rightM.configNominalOutputVoltage(+0.0f, -0.0f);
+		rightM.configPeakOutputVoltage(+12.0f, -12.0f);
+		rightM.setProfile(0);
+		rightM.setF(1);
+		rightM.setP(0);
+		rightM.setI(0);
+		rightM.setD(0);
 
 	}
 
@@ -62,8 +97,8 @@ public class Robot extends IterativeRobot {
 		waffle.reset();
 		waffle.ahrs.reset();
 		waffle.interpret();
-		waffle.left.setInverted(false);
-		waffle.right.setInverted(false);
+//		waffle.left.setInverted(false);
+//		waffle.right.setInverted(false);
 		waffle.length = 0;
 
 	}
@@ -121,10 +156,12 @@ public class Robot extends IterativeRobot {
 	}
 
 	public void teleopInit() {
-		isInverted = true;
+//		isInverted = true;
 //		waffle.left.setInverted(true);
 //		waffle.right.setInverted(true);
 		// leftF.setInverted(isInverted);
+		rightM.setEncPosition(0);
+		leftM.setEncPosition(0);
 
 	}
 
@@ -143,7 +180,13 @@ public class Robot extends IterativeRobot {
 
 		}
 		
-		SmartDashboard.putNumber("Encoder", rightM.getEncPosition());
+		leftVelocity = leftM.getEncVelocity() / Wiring.PULSES_PER_INCH * 10;
+		rightVelocity = (rightM.getEncVelocity() / Wiring.PULSES_PER_INCH * 10) / 12;
+		
+		
+		SmartDashboard.putNumber("Left Encoder", leftM.getEncPosition());
+		SmartDashboard.putNumber("Right Encoder", leftM.getPosition());
+		SmartDashboard.putNumber("Current", leftM.getOutputCurrent());
 	}
 
 	public void sendRecieveCenterValues() {

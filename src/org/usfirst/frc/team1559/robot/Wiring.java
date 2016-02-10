@@ -37,4 +37,8 @@ public class Wiring {
 	//NAVx stuff
 	public static final double OPTIMAL_TURNT_SPEED = 1;
 	
+	//driving stuff
+	public static final int VOLTAGE_RAMP_RATE = 80;
+	public static final int PULSES_PER_INCH = 256;
+	
 }
