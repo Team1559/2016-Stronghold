@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.Talon;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * Includes methods for shooting and gathering.
@@ -29,13 +30,20 @@ public class ShooterGatherer {
 	// private Joystick stick;
 	// private Solenoid shift1;
 	// private Solenoid shift2;
-	private Solenoid solShooter;
 	// private Solenoid cocked;
 	// private Relay led;
 	private DigitalInput diGathererTop;
 	private DigitalInput diGathererBot;
 	// private PowerDistributionPanel pdp;
 	private Counter counter;
+	Solenoid fireShooter, downShooter;
+	
+
+	public ShooterGatherer() {
+		fireShooter = new Solenoid(Wiring.SHOOTER_UP_SOLENOID);
+		downShooter = new Solenoid(Wiring.SHOOTER_DOWN_SOLENOID);
+	}
+
 	//
 	// public void robotInit() {
 	// // ahrs = new AHRS(SPI.Port.kMXP);
@@ -180,38 +188,47 @@ public class ShooterGatherer {
 
 	/**
 	 * Enable/disable the shooter based on joystick input.
-	 * @param input The joystick used to control the shooter.
+	 * 
+	 * @param input
+	 *            The joystick used to control the shooter.
 	 */
+	
+	public void setSolenoids(boolean s){
+		fireShooter.set(s);
+		downShooter.set(!s);
+	}
+	
 	public void updateShooter(Joystick input) {
-		if (solShooter == null) {
-			System.err.println("The shooter motor controller has not been initialized. Do so with this class's \"initShooter()\" method.");
-			return;
-		}
+
+		SmartDashboard.putBoolean("SOLENOID", fireShooter.get());
+		SmartDashboard.putNumber("Shoot State", shootState);
+		
 		switch (shootState) {
 		case 0: // waiting for fire button
 			if (input.getRawButton(Wiring.BTN_SHOOT)) {
-				solShooter.set(true);
+				setSolenoids(true);
 				shootState = 1;
 				shooterCount = 0;
 			}
 			break;
 		case 1: // waiting for catapult to move
 			shooterCount++;
-			if (shooterCount >= Wiring.SHOOTER_DELAY) {
+			if (shooterCount >= Wiring.SHOOTER_UP_DELAY) {
 				shootState = 2;
 				shooterCount = 0;
 			}
 			break;
 		case 2: // recock the catapult
-			solShooter.set(false);
+			setSolenoids(false);
 			shootState = 3;
 			break;
 		case 3: // wait for catapult to cock
 			shooterCount++;
-			if (shooterCount >= Wiring.SHOOTER_DELAY) {
+			if (shooterCount >= Wiring.SHOOTER_DOWN_DELAY) {
 				shootState = 4;
 				shooterCount = 0;
 			}
+			break;
 		case 4: // wait for button to go false
 			if (!input.getRawButton(Wiring.BTN_SHOOT))
 				shootState = 0;
@@ -221,16 +238,17 @@ public class ShooterGatherer {
 
 	private int gatherState = 0;
 
-	public void initShooter(int id) {
-		solShooter = new Solenoid(id);
-		solShooter.set(false);
+	public void initShooter() {
+		setSolenoids(false);
 	}
 
 	/**
 	 * Initializes the two motor controls necessary for gatherer usage.
 	 * 
-	 * @param liftId The id for the {@link Talon}
-	 * @param rotateId The id for the {@link Spark}
+	 * @param liftId
+	 *            The id for the {@link Talon}
+	 * @param rotateId
+	 *            The id for the {@link Spark}
 	 */
 
 	public void initGatherers(int liftId, int rotateId) {
@@ -239,24 +257,30 @@ public class ShooterGatherer {
 	}
 
 	/**
-	 * Reads input from the joystick in order to control the lifting part of the gatherer, which operates on a three-tier elevator-like system. Three different buttons are read from the joystick in order to move the {@link Talon} to one of
-	 * the three tiers. Update periodically.
+	 * Reads input from the joystick in order to control the lifting part of the
+	 * gatherer, which operates on a three-tier elevator-like system. Three
+	 * different buttons are read from the joystick in order to move the
+	 * {@link Talon} to one of the three tiers. Update periodically.
 	 * 
-	 * @param input The joystick that will be used to control the gatherer.
+	 * @param input
+	 *            The joystick that will be used to control the gatherer.
 	 */
 	public void gathererTalon(Joystick input) {
 		if (gatherLift == null) {
-			System.err.println("The gatherer motor controllers have not been initialized. Call this class's method \"initGatherers()\" in order to do so.");
+			System.err
+					.println("The gatherer motor controllers have not been initialized. Call this class's method \"initGatherers()\" in order to do so.");
 			return;
 		}
 		switch (gatherState) {
 		case 0: // checking for input
-			if (input.getRawButton(Wiring.BTN_GATHERER_TO_TOP) && diGathererTop.get()) {
+			if (input.getRawButton(Wiring.BTN_GATHERER_TO_TOP)
+					&& diGathererTop.get()) {
 				gatherLift.set(0.6);
 				System.out.println("Gatherer up");
 				gatherCount = 0;
 				gatherState = 1;
-			} else if (input.getRawButton(Wiring.BTN_GATHERER_TO_BOT) && diGathererBot.get()) {
+			} else if (input.getRawButton(Wiring.BTN_GATHERER_TO_BOT)
+					&& diGathererBot.get()) {
 				gatherLift.set(-0.6);
 				System.out.println("Gatherer down");
 				gatherCount = 0;

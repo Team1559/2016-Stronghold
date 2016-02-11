@@ -38,15 +38,19 @@ public class Wiring {
 	public static final double OPTIMAL_TURNT_SPEED = 1;
 	
 	//driving stuff
-	public static final int VOLTAGE_RAMP_RATE = 80;
-	public static final int PULSES_PER_INCH = 256;
+	public static final int VOLTAGE_RAMP_RATE = 40;
+	public static final int PULSES_PER_INCH = 447;
 	
 	// gatherer/shooter controls
 	public static final int BTN_GATHERER_TO_TOP = 7;
 	public static final int BTN_GATHERER_TO_MID = 5;
 	public static final int BTN_GATHERER_TO_BOT = 8;
-	public static final int BTN_SHOOT = 0;
+	public static final int BTN_SHOOT = 1;
 	
 	// shooter constant(s)
-	public static final int SHOOTER_DELAY = 5;
+	public static final int SHOOTER_UP_DELAY = 50;
+	public static final int SHOOTER_DOWN_DELAY = 5;
+	public static final int SHOOTER_UP_SOLENOID = 6;
+	public static final int SHOOTER_DOWN_SOLENOID = 5;
+	public static final int MAGNET = 0;
 }

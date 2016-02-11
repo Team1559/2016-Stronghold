@@ -3,9 +3,12 @@ package org.usfirst.frc.team1559.robot;
 import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.CANTalon.FeedbackDevice;
 import edu.wpi.first.wpilibj.CANTalon.TalonControlMode;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.RobotDrive;
+import edu.wpi.first.wpilibj.RobotDrive.MotorType;
+import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -26,6 +29,9 @@ public class Robot extends IterativeRobot {
 	int listPos = 0;
 	SocketClient sc = new SocketClient();
 	double leftVelocity, rightVelocity;
+	ShooterGatherer sg;
+	final boolean shooterInversion = false;
+	DigitalInput magneticSensor; 
 
 	// Comments are for a 4 motor drive system whereas uncommented code just does 2
 
@@ -43,10 +49,14 @@ public class Robot extends IterativeRobot {
 		robot = new RobotDrive(leftM, rightM);
 		stick = new Joystick(Wiring.JOYSTICK0);
 		tranny = new Transmission(stick);
+		sg = new ShooterGatherer();
+		sg.initShooter();
+		magneticSensor = new DigitalInput(Wiring.MAGNET);
 		// waffle = new WFFL("/media/sda1/runthis.wffl");
+		robot.setExpiration(Double.MAX_VALUE);
 
-		// leftM.setInverted(true);
-		// rightM.setInverted(false);
+		 leftM.setInverted(true);
+		 rightM.setInverted(true);
 
 		// encoder stuff
 		leftM.configEncoderCodesPerRev(Wiring.PULSES_PER_INCH);
@@ -59,29 +69,28 @@ public class Robot extends IterativeRobot {
 
 		rightM.setVoltageRampRate(Wiring.VOLTAGE_RAMP_RATE);
 		leftM.setVoltageRampRate(Wiring.VOLTAGE_RAMP_RATE);
-		robot.setExpiration(1000000);
 
-		leftM.changeControlMode(TalonControlMode.Speed);
-		leftM.setFeedbackDevice(FeedbackDevice.CtreMagEncoder_Relative);
-		leftM.reverseSensor(false);
-		leftM.configNominalOutputVoltage(+0.0f, -0.0f);
-		leftM.configPeakOutputVoltage(+12.0f, -12.0f);
-		leftM.setProfile(0);
-		leftM.setF(1);
-		leftM.setP(0);
-		leftM.setI(0);
-		leftM.setD(0);
-
-		rightM.changeControlMode(TalonControlMode.Speed);
-		rightM.setFeedbackDevice(FeedbackDevice.CtreMagEncoder_Relative);
-		rightM.reverseSensor(false);
-		rightM.configNominalOutputVoltage(+0.0f, -0.0f);
-		rightM.configPeakOutputVoltage(+12.0f, -12.0f);
-		rightM.setProfile(0);
-		rightM.setF(1);
-		rightM.setP(0);
-		rightM.setI(0);
-		rightM.setD(0);
+//		leftM.changeControlMode(TalonControlMode.Speed);
+//		leftM.setFeedbackDevice(FeedbackDevice.CtreMagEncoder_Relative);
+//		leftM.reverseSensor(false);
+//		leftM.configNominalOutputVoltage(+0.0f, -0.0f);
+//		leftM.configPeakOutputVoltage(+12.0f, -12.0f);
+//		leftM.setProfile(0);
+//		leftM.setF(1);
+//		leftM.setP(0);
+//		leftM.setI(0);
+//		leftM.setD(0);
+//
+//		rightM.changeControlMode(TalonControlMode.Speed);
+//		rightM.setFeedbackDevice(FeedbackDevice.CtreMagEncoder_Relative);
+//		rightM.reverseSensor(false);
+//		rightM.configNominalOutputVoltage(+0.0f, -0.0f);
+//		rightM.configPeakOutputVoltage(+12.0f, -12.0f);
+//		rightM.setProfile(0);
+//		rightM.setF(1);
+//		rightM.setP(0);
+//		rightM.setI(0);
+//		rightM.setD(0);
 
 	}
 
@@ -92,7 +101,8 @@ public class Robot extends IterativeRobot {
 		// waffle.left.setInverted(false);
 		// waffle.right.setInverted(false);
 		waffle.length = 0;
-
+		sg.initShooter();
+		
 	}
 
 	public void autonomousPeriodic() {
@@ -153,14 +163,18 @@ public class Robot extends IterativeRobot {
 		// leftF.setInverted(isInverted);
 		rightM.setEncPosition(0);
 		leftM.setEncPosition(0);
+		sg.initShooter();
 
 	}
 
 	public void teleopPeriodic() {
 		// sendRecieveCenterValues();
 		// waffle.myRobot.arcadeDrive(stick); //FOR THE TEST CHASSIS
-		robot.arcadeDrive(stick);
+		robot.arcadeDrive(stick.getY(), -stick.getX());
 		// waffle.Traction();
+		
+		System.out.println(magneticSensor.get());
+		
 		if (stick.getRawButton(3)) {
 
 			tranny.gear1();
@@ -170,13 +184,9 @@ public class Robot extends IterativeRobot {
 			tranny.gear2();
 
 		}
-
-		leftVelocity = leftM.getEncVelocity() / Wiring.PULSES_PER_INCH * 10;
-		rightVelocity = (rightM.getEncVelocity() / Wiring.PULSES_PER_INCH * 10) / 12;
-
-		SmartDashboard.putNumber("Left Encoder", leftM.getEncPosition());
-		SmartDashboard.putNumber("Right Encoder", leftM.getPosition());
-		SmartDashboard.putNumber("Current", leftM.getOutputCurrent());
+		
+		sg.updateShooter(stick);
+		
 	}
 
 	public void sendRecieveCenterValues(String in) {
@@ -191,6 +201,7 @@ public class Robot extends IterativeRobot {
 		}
 	}
 
+	
 	public void testInit() {
 
 	}
