@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.Talon;
 
 /**
@@ -17,7 +18,6 @@ public class ShooterGatherer {
 	// final int BlueButton = 3;
 	// final int RedButton = 2;
 	// final int GreenButton = 1;
-	final int CAT_DELAY = 5;
 	//
 	// private RobotDrive robot;
 	private Talon gatherLift;
@@ -32,8 +32,6 @@ public class ShooterGatherer {
 	private Solenoid solShooter;
 	// private Solenoid cocked;
 	// private Relay led;
-	private DigitalInput diShooterTop;
-	private DigitalInput diShooterBot;
 	private DigitalInput diGathererTop;
 	private DigitalInput diGathererBot;
 	// private PowerDistributionPanel pdp;
@@ -47,8 +45,6 @@ public class ShooterGatherer {
 	// rightS = new CANTalon(18);
 	// gatherLift = new Talon(0);
 	// gatherRotate = new Talon(1);
-	// catTop = new DigitalInput(0);
-	// catBot = new DigitalInput(1);
 	// gatherTop = new DigitalInput(2);
 	// gatherBot = new DigitalInput(3);
 	// robot = new RobotDrive(leftM, rightM);
@@ -62,9 +58,7 @@ public class ShooterGatherer {
 	// leftS.set(15);// sets to ID of master(leftM)
 	// rightS.changeControlMode(CANTalon.TalonControlMode.Follower);
 	// rightS.set(16);
-	// fired = new Solenoid(2);
 	// led = new Relay(0);
-	// fired.set(false);
 	// gatherLift.set(0.0);
 	// gatherRotate.set(0.0);
 	// counter.reset();
@@ -182,26 +176,30 @@ public class ShooterGatherer {
 	// }
 	//
 	private int shootState = 0;
-	private int catCount = 0;
+	private int shooterCount = 0;
 
 	/**
-	 * 
-	 * @param
+	 * Enable/disable the shooter based on joystick input.
+	 * @param input The joystick used to control the shooter.
 	 */
-	public void shooter1(Joystick input) {
+	public void updateShooter(Joystick input) {
+		if (solShooter == null) {
+			System.err.println("The shooter motor controller has not been initialized. Do so with this class's \"initShooter()\" method.");
+			return;
+		}
 		switch (shootState) {
 		case 0: // waiting for fire button
 			if (input.getRawButton(Wiring.BTN_SHOOT)) {
 				solShooter.set(true);
 				shootState = 1;
-				catCount = 0;
+				shooterCount = 0;
 			}
 			break;
 		case 1: // waiting for catapult to move
-			catCount++;
-			if (catCount >= CAT_DELAY) {
+			shooterCount++;
+			if (shooterCount >= Wiring.SHOOTER_DELAY) {
 				shootState = 2;
-				catCount = 0;
+				shooterCount = 0;
 			}
 			break;
 		case 2: // recock the catapult
@@ -209,10 +207,10 @@ public class ShooterGatherer {
 			shootState = 3;
 			break;
 		case 3: // wait for catapult to cock
-			catCount++;
-			if (catCount >= CAT_DELAY) {
+			shooterCount++;
+			if (shooterCount >= Wiring.SHOOTER_DELAY) {
 				shootState = 4;
-				catCount = 0;
+				shooterCount = 0;
 			}
 		case 4: // wait for button to go false
 			if (!input.getRawButton(Wiring.BTN_SHOOT))
@@ -221,34 +219,12 @@ public class ShooterGatherer {
 		}
 	}
 
-	public void shooter(boolean fire) {
-		switch (shootState) {
-		case 0:
-			if (fire) { // add && ball sensor
-				solShooter.set(true);
-				shootState = 1;
-			}
-			break;
-		case 1:
-			if (!diShooterTop.get()) {
-				solShooter.set(false);
-				shootState = 2;
-			}
-			break;
-		case 2:
-			if (!diShooterBot.get()) {
-				shootState = 3;
-			}
-			break;
-		case 3:
-			if (!fire) {
-				shootState = 0;
-			}
-			break;
-		}
-	}
-
 	private int gatherState = 0;
+
+	public void initShooter(int id) {
+		solShooter = new Solenoid(id);
+		solShooter.set(false);
+	}
 
 	/**
 	 * Initializes the two motor controls necessary for gatherer usage.
@@ -256,6 +232,7 @@ public class ShooterGatherer {
 	 * @param liftId The id for the {@link Talon}
 	 * @param rotateId The id for the {@link Spark}
 	 */
+
 	public void initGatherers(int liftId, int rotateId) {
 		gatherLift = new Talon(liftId);
 		gatherRotate = new Talon(rotateId);

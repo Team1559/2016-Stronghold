@@ -46,4 +46,7 @@ public class Wiring {
 	public static final int BTN_GATHERER_TO_MID = 5;
 	public static final int BTN_GATHERER_TO_BOT = 8;
 	public static final int BTN_SHOOT = 0;
+	
+	// shooter constant(s)
+	public static final int SHOOTER_DELAY = 5;
 }
