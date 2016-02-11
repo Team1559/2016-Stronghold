@@ -8,6 +8,7 @@ import java.util.Scanner;
 
 import com.kauailabs.navx.frc.AHRS;
 
+import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.SPI;
@@ -37,10 +38,7 @@ public class WFFL {
 	double yawError;
 	double unchangedYawError;
 	double gyro_angle;
-	AHRS ahrs;
-	Talon right = new Talon(1);
-	Talon left = new Talon(0);
-	RobotDrive myRobot = new RobotDrive(left, right);
+	private AHRS ahrs;
 	long global_startTime = System.currentTimeMillis() / 1000;
 	double time;
 	double dist;
@@ -54,8 +52,11 @@ public class WFFL {
 	SocketClient sc = new SocketClient();
 	public int cx;
 	public int cy;
+	RobotDrive robot;
+	CANTalon rightM, leftM;
+	
 
-	public WFFL(String path) {
+	public WFFL(String path, RobotDrive rd, CANTalon rightM, CANTalon leftM) {
 		this.path = path;
 		file = new File(path);
 		try {
@@ -65,6 +66,10 @@ public class WFFL {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		robot = rd;
+		this.rightM = rightM;
+		this.leftM = leftM;
 
 	}
 
@@ -160,6 +165,10 @@ public class WFFL {
 			e.printStackTrace();
 		}
 	}
+	
+	public void resetAHRS() {
+		ahrs.reset();
+	}
 
 	public void turnToAngle(double angle) {
 		double kpturn = 0.1;
@@ -194,16 +203,16 @@ public class WFFL {
 		if ((Math.abs(yawError) > turnTolerance)) {
 			keepTurning = true;
 			if (yawError > 0) {
-				left.set(correctionTurn * Wiring.OPTIMAL_TURNT_SPEED);
-				right.set(correctionTurn * Wiring.OPTIMAL_TURNT_SPEED);
+				leftM.set(correctionTurn * Wiring.OPTIMAL_TURNT_SPEED);
+				rightM.set(correctionTurn * Wiring.OPTIMAL_TURNT_SPEED);
 			} else if (yawError < 0) {
-				left.set(correctionTurn * Wiring.OPTIMAL_TURNT_SPEED);
-				right.set(correctionTurn * Wiring.OPTIMAL_TURNT_SPEED);
+				leftM.set(correctionTurn * Wiring.OPTIMAL_TURNT_SPEED);
+				rightM.set(correctionTurn * Wiring.OPTIMAL_TURNT_SPEED);
 
 			}
 		} else {
-			left.set(0);
-			right.set(0);
+			leftM.set(0);
+			rightM.set(0);
 			keepTurning = false;
 		}
 	}
@@ -249,16 +258,16 @@ public class WFFL {
 			keepRunning = true;
 			if ((Math.abs(yawError)) >= tolerance) {
 				if ((Math.abs(yawError * kp)) < maxError) {
-					myRobot.drive(speed, -(yawError * kp));
+					robot.drive(speed, -(yawError * kp));
 				} else {
 					if (yawError < 0) {
-						myRobot.drive(speed, maxError);
+						robot.drive(speed, maxError);
 					} else {
-						myRobot.drive(speed, -maxError);
+						robot.drive(speed, -maxError);
 					}
 				}
 			} else {
-				myRobot.drive(speed, 0);
+				robot.drive(speed, 0);
 			}
 		} else {
 			keepRunning = false;
@@ -282,10 +291,10 @@ public class WFFL {
 
 		if (Math.abs(avg) < .007 && pdp.getCurrent(0) > 40) {
 			slip = true;
-			left.set(left.get() * .5);
+			leftM.set(leftM.get() * .5);
 		} else if (Math.abs(avg) < .007 && pdp.getCurrent(1) > 40) {
 			slip = true;
-			right.set(right.get() * .5);
+			rightM.set(rightM.get() * .5);
 		}
 
 		if (runTime == (int) accelVals.length) {
@@ -304,28 +313,27 @@ public class WFFL {
 
 	public boolean center() {
 		if (isWithinThresh(cx, 310, 330)) {
-			left.set(0);
-			right.set(0);
+			leftM.set(0);
+			rightM.set(0);
 			// shoot code goes here
 			return true;
 		} else if (cx < 310) {
-			left.set(Wiring.OPTIMAL_TURNT_SPEED);
-			right.set(Wiring.OPTIMAL_TURNT_SPEED);
+			leftM.set(Wiring.OPTIMAL_TURNT_SPEED);
+			rightM.set(Wiring.OPTIMAL_TURNT_SPEED);
 			return false;
 		} else {
-			left.set(-Wiring.OPTIMAL_TURNT_SPEED);
-			right.set(-Wiring.OPTIMAL_TURNT_SPEED);
+			leftM.set(-Wiring.OPTIMAL_TURNT_SPEED);
+			rightM.set(-Wiring.OPTIMAL_TURNT_SPEED);
 			return false;
 		}
 	}
 	
-	public void estimateDistance() {
-		double v = ahrs.getVelocityY();
-		double d = ahrs.getDisplacementY();
-		
-		double deltaDistance = v * .02;
-		distance += deltaDistance;
-		
-	}
-	
+//	public void estimateDistance() {
+//		double v = ahrs.getVelocityY();
+//		double d = ahrs.getDisplacementY();
+//		
+//		double deltaDistance = v * .02;
+//		distance += deltaDistance;
+//		
+//	}
 }

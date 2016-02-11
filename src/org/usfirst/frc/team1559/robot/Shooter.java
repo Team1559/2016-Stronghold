@@ -9,6 +9,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 public class Shooter {
 
+	boolean shootDone = false;
+	
 	// final int fireButton = 6;
 	// final int YellowButton = 4;
 	// final int BlueButton = 3;
@@ -186,6 +188,44 @@ public class Shooter {
 	public void setSolenoids(boolean s){
 		fireShooter.set(s);
 		downShooter.set(!s);
+	}
+	
+	public void updateShooter(boolean input) {
+
+		SmartDashboard.putBoolean("SOLENOID", fireShooter.get());
+		SmartDashboard.putNumber("Shoot State", shootState);
+		
+		switch (shootState) {
+		case 0: // waiting for fire button
+			if (input) {
+				setSolenoids(true);
+				shootState = 1;
+				shooterCount = 0;
+			}
+			break;
+		case 1: // waiting for catapult to move
+			shooterCount++;
+			if (shooterCount >= Wiring.SHOOTER_UP_DELAY) {
+				shootState = 2;
+				shooterCount = 0;
+			}
+			break;
+		case 2: // recock the catapult
+			setSolenoids(false);
+			shootState = 3;
+			break;
+		case 3: // wait for catapult to cock
+			shooterCount++;
+			if (shooterCount >= Wiring.SHOOTER_DOWN_DELAY) {
+				shootState = 4;
+				shooterCount = 0;
+			}
+			break;
+		case 4: // wait for button to go false
+				shootDone = true;
+				shootState = 0;
+			break;
+		}
 	}
 	
 	public void updateShooter(Joystick input) {
