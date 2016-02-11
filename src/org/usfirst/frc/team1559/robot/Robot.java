@@ -1,14 +1,10 @@
 package org.usfirst.frc.team1559.robot;
 
 import edu.wpi.first.wpilibj.CANTalon;
-import edu.wpi.first.wpilibj.CANTalon.FeedbackDevice;
-import edu.wpi.first.wpilibj.CANTalon.TalonControlMode;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.RobotDrive;
-import edu.wpi.first.wpilibj.RobotDrive.MotorType;
-import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -29,7 +25,7 @@ public class Robot extends IterativeRobot {
 	int listPos = 0;
 	SocketClient sc = new SocketClient();
 	double leftVelocity, rightVelocity;
-	ShooterGatherer sg;
+	Shooter sg;
 	final boolean shooterInversion = false;
 	DigitalInput magneticSensor; 
 
@@ -49,12 +45,12 @@ public class Robot extends IterativeRobot {
 		robot = new RobotDrive(leftM, rightM);
 		stick = new Joystick(Wiring.JOYSTICK0);
 		tranny = new Transmission(stick);
-		sg = new ShooterGatherer();
+		sg = new Shooter();
 		sg.initShooter();
 		magneticSensor = new DigitalInput(Wiring.MAGNET);
 		// waffle = new WFFL("/media/sda1/runthis.wffl");
 		robot.setExpiration(Double.MAX_VALUE);
-
+		
 		 leftM.setInverted(true);
 		 rightM.setInverted(true);
 
@@ -168,6 +164,7 @@ public class Robot extends IterativeRobot {
 	}
 
 	public void teleopPeriodic() {
+		SmartDashboard.putNumber("Left Encoder", leftM.getEncPosition());
 		// sendRecieveCenterValues();
 		// waffle.myRobot.arcadeDrive(stick); //FOR THE TEST CHASSIS
 		robot.arcadeDrive(stick.getY(), -stick.getX());

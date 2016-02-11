@@ -7,46 +7,43 @@ package org.usfirst.frc.team1559.robot;
  * Thou shalt not use magic numbers!
  */
 public class Wiring {
-	
+
 	/*
-	 * 
-	 * Format:
-	 * public static final type VALUE_IN_CAPS = 23;
-	 * 
+	 * Format: public static final type VALUE_IN_CAPS = 23;
 	 */
-	
-	//Talon Slavery
+
+	// Talon Slavery
 	public static final int LEFT_MASTER_TALON = 13;
 	public static final int RIGHT_MASTER_TALON = 12;
 	public static final int LEFT_SLAVE_TALON = 11;
 	public static final int RIGHT_SLAVE_TALON = 10;
-	
-	//Transmission
+
+	// Transmission
 	public static final int SHIFT_1 = 3;
 	public static final int SHIFT_2 = 4;
-	//determined after consulting Mr. Petilli
+	// determined after consulting Mr. Petilli
 	public static final double SHIFT_UP_SPEED = 4.6; // m/s
 	public static final double SHIFT_DOWN_SPEED = 4.4; // m/s
-	
-	//Joysticks
+
+	// Joysticks
 	public static final int JOYSTICK0 = 0;
 	public static final int JOYSTICK1 = 1;
 	public static final int JOYSTICK2 = 2;
 	public static final int JOYSTICK3 = 3;
-	
-	//NAVx stuff
+
+	// NAVx stuff
 	public static final double OPTIMAL_TURNT_SPEED = 1;
-	
-	//driving stuff
+
+	// driving stuff
 	public static final int VOLTAGE_RAMP_RATE = 40;
 	public static final int PULSES_PER_INCH = 447;
-	
+
 	// gatherer/shooter controls
 	public static final int BTN_GATHERER_TO_TOP = 7;
 	public static final int BTN_GATHERER_TO_MID = 5;
 	public static final int BTN_GATHERER_TO_BOT = 8;
 	public static final int BTN_SHOOT = 1;
-	
+
 	// shooter constant(s)
 	public static final int SHOOTER_UP_DELAY = 50;
 	public static final int SHOOTER_DOWN_DELAY = 5;
