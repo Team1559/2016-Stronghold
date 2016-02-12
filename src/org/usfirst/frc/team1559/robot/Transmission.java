@@ -82,19 +82,19 @@ public class Transmission /*implements Runnable */{
 //	}
 	
 	public int getRDisplacement() {
-		return -(rightM.getEncPosition() / Wiring.PULSES_PER_INCH);
+		return (rightM.getEncPosition() / Wiring.PULSES_PER_INCH);
 	}
 
 	public int getLDisplacement() {
-		return (leftM.getEncPosition() / Wiring.PULSES_PER_INCH);
+		return -(leftM.getEncPosition() / Wiring.PULSES_PER_INCH);
 	}
 	
 	public int getRVelocity() {
-		return -(rightM.getEncVelocity() / Wiring.PULSES_PER_INCH);
+		return (rightM.getEncVelocity() / Wiring.PULSES_PER_INCH);
 	}
 
 	public int getLVelocity() {
-		return (leftM.getEncVelocity() / Wiring.PULSES_PER_INCH);
+		return -(leftM.getEncVelocity() / Wiring.PULSES_PER_INCH);
 	}
 	
 	public void resetEncoders() {

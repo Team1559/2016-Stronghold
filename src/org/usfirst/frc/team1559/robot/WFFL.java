@@ -252,7 +252,7 @@ public class WFFL {
 			yawError = (yawError + 360);
 		}
 		
-//		System.out.println((tranny.getLDisplacement() + tranny.getRDisplacement()) / 2);
+		System.out.println((tranny.getLDisplacement() + tranny.getRDisplacement()) / 2);
 		
 		if (((tranny.getLDisplacement() + tranny.getRDisplacement()) / 2) <= inches) {
 			keepRunning = true;
