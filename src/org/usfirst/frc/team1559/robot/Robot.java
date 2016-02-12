@@ -25,7 +25,7 @@ public class Robot extends IterativeRobot {
 	int listPos = 0;
 	SocketClient sc = new SocketClient();
 	double leftVelocity, rightVelocity;
-	Shooter sg;
+	Shooter shooter;
 	final boolean shooterInversion = false;
 	DigitalInput magneticSensor;
 
@@ -45,8 +45,8 @@ public class Robot extends IterativeRobot {
 		robot = new RobotDrive(leftM, rightM);
 		stick = new Joystick(Wiring.JOYSTICK0);
 		tranny = new Transmission(stick, leftM, rightM);
-		sg = new Shooter();
-		sg.initShooter();
+		shooter = new Shooter();
+		shooter.initShooter();
 		magneticSensor = new DigitalInput(Wiring.MAGNET);
 		
 		robot.setExpiration(Double.MAX_VALUE);
@@ -99,7 +99,7 @@ public class Robot extends IterativeRobot {
 		leftM.setInverted(false);
 		rightM.setInverted(false);
 		waffle.length = 0;
-		sg.initShooter();
+		shooter.initShooter();
 
 	}
 
@@ -121,9 +121,8 @@ public class Robot extends IterativeRobot {
 			}
 		} else if (current.command.equals("SHOOT")) {
 			// sendRecieveCenterValues("");
-//			boolean shootDone = waffle.center();
-			sg.updateShooter(true);
-			if (sg.shootDone) {
+			shooter.updateShooter(true);
+			if (shooter.shootDone) {
 				current.done = true;
 				System.out.println("DONE SHOOTING!");
 			}
@@ -160,7 +159,7 @@ public class Robot extends IterativeRobot {
 		// leftF.setInverted(isInverted);
 		rightM.setEncPosition(0);
 		leftM.setEncPosition(0);
-		sg.initShooter();
+		shooter.initShooter();
 		
 		
 
@@ -186,7 +185,7 @@ public class Robot extends IterativeRobot {
 
 		}
 
-		sg.updateShooter(stick);
+		shooter.updateShooter(stick);
 
 	}
 
