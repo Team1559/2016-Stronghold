@@ -12,12 +12,13 @@ import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.SPI;
-import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+/**
+ * Used to interpret and execute a .wffl file.
+ */
 public class WFFL {
 
-	byte everything;
 	String raw;
 	String command;
 	String path;
@@ -38,7 +39,7 @@ public class WFFL {
 	double yawError;
 	double unchangedYawError;
 	double gyro_angle;
-	private AHRS ahrs;
+	AHRS ahrs;
 	long global_startTime = System.currentTimeMillis() / 1000;
 	double time;
 	double dist;
@@ -54,19 +55,20 @@ public class WFFL {
 	public int cy;
 	RobotDrive robot;
 	CANTalon rightM, leftM;
-	
+	Transmission tranny;
 
-	public WFFL(String path, RobotDrive rd, CANTalon rightM, CANTalon leftM) {
+	public WFFL(String path, RobotDrive rd, CANTalon rightM, CANTalon leftM, Transmission tranny) {
 		this.path = path;
+		this.tranny = tranny;
 		file = new File(path);
 		try {
 			s = new Scanner(file);
 			ahrs = new AHRS(SPI.Port.kMXP);
+			System.out.println("HELLOW from a try catch block");
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		robot = rd;
 		this.rightM = rightM;
 		this.leftM = leftM;
@@ -75,14 +77,14 @@ public class WFFL {
 
 	public void interpret() {
 		raw = s.nextLine() + " "; // pads the string so this next stuff
-		raw.replaceAll("^M", "");
+		raw.replaceAll("^M", ""); // safety first
 
 		// works.
 		command = raw.substring(0, raw.indexOf(" "));
-		
-		if(raw.trim().equals("<<START>>")){
+
+		if (raw.trim().equals("<<START>>")) {
 			System.out.println("START");
-		} else if(raw.trim().equals("STOP")){
+		} else if (raw.trim().equals("STOP")) {
 			System.out.println("<<STOP>>");
 			list.add(new Command("STOP", 0, 0, 0, 0, "", false, ""));
 		} else if (command.equals("GO")) {
@@ -165,10 +167,6 @@ public class WFFL {
 			e.printStackTrace();
 		}
 	}
-	
-	public void resetAHRS() {
-		ahrs.reset();
-	}
 
 	public void turnToAngle(double angle) {
 		double kpturn = 0.1;
@@ -188,7 +186,7 @@ public class WFFL {
 			yawError = (yawError + 360);
 		}
 
-		double correctionTurn = -kpturn * yawError;
+		double correctionTurn = kpturn * yawError;
 		if (correctionTurn > 0.3) {
 			correctionTurn = 0.3;
 		} else if (correctionTurn < -0.3) {
@@ -198,8 +196,8 @@ public class WFFL {
 		} else if (correctionTurn > -.01 && correctionTurn < 0) {
 			correctionTurn = -.01;
 		}
-		// TODO: remove abs of yawError and place if
 
+		System.out.println(yawError);
 		if ((Math.abs(yawError) > turnTolerance)) {
 			keepTurning = true;
 			if (yawError > 0) {
@@ -217,7 +215,7 @@ public class WFFL {
 		}
 	}
 
-	public void drive(double angle, double seconds, double startTime, double speed) {
+	public void drive(double angle, double inches, double speed) {
 		double kp = 0;
 		yaw = ahrs.getYaw();
 
@@ -254,16 +252,18 @@ public class WFFL {
 			yawError = (yawError + 360);
 		}
 		
-		if ((length >= startTime * 50) && (length <= (seconds + startTime) * 50)) {
+//		System.out.println((tranny.getLDisplacement() + tranny.getRDisplacement()) / 2);
+		
+		if (((tranny.getLDisplacement() + tranny.getRDisplacement()) / 2) <= inches) {
 			keepRunning = true;
 			if ((Math.abs(yawError)) >= tolerance) {
 				if ((Math.abs(yawError * kp)) < maxError) {
-					robot.drive(speed, -(yawError * kp));
+					robot.drive(speed, (yawError * kp));
 				} else {
 					if (yawError < 0) {
-						robot.drive(speed, maxError);
-					} else {
 						robot.drive(speed, -maxError);
+					} else {
+						robot.drive(speed, maxError);
 					}
 				}
 			} else {
@@ -271,13 +271,13 @@ public class WFFL {
 			}
 		} else {
 			keepRunning = false;
+			tranny.resetEncoders();
 		}
 	}
 
-	public void Traction() {
+	public void traction() {
 		double accelVals[] = new double[25];
 		int runTime = 0;
-		int average = 0;
 		double avg = 0;
 		boolean slip = false;
 		// 1.25
@@ -327,13 +327,4 @@ public class WFFL {
 			return false;
 		}
 	}
-	
-//	public void estimateDistance() {
-//		double v = ahrs.getVelocityY();
-//		double d = ahrs.getDisplacementY();
-//		
-//		double deltaDistance = v * .02;
-//		distance += deltaDistance;
-//		
-//	}
 }

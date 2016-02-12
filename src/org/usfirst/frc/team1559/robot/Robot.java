@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Robot extends IterativeRobot {
-	// AHRS ahrs;
+	
 	RobotDrive robot;
 	boolean shootDone = false;
 	CANTalon leftM;
@@ -33,7 +33,6 @@ public class Robot extends IterativeRobot {
 	// does 2
 
 	public void robotInit() {
-		// ahrs = new AHRS(SPI.Port.kMXP);
 		leftM = new CANTalon(Wiring.LEFT_MASTER_TALON);
 		rightM = new CANTalon(Wiring.RIGHT_MASTER_TALON);
 		leftS = new CANTalon(Wiring.LEFT_SLAVE_TALON);
@@ -45,7 +44,7 @@ public class Robot extends IterativeRobot {
 		rightS.set(Wiring.RIGHT_MASTER_TALON);
 		robot = new RobotDrive(leftM, rightM);
 		stick = new Joystick(Wiring.JOYSTICK0);
-		tranny = new Transmission(stick);
+		tranny = new Transmission(stick, leftM, rightM);
 		sg = new Shooter();
 		sg.initShooter();
 		magneticSensor = new DigitalInput(Wiring.MAGNET);
@@ -89,16 +88,16 @@ public class Robot extends IterativeRobot {
 		// rightM.setI(0);
 		// rightM.setD(0);
 
-		waffle = new WFFL("/media/sda1/waffle.wffl", robot, rightM, leftM);
+		waffle = new WFFL("/media/sda1/waffle.wffl", robot, rightM, leftM, tranny);
 		
 	}
 
 	public void autonomousInit() {
 		waffle.reset();
-		waffle.resetAHRS();
+		waffle.ahrs.reset();
 		waffle.interpret();
-		// waffle.left.setInverted(false);
-		// waffle.right.setInverted(false);
+		leftM.setInverted(false);
+		rightM.setInverted(false);
 		waffle.length = 0;
 		sg.initShooter();
 
@@ -106,7 +105,7 @@ public class Robot extends IterativeRobot {
 
 	public void autonomousPeriodic() {
 		SmartDashboard.putNumber("Yaw:", waffle.yaw);
-
+		System.out.println(waffle.ahrs.getYaw());
 		Command current = waffle.list.get(listPos);
 		if (current.command.equals("TURN")) {
 			waffle.turnToAngle(current.angle);
@@ -115,9 +114,8 @@ public class Robot extends IterativeRobot {
 				current.done = true;
 				waffle.length = 0;
 			}
-			System.out.println("Works YAY");
 		} else if (current.command.equals("GO")) {
-			waffle.drive(desiredHeading, current.dist, 0, current.speed);
+			waffle.drive(desiredHeading, current.dist, current.speed);
 			if (waffle.keepRunning == false) {
 				current.done = true;
 			}
@@ -153,7 +151,6 @@ public class Robot extends IterativeRobot {
 			}
 
 		}
-		waffle.length++;
 	}
 
 	public void teleopInit() {

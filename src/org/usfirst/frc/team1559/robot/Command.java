@@ -1,5 +1,8 @@
 package org.usfirst.frc.team1559.robot;
 
+/**
+ * A command taken from a .wffl file.
+ */
 public class Command {
 	
 	
@@ -14,6 +17,17 @@ public class Command {
 	
 	boolean done;
 	
+	/**
+	 * 
+	 * @param command
+	 * @param dist
+	 * @param speed
+	 * @param time
+	 * @param angle
+	 * @param id
+	 * @param active
+	 * @param pattern
+	 */
 	public Command(String command, double dist, double speed, double time, double angle, String id, boolean active, String pattern) {
 		
 		this.command = command;

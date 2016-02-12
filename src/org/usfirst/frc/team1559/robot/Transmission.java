@@ -1,9 +1,9 @@
 package org.usfirst.frc.team1559.robot;
 
+import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.Solenoid;
-import edu.wpi.first.wpilibj.Talon;
 
 public class Transmission /*implements Runnable */{
 	
@@ -14,15 +14,18 @@ public class Transmission /*implements Runnable */{
 	PowerDistributionPanel pdp;
 	int gear;
 	Joystick joy;
+	CANTalon leftM, rightM;
 	
 
-	public Transmission(Joystick joy) {
+	public Transmission(Joystick joy, CANTalon rightM, CANTalon leftM) {
 
 		shift1 = new Solenoid(Wiring.SHIFT_1);
 		shift2 = new Solenoid(Wiring.SHIFT_2);
 		pdp = new PowerDistributionPanel();
 		gear = 1;
 		this.joy = joy;
+		this.rightM = rightM;
+		this.leftM = leftM;
 	}
 
 	public void gear1() {
@@ -78,5 +81,24 @@ public class Transmission /*implements Runnable */{
 //		
 //	}
 	
+	public int getRDisplacement() {
+		return -(rightM.getEncPosition() / Wiring.PULSES_PER_INCH);
+	}
 
+	public int getLDisplacement() {
+		return (leftM.getEncPosition() / Wiring.PULSES_PER_INCH);
+	}
+	
+	public int getRVelocity() {
+		return -(rightM.getEncVelocity() / Wiring.PULSES_PER_INCH);
+	}
+
+	public int getLVelocity() {
+		return (leftM.getEncVelocity() / Wiring.PULSES_PER_INCH);
+	}
+	
+	public void resetEncoders() {
+		rightM.setEncPosition(0);
+		leftM.setEncPosition(0);
+	}
 }
