@@ -1,5 +1,11 @@
 package org.usfirst.frc.team1559.robot;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Scanner;
+
 import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.IterativeRobot;
@@ -133,7 +139,11 @@ public class Robot extends IterativeRobot {
 			leftM.set(0);
 			rightM.set(0);
 			shooter.setSolenoids(false);
+		} else if(current.equals("DEFENSE")){
+			String id = current.id;
+			
 		} else if (current.command.equals("WAIT")) {
+		
 			System.out.println("waiting...");
 			Timer.delay(current.time);
 			current.done = true;
@@ -165,7 +175,7 @@ public class Robot extends IterativeRobot {
 		leftM.setInverted(true);
 		rightM.setInverted(true);
 		shooter.initShooter();
-		
+		initRecord();
 		
 
 	}
@@ -174,11 +184,12 @@ public class Robot extends IterativeRobot {
 		// sendRecieveCenterValues();
 		// waffle.myRobot.arcadeDrive(stick); //FOR THE TEST CHASSIS
 		robot.arcadeDrive(stick.getY(), -stick.getX());
+		recordPeriodic();
 		// waffle.Traction();
 
-		System.out.println(magneticSensor.get());
-		SmartDashboard.putNumber("Right Encoder", getRVelocity());
-		SmartDashboard.putNumber("Left Encoder", getLVelocity());
+//		System.out.println(magneticSensor.get());
+//		SmartDashboard.putNumber("Right Encoder", getRVelocity());
+//		SmartDashboard.putNumber("Left Encoder", getLVelocity());
 
 //		if (stick.getRawButton(3)) {
 //
@@ -239,5 +250,52 @@ public class Robot extends IterativeRobot {
 
 	public int getLVelocity() {
 		return (leftM.getEncVelocity() / Wiring.PULSES_PER_INCH);
+	}
+	
+	
+	File file = new File("/media/sda1/belgian.wfflt");
+	FileWriter writer;
+	public void initRecord(){
+		try {
+			file.createNewFile();
+			writer = new FileWriter(file);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+	
+	public void recordPeriodic(){
+		try {
+			writer.write(String.valueOf(leftM.get()) + ",");
+			writer.write(String.valueOf(rightM.get()) + ",");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	Scanner johnKennethDunaske;
+	String[] ryanWilliamLuu;
+	public void playbackSetup(){
+		try {
+			johnKennethDunaske = new Scanner(new File("/media/sda1/belgian.wfflt"));
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		String raw = johnKennethDunaske.nextLine();
+		ryanWilliamLuu = raw.split(",");
+	}
+	
+	int wffltPos = 0;
+	public void playbackIterative(){
+		double leftVal = Double.valueOf(ryanWilliamLuu[wffltPos]);
+//		if(wffltPos < ryanWilliamLuu.lengthwffltPos++;
+		double rightVal = Double.valueOf(ryanWilliamLuu[wffltPos]);
+		wffltPos++;
+		rightM.set(rightVal);
+		leftM.set(leftVal);
 	}
 }
