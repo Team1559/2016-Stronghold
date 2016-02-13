@@ -223,7 +223,11 @@ public class Shooter {
 			break;
 		case 4: // wait for button to go false
 			shootDone = true;
-			shootState = 0;
+			shootState = 5;
+			break;
+		default:
+			setSolenoids(false);
+			shootDone = true;
 			break;
 		}
 	}

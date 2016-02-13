@@ -130,6 +130,7 @@ public class Robot extends IterativeRobot {
 		} else if (current.command.equals("STOP")) {
 			leftM.set(0);
 			rightM.set(0);
+			shooter.setSolenoids(false);
 		} else if (current.command.equals("WAIT")) {
 			System.out.println("waiting...");
 			Timer.delay(current.time);
