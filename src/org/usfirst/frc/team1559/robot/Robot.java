@@ -180,17 +180,20 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putNumber("Right Encoder", getRVelocity());
 		SmartDashboard.putNumber("Left Encoder", getLVelocity());
 
-		if (stick.getRawButton(3)) {
-
-			tranny.gear1();
-
-		} else if (stick.getRawButton(4)) {
-
-			tranny.gear2();
-
-		}
+//		if (stick.getRawButton(3)) {
+//
+//			tranny.gear1();
+//
+//		} else if (stick.getRawButton(4)) {
+//
+//			tranny.gear2();
+//
+//		}
+		
+		tranny.updateShifting();
 
 		shooter.updateShooter(stick);
+
 
 	}
 

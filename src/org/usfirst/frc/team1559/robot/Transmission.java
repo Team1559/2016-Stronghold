@@ -5,7 +5,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.Solenoid;
 
-public class Transmission /*implements Runnable */{
+public class Transmission {
 	
 	//will eventually be in its own thread to shift gears while driving is occurring.
 	
@@ -74,12 +74,6 @@ public class Transmission /*implements Runnable */{
 		/*ADD REAL CODE!*/
 		return 10.1;
 	}
-
-//	@Override
-//	public void run() {
-//		auto();
-//		
-//	}
 	
 	public int getRDisplacement() {
 		return (rightM.getEncPosition() / Wiring.PULSES_PER_INCH);
@@ -101,4 +95,16 @@ public class Transmission /*implements Runnable */{
 		rightM.setEncPosition(0);
 		leftM.setEncPosition(0);
 	}
+	
+	public void updateShifting(){
+		double velocity = (getRVelocity() + (double) getLVelocity())/2;
+		
+		if(velocity >= Wiring.SHIFT_UP_SPEED && !joy.getRawButton(2)){
+			gear2();
+		} else if((velocity <= Wiring.SHIFT_DOWN_SPEED) || joy.getRawButton(2)){
+			gear1();
+		}
+		
+	}
+	
 }
