@@ -269,7 +269,7 @@ public class Robot extends IterativeRobot {
 	public void recordPeriodic(){
 		try {
 			writer.write(String.valueOf(leftM.get()) + ",");
-			writer.write(String.valueOf(rightM.get()) + ",");
+			writer.write(String.valueOf(rightM.get()) + "\n");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -278,24 +278,32 @@ public class Robot extends IterativeRobot {
 	
 	Scanner johnKennethDunaske;
 	String[] ryanWilliamLuu;
+	boolean doneFollowing;
 	public void playbackSetup(){
+		doneFollowing = false;
 		try {
 			johnKennethDunaske = new Scanner(new File("/media/sda1/belgian.wfflt"));
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		String raw = johnKennethDunaske.nextLine();
-		ryanWilliamLuu = raw.split(",");
 	}
 	
 	int wffltPos = 0;
 	public void playbackIterative(){
-		double leftVal = Double.valueOf(ryanWilliamLuu[wffltPos]);
-//		if(wffltPos < ryanWilliamLuu.lengthwffltPos++;
-		double rightVal = Double.valueOf(ryanWilliamLuu[wffltPos]);
-		wffltPos++;
-		rightM.set(rightVal);
-		leftM.set(leftVal);
+		
+		if(johnKennethDunaske.hasNextLine()){
+			String raw = johnKennethDunaske.nextLine();
+			ryanWilliamLuu = raw.split(",");
+			
+			double leftVal = Double.valueOf(ryanWilliamLuu[wffltPos]);
+			wffltPos++;
+			double rightVal = Double.valueOf(ryanWilliamLuu[wffltPos]);
+			wffltPos = 0;
+			rightM.set(rightVal);
+			leftM.set(leftVal);
+		} else {
+			doneFollowing = true;
+		}
 	}
 }
