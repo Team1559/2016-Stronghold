@@ -121,6 +121,8 @@ public class Robot extends IterativeRobot {
 			}
 		} else if (current.command.equals("SHOOT")) {
 			// sendRecieveCenterValues("");
+			leftM.set(0);
+			rightM.set(0);
 			shooter.updateShooter(true);
 			if (shooter.shootDone) {
 				current.done = true;
@@ -160,6 +162,8 @@ public class Robot extends IterativeRobot {
 		// leftF.setInverted(isInverted);
 		rightM.setEncPosition(0);
 		leftM.setEncPosition(0);
+		leftM.setInverted(true);
+		rightM.setInverted(true);
 		shooter.initShooter();
 		
 		
