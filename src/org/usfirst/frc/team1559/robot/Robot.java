@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.util.Scanner;
 
 import edu.wpi.first.wpilibj.CANTalon;
-import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobot;
@@ -17,7 +16,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Robot extends IterativeRobot {
-	
+
 	RobotDrive robot;
 	boolean shootDone = false;
 	CANTalon leftM;
@@ -35,10 +34,9 @@ public class Robot extends IterativeRobot {
 	double leftVelocity, rightVelocity;
 	Shooter shooter;
 	final boolean shooterInversion = false;
-//	DigitalInput magneticSensor;
+	// DigitalInput magneticSensor;
 	DigitalOutput dio2;
 	DigitalOutput dio1;
-	
 
 	// Comments are for a 4 motor drive system whereas uncommented code just
 	// does 2
@@ -58,8 +56,8 @@ public class Robot extends IterativeRobot {
 		tranny = new Transmission(stick, leftM, rightM);
 		shooter = new Shooter();
 		shooter.initShooter();
-//		magneticSensor = new DigitalInput(Wiring.MAGNET);
-		
+		// magneticSensor = new DigitalInput(Wiring.MAGNET);
+
 		robot.setExpiration(Double.MAX_VALUE);
 
 		leftM.setInverted(true);
@@ -100,10 +98,10 @@ public class Robot extends IterativeRobot {
 		// rightM.setD(0);
 
 		waffle = new WFFL("/media/sda1/waffle.wffl", robot, rightM, leftM, tranny);
-		
+
 		dio1 = new DigitalOutput(0);
 		dio2 = new DigitalOutput(1);
-		
+
 	}
 
 	public void autonomousInit() {
@@ -114,12 +112,10 @@ public class Robot extends IterativeRobot {
 		rightM.setInverted(false);
 		waffle.length = 0;
 		shooter.initShooter();
-
 	}
 
 	public void autonomousPeriodic() {
 		SmartDashboard.putNumber("Yaw:", waffle.yaw);
-		System.out.println(waffle.ahrs.getYaw());
 		Command current = waffle.list.get(listPos);
 		if (current.command.equals("TURN")) {
 			waffle.turnToAngle(current.angle);
@@ -147,16 +143,21 @@ public class Robot extends IterativeRobot {
 			leftM.set(0);
 			rightM.set(0);
 			shooter.setSolenoids(false);
-		} else if(current.equals("DEFENSE")){
+		} else if (current.command.equals("DEFENSE")) {
 			String id = current.id;
-			
+			if(!following) {
+				playbackSetup(id);
+			}
+			playbackIterative();
+			current.done = doneFollowing;
 		} else if (current.command.equals("WAIT")) {
-		
+
 			System.out.println("waiting...");
 			Timer.delay(current.time);
 			current.done = true;
 		}
 
+		// when a command is completed, we reset and move on to the next one
 		if ((current.done == true)) {
 			current.done = false;
 
@@ -183,17 +184,16 @@ public class Robot extends IterativeRobot {
 		leftM.setInverted(true);
 		rightM.setInverted(true);
 		shooter.initShooter();
-		initRecord();
-//		playbackSetup();
-		
-		if(DriverStation.getInstance().getAlliance() == DriverStation.Alliance.Blue){
+//		initRecord();
+		// playbackSetup();
+
+		if (DriverStation.getInstance().getAlliance() == DriverStation.Alliance.Blue) {
 			dio1.set(true);
 			dio2.set(false);
 		} else {
 			dio1.set(false);
 			dio2.set(true);
 		}
-		
 
 	}
 
@@ -201,30 +201,28 @@ public class Robot extends IterativeRobot {
 		// sendRecieveCenterValues();
 		// waffle.myRobot.arcadeDrive(stick); //FOR THE TEST CHASSIS
 		robot.arcadeDrive(stick.getY(), -stick.getRawAxis(4));
-		recordPeriodic();
-//		playbackIterative();
-		
-		// waffle.Traction();
-		
-//		System.out.println(magneticSensor.get());
-//		SmartDashboard.putNumber("Right Encoder", getRVelocity());
-//		SmartDashboard.putNumber("Left Encoder", getLVelocity());
+//		recordPeriodic();
+		// playbackIterative();
 
-//		if (stick.getRawButton(3)) {
-//
-//			tranny.gear1();
-//
-//		} else if (stick.getRawButton(4)) {
-//
-//			tranny.gear2();
-//
-//		}
-		
+		// waffle.Traction();
+
+		// System.out.println(magneticSensor.get());
+		// SmartDashboard.putNumber("Right Encoder", getRVelocity());
+		// SmartDashboard.putNumber("Left Encoder", getLVelocity());
+
+		// if (stick.getRawButton(3)) {
+		//
+		// tranny.gear1();
+		//
+		// } else if (stick.getRawButton(4)) {
+		//
+		// tranny.gear2();
+		//
+		// }
+
 		tranny.updateShifting();
 
 		shooter.updateShooter(stick);
-
-
 	}
 
 	public void sendRecieveCenterValues(String in) {
@@ -240,7 +238,7 @@ public class Robot extends IterativeRobot {
 	}
 
 	public void testInit() {
-		
+
 	}
 
 	public void testPeriodic() {
@@ -252,7 +250,7 @@ public class Robot extends IterativeRobot {
 	}
 
 	public void disabledPeriodic() {
-		//roit gets rekt
+		// roit gets rekt
 	}
 
 	public int getRDisplacement() {
@@ -262,7 +260,7 @@ public class Robot extends IterativeRobot {
 	public int getLDisplacement() {
 		return (leftM.getEncPosition() / Wiring.PULSES_PER_INCH);
 	}
-	
+
 	public int getRVelocity() {
 		return -(rightM.getEncVelocity() / Wiring.PULSES_PER_INCH);
 	}
@@ -270,59 +268,61 @@ public class Robot extends IterativeRobot {
 	public int getLVelocity() {
 		return (leftM.getEncVelocity() / Wiring.PULSES_PER_INCH);
 	}
-	
-    
+
 	File file = new File("/media/sda1/belgian.wfflt");
 	FileWriter writer;
-	public void initRecord(){
+
+	public void initRecord() {
 		try {
 			file.createNewFile();
 			writer = new FileWriter(file);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
 	}
-	
-	public void recordPeriodic(){
+
+	public void recordPeriodic() {
 		try {
 			writer.write(String.valueOf(leftM.get()) + ",");
 			System.out.println("writing fo' real!");
 			writer.write(String.valueOf(rightM.get()) + "\n");
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
-	
+
 	Scanner johnKennethDunaske;
 	String[] ryanWilliamLuu;
-	boolean doneFollowing;
-	public void playbackSetup(){
+	boolean doneFollowing = false;
+	boolean following = false;
+
+	public void playbackSetup(String id) {
 		doneFollowing = false;
+		System.out.println(id);
 		try {
-			johnKennethDunaske = new Scanner(new File("/media/sda1/rockwall.wfflt"));
+			johnKennethDunaske = new Scanner(new File("/media/sda1/" + id + ".wfflt"));
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		following = true;
 	}
-	
+
 	int wffltPos = 0;
-	public void playbackIterative(){
-		
-		if(johnKennethDunaske.hasNextLine()){
+
+	public void playbackIterative() {
+		if (johnKennethDunaske.hasNextLine()) {
+			doneFollowing = false;
 			String raw = johnKennethDunaske.nextLine();
 			ryanWilliamLuu = raw.split(",");
-			
+
 			double leftVal = Double.valueOf(ryanWilliamLuu[wffltPos]);
 			wffltPos++;
 			double rightVal = Double.valueOf(ryanWilliamLuu[wffltPos]);
 			wffltPos = 0;
-			rightM.set(-rightVal);
-			leftM.set(-leftVal);
+			rightM.set(rightVal);
+			leftM.set(leftVal);
 		} else {
+			following = false;
 			doneFollowing = true;
 			leftM.set(0);
 			rightM.set(0);

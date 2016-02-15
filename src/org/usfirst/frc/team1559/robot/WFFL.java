@@ -144,7 +144,7 @@ public class WFFL {
 			System.out.println(temp);
 		} else if (command.equals("NOTE")) {
 			System.out.println(raw);
-		} else {
+		}else {
 			System.err.println("UNKNOWN COMMAND:" + raw);
 		}
 		if (s.hasNextLine()) {
