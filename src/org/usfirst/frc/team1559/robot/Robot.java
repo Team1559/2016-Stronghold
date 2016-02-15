@@ -184,7 +184,7 @@ public class Robot extends IterativeRobot {
 	public void teleopPeriodic() {
 		// sendRecieveCenterValues();
 		// waffle.myRobot.arcadeDrive(stick); //FOR THE TEST CHASSIS
-		robot.arcadeDrive(stick.getY(), -stick.getX());
+		robot.arcadeDrive(stick.getY(), -stick.getRawAxis(4));
 //		recordPeriodic();
 //		playbackIterative();
 		
@@ -272,6 +272,7 @@ public class Robot extends IterativeRobot {
 	public void recordPeriodic(){
 		try {
 			writer.write(String.valueOf(leftM.get()) + ",");
+			System.out.println("writing fo' real!");
 			writer.write(String.valueOf(rightM.get()) + "\n");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

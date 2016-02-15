@@ -53,7 +53,7 @@ public class Transmission {
 			// normal driving
 
 			// do we need to shift?
-			if ((getSpeed() >= Wiring.SHIFT_UP_SPEED) && !joy.getRawButton(1)) { // hold button 2 to hold low gear
+			if ((getSpeed() >= Wiring.SHIFT_UP_SPEED) && !joy.getRawButton(9)) { // hold button 2 to hold low gear
 				gear2();
 				gear = 2;
 			}
@@ -99,9 +99,9 @@ public class Transmission {
 	public void updateShifting(){
 		double velocity = (getRVelocity() + (double) getLVelocity())/2;
 		
-		if(velocity >= Wiring.SHIFT_UP_SPEED && !joy.getRawButton(2)){
+		if(velocity >= Wiring.SHIFT_UP_SPEED && joy.getRawButton(9)){
 			gear2();
-		} else if((velocity <= Wiring.SHIFT_DOWN_SPEED) || joy.getRawButton(2)){
+		} else if((velocity <= Wiring.SHIFT_DOWN_SPEED) || !joy.getRawButton(9)){
 			gear1();
 		}
 		

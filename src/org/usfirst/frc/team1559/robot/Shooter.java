@@ -239,7 +239,7 @@ public class Shooter {
 
 		switch (shootState) {
 		case 0: // waiting for fire button
-			if (input.getRawButton(Wiring.BTN_SHOOT)) {
+			if (input.getRawAxis(3) >= .9) {
 				setSolenoids(true);
 				shootState = 1;
 				shooterCount = 0;
