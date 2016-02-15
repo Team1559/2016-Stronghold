@@ -175,7 +175,8 @@ public class Robot extends IterativeRobot {
 		leftM.setInverted(true);
 		rightM.setInverted(true);
 		shooter.initShooter();
-		initRecord();
+//		initRecord();
+//		playbackSetup();
 		
 
 	}
@@ -184,9 +185,11 @@ public class Robot extends IterativeRobot {
 		// sendRecieveCenterValues();
 		// waffle.myRobot.arcadeDrive(stick); //FOR THE TEST CHASSIS
 		robot.arcadeDrive(stick.getY(), -stick.getX());
-		recordPeriodic();
+//		recordPeriodic();
+//		playbackIterative();
+		
 		// waffle.Traction();
-
+		
 //		System.out.println(magneticSensor.get());
 //		SmartDashboard.putNumber("Right Encoder", getRVelocity());
 //		SmartDashboard.putNumber("Left Encoder", getLVelocity());
@@ -252,7 +255,7 @@ public class Robot extends IterativeRobot {
 		return (leftM.getEncVelocity() / Wiring.PULSES_PER_INCH);
 	}
 	
-	
+    
 	File file = new File("/media/sda1/belgian.wfflt");
 	FileWriter writer;
 	public void initRecord(){
@@ -300,10 +303,12 @@ public class Robot extends IterativeRobot {
 			wffltPos++;
 			double rightVal = Double.valueOf(ryanWilliamLuu[wffltPos]);
 			wffltPos = 0;
-			rightM.set(rightVal);
-			leftM.set(leftVal);
+			rightM.set(-rightVal);
+			leftM.set(-leftVal);
 		} else {
 			doneFollowing = true;
+			leftM.set(0);
+			rightM.set(0);
 		}
 	}
 }
