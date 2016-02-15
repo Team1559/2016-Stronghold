@@ -8,6 +8,8 @@ import java.util.Scanner;
 
 import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DigitalOutput;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.RobotDrive;
@@ -33,7 +35,10 @@ public class Robot extends IterativeRobot {
 	double leftVelocity, rightVelocity;
 	Shooter shooter;
 	final boolean shooterInversion = false;
-	DigitalInput magneticSensor;
+//	DigitalInput magneticSensor;
+	DigitalOutput dio2;
+	DigitalOutput dio1;
+	
 
 	// Comments are for a 4 motor drive system whereas uncommented code just
 	// does 2
@@ -53,7 +58,7 @@ public class Robot extends IterativeRobot {
 		tranny = new Transmission(stick, leftM, rightM);
 		shooter = new Shooter();
 		shooter.initShooter();
-		magneticSensor = new DigitalInput(Wiring.MAGNET);
+//		magneticSensor = new DigitalInput(Wiring.MAGNET);
 		
 		robot.setExpiration(Double.MAX_VALUE);
 
@@ -95,6 +100,9 @@ public class Robot extends IterativeRobot {
 		// rightM.setD(0);
 
 		waffle = new WFFL("/media/sda1/waffle.wffl", robot, rightM, leftM, tranny);
+		
+		dio1 = new DigitalOutput(0);
+		dio2 = new DigitalOutput(1);
 		
 	}
 
@@ -175,8 +183,16 @@ public class Robot extends IterativeRobot {
 		leftM.setInverted(true);
 		rightM.setInverted(true);
 		shooter.initShooter();
-//		initRecord();
+		initRecord();
 //		playbackSetup();
+		
+		if(DriverStation.getInstance().getAlliance() == DriverStation.Alliance.Blue){
+			dio1.set(true);
+			dio2.set(false);
+		} else {
+			dio1.set(false);
+			dio2.set(true);
+		}
 		
 
 	}
@@ -185,7 +201,7 @@ public class Robot extends IterativeRobot {
 		// sendRecieveCenterValues();
 		// waffle.myRobot.arcadeDrive(stick); //FOR THE TEST CHASSIS
 		robot.arcadeDrive(stick.getY(), -stick.getRawAxis(4));
-//		recordPeriodic();
+		recordPeriodic();
 //		playbackIterative();
 		
 		// waffle.Traction();
@@ -204,9 +220,9 @@ public class Robot extends IterativeRobot {
 //
 //		}
 		
-		tranny.updateShifting();
-
-		shooter.updateShooter(stick);
+//		tranny.updateShifting();
+//
+//		shooter.updateShooter(stick);
 
 
 	}
@@ -224,7 +240,7 @@ public class Robot extends IterativeRobot {
 	}
 
 	public void testInit() {
-
+		
 	}
 
 	public void testPeriodic() {
@@ -286,7 +302,7 @@ public class Robot extends IterativeRobot {
 	public void playbackSetup(){
 		doneFollowing = false;
 		try {
-			johnKennethDunaske = new Scanner(new File("/media/sda1/belgian.wfflt"));
+			johnKennethDunaske = new Scanner(new File("/media/sda1/rockwall.wfflt"));
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
