@@ -220,9 +220,9 @@ public class Robot extends IterativeRobot {
 //
 //		}
 		
-//		tranny.updateShifting();
-//
-//		shooter.updateShooter(stick);
+		tranny.updateShifting();
+
+		shooter.updateShooter(stick);
 
 
 	}
