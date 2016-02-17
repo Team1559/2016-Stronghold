@@ -50,7 +50,6 @@ public class WFFL {
 	boolean active;
 	String pattern;
 	ArrayList<Command> list = new ArrayList<Command>();
-	SocketClient sc = new SocketClient();
 	public int cx;
 	public int cy;
 	RobotDrive robot;
@@ -157,6 +156,10 @@ public class WFFL {
 		if (s.hasNextLine()) {
 			printAll();
 		}
+	}
+	
+	public double getCurrentAngle(){
+		return ahrs.getAngle();
 	}
 
 	public void reset() {
@@ -311,20 +314,4 @@ public class WFFL {
 		return (low < x && x < high);
 	}
 
-	public boolean center() {
-		if (isWithinThresh(cx, 310, 330)) {
-			leftM.set(0);
-			rightM.set(0);
-			// shoot code goes here
-			return true;
-		} else if (cx < 310) {
-			leftM.set(Wiring.OPTIMAL_TURNT_SPEED);
-			rightM.set(Wiring.OPTIMAL_TURNT_SPEED);
-			return false;
-		} else {
-			leftM.set(-Wiring.OPTIMAL_TURNT_SPEED);
-			rightM.set(-Wiring.OPTIMAL_TURNT_SPEED);
-			return false;
-		}
-	}
 }

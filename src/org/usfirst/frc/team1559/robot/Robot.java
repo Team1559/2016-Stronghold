@@ -30,7 +30,7 @@ public class Robot extends IterativeRobot {
 	WFFL waffle;
 	Transmission tranny;
 	int listPos = 0;
-	SocketClient sc = new SocketClient();
+	SerialClient sc = new SerialClient();//using serial now because it's good
 	double leftVelocity, rightVelocity;
 	Shooter shooter;
 	final boolean shooterInversion = false;
@@ -194,6 +194,7 @@ public class Robot extends IterativeRobot {
 		// waffle.left.setInverted(true);
 		// waffle.right.setInverted(true);
 		// leftF.setInverted(isInverted);
+		centerWithAngle();
 		rightM.setEncPosition(0);
 		leftM.setEncPosition(0);
 		leftM.setInverted(true);
@@ -240,19 +241,26 @@ public class Robot extends IterativeRobot {
 
 		shooter.updateShooter(stick);
 	}
-
-	public void sendRecieveCenterValues(String in) {
-		String cx = in.substring(0, (in.indexOf(",")));
-		String cy = in.substring(in.indexOf(",") + 1);
-		System.out.println(cx + " " + cy);
-		try {
-			waffle.cx = Integer.parseInt(cx);
-			waffle.cy = Integer.parseInt(cy);
-		} catch (NumberFormatException e) {
-			return;
+	public void centerWithAngle(){// comes in as error,angle,distance
+		String in = sc.read();
+		String err = in.substring(0, in.indexOf(","));
+		String temp = in.substring(in.indexOf(","));
+		String ang = temp.substring(0, temp.indexOf(","));
+		String dist = temp.substring(temp.indexOf(","));
+		int error = 0;
+		double angle = 0;
+		try{
+			error = Integer.parseInt(err);
+			angle = Double.parseDouble(ang);
+		} catch (Exception e){
+			
 		}
+		if (error < 0){
+			angle = angle * -1;
+		}
+		double currentAngle = waffle.getCurrentAngle();
+		waffle.turnToAngle(currentAngle + angle);
 	}
-
 	public void testInit() {
 
 	}
