@@ -17,9 +17,10 @@ public class Gatherer {
 	private AnalogInput analog = new AnalogInput(Wiring.GATHERER_ANALOG_INPUT);
 	private PowerDistributionPanel pdp = new PowerDistributionPanel();
 	private int gatherState = 0;
+	private final double maxLimit = 4095;
 	private final double MID_TARGET = 2048;
-	private final double TOP_TARGET = 0;
-	private final double BOTTOM_TARGET = 4095;
+	private final double TOP_TARGET = 1024;
+	private final double BOTTOM_TARGET = 3072;
 	private final double kP = .2;
 	private final double kI = .01;
 	private final double kD = 0.0;
@@ -74,9 +75,8 @@ public class Gatherer {
 			gatherLift.set(0.0);
 		}
 
-		if (pdp.getCurrent(Wiring.PDP_CHANNEL_GATHERER) > talonIdleCurrent) {
-			
+		if (pdp.getCurrent(Wiring.PDP_CHANNEL_GATHERER) <= sparkIdleCurrent) {
+			pid.disable();
 		}
-		// ryan luu
 	}
 }
