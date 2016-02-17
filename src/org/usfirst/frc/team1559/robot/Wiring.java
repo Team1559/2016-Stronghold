@@ -12,6 +12,8 @@ public class Wiring {
 	 * Format: public static final type VALUE_IN_CAPS = 23;
 	 */
 
+	public static final String WFFL_NAME = "/media/sda1/staple.wffl";
+	
 	// Talon Slavery
 	public static final int LEFT_MASTER_TALON = 13;
 	public static final int RIGHT_MASTER_TALON = 12;
@@ -21,6 +23,7 @@ public class Wiring {
 	// Transmission
 	public static final int SHIFT_1 = 3;
 	public static final int SHIFT_2 = 4;
+	
 	// determined after consulting Mr. Petilli
 	public static final double SHIFT_UP_SPEED = 4.6; // m/s
 	public static final double SHIFT_DOWN_SPEED = 4.4; // m/s

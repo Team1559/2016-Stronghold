@@ -97,10 +97,12 @@ public class Robot extends IterativeRobot {
 		// rightM.setI(0);
 		// rightM.setD(0);
 
-		waffle = new WFFL("/media/sda1/waffle.wffl", robot, rightM, leftM, tranny);
+		waffle = new WFFL(Wiring.WFFL_NAME, robot, rightM, leftM, tranny);
 
 		dio1 = new DigitalOutput(0);
 		dio2 = new DigitalOutput(1);
+		
+		tranny.resetEncoders();
 
 	}
 
@@ -112,10 +114,11 @@ public class Robot extends IterativeRobot {
 		rightM.setInverted(false);
 		waffle.length = 0;
 		shooter.initShooter();
+		tranny.resetEncoders();
 	}
 
 	public void autonomousPeriodic() {
-		SmartDashboard.putNumber("Yaw:", waffle.yaw);
+		SmartDashboard.putNumber("Displacement", (tranny.getLDisplacement() + tranny.getRDisplacement())/2);
 		Command current = waffle.list.get(listPos);
 		if (current.command.equals("TURN")) {
 			waffle.turnToAngle(current.angle);
@@ -123,11 +126,13 @@ public class Robot extends IterativeRobot {
 				desiredHeading = current.angle;
 				current.done = true;
 				waffle.length = 0;
+				tranny.resetEncoders();
 			}
 		} else if (current.command.equals("GO")) {
 			waffle.drive(desiredHeading, current.dist, current.speed);
 			if (waffle.keepRunning == false) {
 				current.done = true;
+				tranny.resetEncoders();
 			}
 		} else if (current.command.equals("SHOOT")) {
 			// sendRecieveCenterValues("");
@@ -136,6 +141,7 @@ public class Robot extends IterativeRobot {
 			shooter.updateShooter(true);
 			if (shooter.shootDone) {
 				current.done = true;
+				tranny.resetEncoders();
 				System.out.println("DONE SHOOTING!");
 			}
 
@@ -152,8 +158,17 @@ public class Robot extends IterativeRobot {
 			current.done = doneFollowing;
 		} else if (current.command.equals("WAIT")) {
 
+			leftM.set(0);
+			rightM.set(0);
+			
+			long brandonThomasBoje = System.currentTimeMillis();
+			brandonThomasBoje += current.time*1000;
+			
 			System.out.println("waiting...");
-			Timer.delay(current.time);
+			
+			while(System.currentTimeMillis() < brandonThomasBoje);
+			//sup ladies			
+			
 			current.done = true;
 		}
 
@@ -184,6 +199,7 @@ public class Robot extends IterativeRobot {
 		leftM.setInverted(true);
 		rightM.setInverted(true);
 		shooter.initShooter();
+		tranny.resetEncoders();
 //		initRecord();
 		// playbackSetup();
 
@@ -326,6 +342,7 @@ public class Robot extends IterativeRobot {
 			doneFollowing = true;
 			leftM.set(0);
 			rightM.set(0);
+			tranny.resetEncoders();
 		}
 	}
 }
