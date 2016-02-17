@@ -241,6 +241,7 @@ public class Robot extends IterativeRobot {
 
 		shooter.updateShooter(stick);
 	}
+	
 	public void centerWithAngle(){// comes in as error,angle,distance
 		String in = sc.read();
 		String err = in.substring(0, in.indexOf(","));
@@ -261,6 +262,7 @@ public class Robot extends IterativeRobot {
 		double currentAngle = waffle.getCurrentAngle();
 		waffle.turnToAngle(currentAngle + angle);
 	}
+	
 	public void testInit() {
 
 	}
