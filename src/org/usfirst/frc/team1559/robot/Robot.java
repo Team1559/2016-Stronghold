@@ -110,6 +110,7 @@ public class Robot extends IterativeRobot {
 		waffle.reset();
 		waffle.ahrs.reset();
 		waffle.interpret();
+		System.out.println("JFKDSLFIUESHF " + waffle.list.get(waffle.list.size() - 1).command);
 		leftM.setInverted(false);
 		rightM.setInverted(false);
 		waffle.length = 0;
@@ -131,8 +132,11 @@ public class Robot extends IterativeRobot {
 		} else if (current.command.equals("GO")) {
 			waffle.drive(desiredHeading, current.dist, current.speed);
 			if (waffle.keepRunning == false) {
+				leftM.set(0);
+				rightM.set(0);
 				current.done = true;
 				tranny.resetEncoders();
+				System.out.println("PLZ STOP NOW");
 			}
 		} else if (current.command.equals("SHOOT")) {
 			// sendRecieveCenterValues("");
@@ -149,6 +153,7 @@ public class Robot extends IterativeRobot {
 			leftM.set(0);
 			rightM.set(0);
 			shooter.setSolenoids(false);
+			System.out.println("Motor Stoppage achieved!");
 		} else if (current.command.equals("DEFENSE")) {
 			String id = current.id;
 			if(!following) {
@@ -174,6 +179,7 @@ public class Robot extends IterativeRobot {
 
 		// when a command is completed, we reset and move on to the next one
 		if ((current.done == true)) {
+			System.out.println("Current done boi");
 			current.done = false;
 
 			if (waffle.list.size() - 1 > listPos) {
@@ -184,6 +190,7 @@ public class Robot extends IterativeRobot {
 			} else {
 				leftM.set(0);
 				rightM.set(0);
+				
 			}
 
 		}
@@ -194,7 +201,7 @@ public class Robot extends IterativeRobot {
 		// waffle.left.setInverted(true);
 		// waffle.right.setInverted(true);
 		// leftF.setInverted(isInverted);
-		centerWithAngle();
+//		centerWithAngle();
 		rightM.setEncPosition(0);
 		leftM.setEncPosition(0);
 		leftM.setInverted(true);

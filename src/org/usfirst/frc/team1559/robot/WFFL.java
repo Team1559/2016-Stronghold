@@ -83,7 +83,7 @@ public class WFFL {
 
 		if (raw.trim().equals("<<START>>")) {
 			System.out.println("START");
-		} else if (raw.trim().equals("STOP")) {
+		} else if (raw.trim().equals("<<STOP>>")) {
 			System.out.println("<<STOP>>");
 			list.add(new Command("STOP", 0, 0, 0, 0, "", false, ""));
 		} else if (command.equals("GO")) {
