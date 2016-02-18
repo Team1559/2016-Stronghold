@@ -74,6 +74,8 @@ public class Robot extends IterativeRobot {
 
 		rightM.setVoltageRampRate(Wiring.VOLTAGE_RAMP_RATE);
 		leftM.setVoltageRampRate(Wiring.VOLTAGE_RAMP_RATE);
+		rightS.setVoltageRampRate(Wiring.VOLTAGE_RAMP_RATE);
+		leftS.setVoltageRampRate(Wiring.VOLTAGE_RAMP_RATE);
 
 		// leftM.changeControlMode(TalonControlMode.Speed);
 		// leftM.setFeedbackDevice(FeedbackDevice.CtreMagEncoder_Relative);
@@ -228,22 +230,9 @@ public class Robot extends IterativeRobot {
 //		recordPeriodic();
 		// playbackIterative();
 
-		// waffle.Traction();
-
-		// System.out.println(magneticSensor.get());
-		// SmartDashboard.putNumber("Right Encoder", getRVelocity());
-		// SmartDashboard.putNumber("Left Encoder", getLVelocity());
-
-		// if (stick.getRawButton(3)) {
-		//
-		// tranny.gear1();
-		//
-		// } else if (stick.getRawButton(4)) {
-		//
-		// tranny.gear2();
-		//
-		// }
-
+		SmartDashboard.putNumber("Voltage", (leftM.getOutputVoltage() + rightM.getOutputVoltage())/2);
+		SmartDashboard.putNumber("Velocity", (tranny.getRVelocity() + tranny.getLVelocity())/2);
+		
 		tranny.updateShifting();
 
 		shooter.updateShooter(stick);

@@ -43,38 +43,12 @@ public class Transmission {
 		System.out.println("GEAR 1");
 
 	}
-
-	public void auto() {
-
-		switch (gear) {
-
-		case 1:
-			System.out.println("1ST GEAR");
-			// normal driving
-
-			// do we need to shift?
-			if ((getSpeed() >= Wiring.SHIFT_UP_SPEED) && !joy.getRawButton(9)) { // hold button 2 to hold low gear
-				gear2();
-				gear = 2;
-			}
-			break;
-		case 2:
-			System.out.println("2ND GEAR");
-			if (((getSpeed() <= Wiring.SHIFT_DOWN_SPEED))) {
-				gear1();
-				gear = 1;
-			}
-			break;
-
-		}
-
-	}
-
-	public double getSpeed() {
-		/*ADD REAL CODE!*/
-		return 10.1;
-	}
-	
+//
+//	public double getSpeed() {
+//		/*ADD REAL CODE!*/
+//		return 10.1;
+//	}
+//	
 	public int getRDisplacement() {
 		return (rightM.getEncPosition() / Wiring.PULSES_PER_INCH);
 	}
