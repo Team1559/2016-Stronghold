@@ -226,7 +226,12 @@ public class Robot extends IterativeRobot {
 	public void teleopPeriodic() {
 		// sendRecieveCenterValues();
 		// waffle.myRobot.arcadeDrive(stick); //FOR THE TEST CHASSIS
-		robot.arcadeDrive(stick.getY(), -stick.getRawAxis(4));
+		if(tranny.gear == 1){
+			robot.arcadeDrive(stick.getY()*Wiring.LOW_SPEED_MULTIPLIER, -stick.getRawAxis(4)*Wiring.LOW_SPEED_MULTIPLIER);
+		} else {
+			robot.arcadeDrive(stick.getY(), -stick.getRawAxis(4));
+		}
+		
 //		recordPeriodic();
 		// playbackIterative();
 

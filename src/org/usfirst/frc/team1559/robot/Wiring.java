@@ -27,6 +27,7 @@ public class Wiring {
 	// determined after consulting Mr. Petilli
 	public static final double SHIFT_UP_SPEED = 4.6; // m/s
 	public static final double SHIFT_DOWN_SPEED = 4.4; // m/s
+	public static final double LOW_SPEED_MULTIPLIER = 1.0 ; //Reccommended 2.2, Chris didn't like it....
 
 	// Joysticks
 	public static final int JOYSTICK0 = 0;

@@ -31,7 +31,7 @@ public class WFFL {
 	double yaw = 0.0;
 	final double kpturn = 0.009;
 	double gyro_yaw;
-	double kpBase = 0.05;
+	double kpBase = 0.001;
 	final double maxError = 1;
 	final double tolerance = .001;
 	final double turnTolerance = .5;
