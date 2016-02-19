@@ -273,7 +273,7 @@ public class Robot extends IterativeRobot {
 		
 		tranny.updateShifting();
 
-		System.out.println(tranny.getRVelocity() + " " + speed);
+		SmartDashboard.putNumber("speeds", (tranny.getRVelocity() + tranny.getLVelocity())/2);
 		
 //		System.out.println(tranny.getspeed + " 1 Commanded Speed " + leftM.get());
 //		System.out.println(speed + " 2 Commanded Speed " + leftS.get());
