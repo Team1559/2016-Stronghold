@@ -7,10 +7,13 @@ import java.io.IOException;
 import java.util.Scanner;
 
 import edu.wpi.first.wpilibj.CANTalon;
+import edu.wpi.first.wpilibj.CANTalon.FeedbackDevice;
+import edu.wpi.first.wpilibj.CANTalon.TalonControlMode;
 import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -37,6 +40,7 @@ public class Robot extends IterativeRobot {
 	// DigitalInput magneticSensor;
 	DigitalOutput dio2;
 	DigitalOutput dio1;
+	PowerDistributionPanel pdp;
 
 	// Comments are for a 4 motor drive system whereas uncommented code just
 	// does 2
@@ -56,6 +60,7 @@ public class Robot extends IterativeRobot {
 		tranny = new Transmission(stick, leftM, rightM);
 		shooter = new Shooter();
 		shooter.initShooter();
+		pdp = new PowerDistributionPanel();
 		// magneticSensor = new DigitalInput(Wiring.MAGNET);
 
 		robot.setExpiration(Double.MAX_VALUE);
@@ -77,27 +82,49 @@ public class Robot extends IterativeRobot {
 		rightS.setVoltageRampRate(Wiring.VOLTAGE_RAMP_RATE);
 		leftS.setVoltageRampRate(Wiring.VOLTAGE_RAMP_RATE);
 
-		// leftM.changeControlMode(TalonControlMode.Speed);
-		// leftM.setFeedbackDevice(FeedbackDevice.CtreMagEncoder_Relative);
-		// leftM.reverseSensor(false);
-		// leftM.configNominalOutputVoltage(+0.0f, -0.0f);
-		// leftM.configPeakOutputVoltage(+12.0f, -12.0f);
-		// leftM.setProfile(0);
-		// leftM.setF(1);
-		// leftM.setP(0);
-		// leftM.setI(0);
-		// leftM.setD(0);
-		//
-		// rightM.changeControlMode(TalonControlMode.Speed);
-		// rightM.setFeedbackDevice(FeedbackDevice.CtreMagEncoder_Relative);
-		// rightM.reverseSensor(false);
-		// rightM.configNominalOutputVoltage(+0.0f, -0.0f);
-		// rightM.configPeakOutputVoltage(+12.0f, -12.0f);
-		// rightM.setProfile(0);
-		// rightM.setF(1);
-		// rightM.setP(0);
-		// rightM.setI(0);
-		// rightM.setD(0);
+		 leftM.changeControlMode(TalonControlMode.Speed);
+		 leftM.setFeedbackDevice(FeedbackDevice.CtreMagEncoder_Relative);
+		 leftM.reverseSensor(true);
+		 leftM.configNominalOutputVoltage(+0.0f, -0.0f);
+		 leftM.configPeakOutputVoltage(+12.0f, -12.0f);
+		 leftM.setProfile(Wiring.VELOCITY_PROFILE);
+		 leftM.setF(Wiring.VELOCITY_F);
+		 leftM.setP(Wiring.VELOCITY_P);
+		 leftM.setI(Wiring.VELOCITY_I);
+		 leftM.setD(Wiring.VELOCITY_D);
+		
+		 rightM.changeControlMode(TalonControlMode.Speed);
+		 rightM.setFeedbackDevice(FeedbackDevice.CtreMagEncoder_Relative);
+		 rightM.reverseSensor(false);
+		 rightM.configNominalOutputVoltage(+0.0f, -0.0f);
+		 rightM.configPeakOutputVoltage(+12.0f, -12.0f);
+		 rightM.setProfile(Wiring.VELOCITY_PROFILE);
+		 rightM.setF(Wiring.VELOCITY_F);
+		 rightM.setP(Wiring.VELOCITY_P);
+		 rightM.setI(Wiring.VELOCITY_I);
+		 rightM.setD(Wiring.VELOCITY_D);
+		 
+		 rightS.changeControlMode(TalonControlMode.Speed);
+		 rightS.setFeedbackDevice(FeedbackDevice.CtreMagEncoder_Relative);
+		 rightS.reverseSensor(false);
+		 rightS.configNominalOutputVoltage(+0.0f, -0.0f);
+		 rightS.configPeakOutputVoltage(+12.0f, -12.0f);
+		 rightS.setProfile(Wiring.VELOCITY_PROFILE);
+		 rightS.setF(Wiring.VELOCITY_F);
+		 rightS.setP(Wiring.VELOCITY_P);
+		 rightS.setI(Wiring.VELOCITY_I);
+		 rightS.setD(Wiring.VELOCITY_D);
+		 
+		 leftS.changeControlMode(TalonControlMode.Speed);
+		 leftS.setFeedbackDevice(FeedbackDevice.CtreMagEncoder_Relative);
+		 leftS.reverseSensor(true);
+		 leftS.configNominalOutputVoltage(+0.0f, -0.0f);
+		 leftS.configPeakOutputVoltage(+12.0f, -12.0f);
+		 leftS.setProfile(Wiring.VELOCITY_PROFILE);
+		 leftS.setF(Wiring.VELOCITY_F);
+		 leftS.setP(Wiring.VELOCITY_P);
+		 leftS.setI(Wiring.VELOCITY_I);
+		 leftS.setD(Wiring.VELOCITY_D);
 
 		waffle = new WFFL(Wiring.WFFL_NAME, robot, rightM, leftM, tranny);
 
@@ -105,6 +132,11 @@ public class Robot extends IterativeRobot {
 		dio2 = new DigitalOutput(1);
 		
 		tranny.resetEncoders();
+		
+		rightM.changeControlMode(TalonControlMode.Speed);
+		rightS.changeControlMode(TalonControlMode.Speed);
+		leftM.changeControlMode(TalonControlMode.Speed);
+		leftS.changeControlMode(TalonControlMode.Speed);
 
 	}
 
@@ -226,20 +258,28 @@ public class Robot extends IterativeRobot {
 	public void teleopPeriodic() {
 		// sendRecieveCenterValues();
 		// waffle.myRobot.arcadeDrive(stick); //FOR THE TEST CHASSIS
-		if(tranny.gear == 1){
-			robot.arcadeDrive(stick.getY()*Wiring.LOW_SPEED_MULTIPLIER, -stick.getRawAxis(4)*Wiring.LOW_SPEED_MULTIPLIER);
-		} else {
-			robot.arcadeDrive(stick.getY(), -stick.getRawAxis(4));
-		}
+//		if(tranny.gear == 1){
+//			robot.arcadeDrive(stick.getY()*Wiring.LOW_SPEED_MULTIPLIER, -stick.getRawAxis(4)*Wiring.LOW_SPEED_MULTIPLIER);
+//		} else {
+//			robot.arcadeDrive(stick.getY(), -stick.getRawAxis(4));
+//		}
+		
+		double speed = stick.getRawAxis(1) * 177;
+		rightM.set(-speed);//hellow-M@
+//		leftM.set(speed);
 		
 //		recordPeriodic();
 		// playbackIterative();
-
-		SmartDashboard.putNumber("Voltage", (leftM.getOutputVoltage() + rightM.getOutputVoltage())/2);
-		SmartDashboard.putNumber("Velocity", (tranny.getRVelocity() + tranny.getLVelocity())/2);
 		
 		tranny.updateShifting();
 
+		System.out.println(tranny.getRVelocity() + " " + speed);
+		
+//		System.out.println(tranny.getspeed + " 1 Commanded Speed " + leftM.get());
+//		System.out.println(speed + " 2 Commanded Speed " + leftS.get());
+//		System.out.println(speed + " 3 Commanded Speed " + rightM.get());
+//		System.out.println(speed + " 4 Commanded Speed " + rightS.get());
+		
 		shooter.updateShooter(stick);
 	}
 	

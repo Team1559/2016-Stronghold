@@ -28,6 +28,11 @@ public class Wiring {
 	public static final double SHIFT_UP_SPEED = 4.6; // m/s
 	public static final double SHIFT_DOWN_SPEED = 4.4; // m/s
 	public static final double LOW_SPEED_MULTIPLIER = 1.0 ; //Reccommended 2.2, Chris didn't like it....
+	public static final double VELOCITY_P = .1; //.011;
+	public static final double VELOCITY_I = 0; //0.001;
+	public static final double VELOCITY_D = 0; //0.001;
+	public static final double VELOCITY_F = 0; //.85;
+	public static final int VELOCITY_PROFILE = 0;
 
 	// Joysticks
 	public static final int JOYSTICK0 = 0;

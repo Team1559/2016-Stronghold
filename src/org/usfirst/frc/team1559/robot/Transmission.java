@@ -32,7 +32,7 @@ public class Transmission {
 
 		shift1.set(false);
 		shift2.set(true);
-		System.out.println("GEAR 1");
+//		System.out.println("GEAR 1");
 
 	}
 
@@ -40,7 +40,7 @@ public class Transmission {
 
 		shift1.set(true);
 		shift2.set(false);
-		System.out.println("GEAR 1");
+//		System.out.println("GEAR 1");
 
 	}
 //
@@ -49,19 +49,19 @@ public class Transmission {
 //		return 10.1;
 //	}
 //	
-	public int getRDisplacement() {
+	public double getRDisplacement() {
 		return (rightM.getEncPosition() / Wiring.PULSES_PER_INCH);
 	}
 
-	public int getLDisplacement() {
+	public double getLDisplacement() {
 		return -(leftM.getEncPosition() / Wiring.PULSES_PER_INCH);
 	}
 	
-	public int getRVelocity() {
+	public double getRVelocity() {
 		return (rightM.getEncVelocity() / Wiring.PULSES_PER_INCH);
 	}
 
-	public int getLVelocity() {
+	public double getLVelocity() {
 		return -(leftM.getEncVelocity() / Wiring.PULSES_PER_INCH);
 	}
 	
