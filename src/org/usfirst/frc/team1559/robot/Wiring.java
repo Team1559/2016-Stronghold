@@ -51,7 +51,7 @@ public class Wiring {
 	public static final int PDP_CHANNEL_GATHERER = 3;
 	
 
-	// shooter constant(s)
+	// shooter constants
 	public static final int SHOOTER_UP_DELAY = 50;
 	public static final int SHOOTER_DOWN_DELAY = 5;
 	public static final int SHOOTER_UP_SOLENOID = 6;
@@ -64,4 +64,9 @@ public class Wiring {
 	public static final int CLAMP_RIGHT_ID = 1;
 	public static final int CLAMP_SENSOR_ID_0 = 30;
 	public static final int CLAMP_SENSOR_ID_1 = 20;
+
+	
+	// gatherer constants
+	public static final double GATHERER_SPEED = 0.5;
+
 }
