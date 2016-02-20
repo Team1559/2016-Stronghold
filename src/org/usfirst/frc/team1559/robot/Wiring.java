@@ -51,10 +51,13 @@ public class Wiring {
 	public static final int PDP_CHANNEL_GATHERER = 3;
 	
 
-	// shooter constant(s)
+	// shooter constants
 	public static final int SHOOTER_UP_DELAY = 50;
 	public static final int SHOOTER_DOWN_DELAY = 5;
 	public static final int SHOOTER_UP_SOLENOID = 6;
 	public static final int SHOOTER_DOWN_SOLENOID = 5;
 	public static final int MAGNET = 0;
+	
+	// gatherer constants
+	public static final double GATHERER_SPEED = 0.5;
 }
