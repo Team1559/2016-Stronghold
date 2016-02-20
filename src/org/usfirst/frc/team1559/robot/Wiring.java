@@ -47,7 +47,7 @@ public class Wiring {
 	public static final int BTN_GATHERER_TO_MID = 5;
 	public static final int BTN_GATHERER_TO_BOT = 8;
 	public static final int BTN_SHOOT = 1;
-	public static final int GATHERER_ANALOG_INPUT = 2;
+	public static final int GATHERER_ANALOG_INPUT = 1;
 	public static final int PDP_CHANNEL_GATHERER = 3;
 	
 
@@ -62,10 +62,13 @@ public class Wiring {
 	// ball clamp
 	public static final int CLAMP_LEFT_ID = 6;
 	public static final int CLAMP_RIGHT_ID = 7;
-	public static final int CLAMP_BALL_SENSOR_ID = 4;
+	public static final int CLAMP_BALL_SENSOR_ID = 0;
 	public static final double CLAMP_SENSOR_THRESHOLD = 4.0;
 	
 	// gatherer constants
 	public static final double GATHERER_SPEED = 0.5;
+	
+	public static final int GATHERER_LIFT = ;
+	public static final int GATHERER_ROTATE = ;
 
 }

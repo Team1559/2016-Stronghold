@@ -41,7 +41,7 @@ public class Robot extends IterativeRobot {
 	DigitalOutput dio1;
 	Joystick coStick;
 	BallClamp clamp;
-	
+	Gatherer gatherer;
 
 	// Comments are for a 4 motor drive system whereas uncommented code just
 	// does 2
@@ -112,6 +112,9 @@ public class Robot extends IterativeRobot {
 		dio2 = new DigitalOutput(1);
 		
 		tranny.resetEncoders();
+		
+		gatherer = new Gatherer();
+		gatherer.initGatherers(Wiring.GATHERER_LIFT, Wiring.GATHERER_ROTATE, stick);
 
 	}
 
@@ -248,6 +251,7 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putNumber("Velocity", (tranny.getRVelocity() + tranny.getLVelocity())/2);
 		
 		tranny.updateShifting();
+		
 
 		shooter.updateShooter(stick);
 		clamp.updateBallClamp(stick);
