@@ -1,20 +1,16 @@
 package org.usfirst.frc.team1559.robot;
-
+import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.PWM;
 import edu.wpi.first.wpilibj.Servo;
 
 public class BallClamp {
 	Servo servoLeft;
 	Servo servoRight;
-	PWM pwm0;
-	PWM pwm1;
-
+	AnalogInput opSensor;
 	public BallClamp() {
 		servoLeft = new Servo(Wiring.CLAMP_LEFT_ID);
 		servoRight = new Servo(Wiring.CLAMP_RIGHT_ID);
-		pwm0 = new PWM(Wiring.CLAMP_SENSOR_ID_0);
-		pwm1 = new PWM(Wiring.CLAMP_SENSOR_ID_1);
+		opSensor = new AnalogInput(Wiring.CLAMP_BALL_SENSOR_ID);
 	}
 
 	public void close() {
@@ -28,14 +24,11 @@ public class BallClamp {
 	}
 
 	public void updateBallClamp(Joystick input) {
-		if (pwm0.getRaw() >= 190 || pwm1.getRaw() >= 0) {
-			if (input.getRawButton(Wiring.BTN_SHOOT)) {
-				open();
-			} else {
-				close();
-			}
-		} else {
+		if(opSensor.getVoltage() >= Wiring.CLAMP_SENSOR_THRESHOLD){
+			close();
+		}else{
 			open();
 		}
 	}
+	
 }

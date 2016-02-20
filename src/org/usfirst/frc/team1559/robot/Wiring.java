@@ -62,9 +62,8 @@ public class Wiring {
 	// ball clamp
 	public static final int CLAMP_LEFT_ID = 0;
 	public static final int CLAMP_RIGHT_ID = 1;
-	public static final int CLAMP_SENSOR_ID_0 = 30;
-	public static final int CLAMP_SENSOR_ID_1 = 20;
-
+	public static final int CLAMP_BALL_SENSOR_ID = 10;
+	public static final double CLAMP_SENSOR_THRESHOLD = 4.0;
 	
 	// gatherer constants
 	public static final double GATHERER_SPEED = 0.5;
