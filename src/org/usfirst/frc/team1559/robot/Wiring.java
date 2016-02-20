@@ -62,6 +62,6 @@ public class Wiring {
 	// ball clamp
 	public static final int CLAMP_LEFT_ID = 0;
 	public static final int CLAMP_RIGHT_ID = 1;
-	public static final int BTN_CLAMP_CLOSE = 15;
-	public static final int BTN_CLAMP_OPEN = 16;
+	public static final int CLAMP_SENSOR_ID_0 = 30;
+	public static final int CLAMP_SENSOR_ID_1 = 20;
 }
