@@ -4,22 +4,26 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Servo;
 
 public class BallClamp {
+	
 	Servo servoLeft;
 	Servo servoRight;
 	AnalogInput opSensor;
+	
 	public BallClamp() {
 		servoLeft = new Servo(Wiring.CLAMP_LEFT_ID);
 		servoRight = new Servo(Wiring.CLAMP_RIGHT_ID);
 		opSensor = new AnalogInput(Wiring.CLAMP_BALL_SENSOR_ID);
+		servoLeft.set(1);
+		servoRight.set(0);
 	}
 
 	public void close() {
-		servoLeft.set(1);
+		servoLeft.set(0);
 		servoRight.set(1);
 	}
 
 	public void open() {
-		servoLeft.set(0);
+		servoLeft.set(1);
 		servoRight.set(0);
 	}
 

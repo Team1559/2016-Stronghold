@@ -6,16 +6,16 @@ import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.Solenoid;
 
 public class Transmission {
-	
-	//will eventually be in its own thread to shift gears while driving is occurring.
-	
+
+	// will eventually be in its own thread to shift gears while driving is
+	// occurring.
+
 	Solenoid shift1;
 	Solenoid shift2;
 	PowerDistributionPanel pdp;
 	int gear;
 	Joystick joy;
 	CANTalon leftM, rightM;
-	
 
 	public Transmission(Joystick joy, CANTalon rightM, CANTalon leftM) {
 
@@ -43,12 +43,13 @@ public class Transmission {
 		System.out.println("GEAR 1");
 
 	}
-//
-//	public double getSpeed() {
-//		/*ADD REAL CODE!*/
-//		return 10.1;
-//	}
-//	
+
+	//
+	// public double getSpeed() {
+	// /*ADD REAL CODE!*/
+	// return 10.1;
+	// }
+	//
 	public int getRDisplacement() {
 		return (rightM.getEncPosition() / Wiring.PULSES_PER_INCH);
 	}
@@ -56,7 +57,7 @@ public class Transmission {
 	public int getLDisplacement() {
 		return -(leftM.getEncPosition() / Wiring.PULSES_PER_INCH);
 	}
-	
+
 	public int getRVelocity() {
 		return (rightM.getEncVelocity() / Wiring.PULSES_PER_INCH);
 	}
@@ -64,21 +65,24 @@ public class Transmission {
 	public int getLVelocity() {
 		return -(leftM.getEncVelocity() / Wiring.PULSES_PER_INCH);
 	}
-	
+
 	public void resetEncoders() {
 		rightM.setEncPosition(0);
 		leftM.setEncPosition(0);
 	}
-	
-	public void updateShifting(){
-		double velocity = (getRVelocity() + (double) getLVelocity())/2;
-		
-		if(velocity >= Wiring.SHIFT_UP_SPEED && joy.getRawButton(9)){
+
+	public void updateShifting() {
+		double velocity = (getRVelocity() + (double) getLVelocity()) / 2;
+
+		if (velocity >= Wiring.SHIFT_UP_SPEED && joy.getRawButton(9)) {
 			gear2();
-		} else if((velocity <= Wiring.SHIFT_DOWN_SPEED) || !joy.getRawButton(9)){
+		} else if ((velocity <= Wiring.SHIFT_DOWN_SPEED) || !joy.getRawButton(9)) {
 			gear1();
 		}
-		
+
 	}
-	
+
+	public PowerDistributionPanel getPDP() {
+		return pdp;
+	}
 }

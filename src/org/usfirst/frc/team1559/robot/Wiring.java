@@ -50,7 +50,6 @@ public class Wiring {
 	public static final int GATHERER_ANALOG_INPUT = 1;
 	public static final int PDP_CHANNEL_GATHERER = 3;
 	
-
 	// shooter constants
 	public static final int SHOOTER_UP_DELAY = 50;
 	public static final int SHOOTER_DOWN_DELAY = 5;
@@ -58,17 +57,15 @@ public class Wiring {
 	public static final int SHOOTER_DOWN_SOLENOID = 5;
 	public static final int MAGNET = 0;
 
-
 	// ball clamp
-	public static final int CLAMP_LEFT_ID = 6;
-	public static final int CLAMP_RIGHT_ID = 7;
+	public static final int CLAMP_LEFT_ID = 7;
+	public static final int CLAMP_RIGHT_ID = 6;
 	public static final int CLAMP_BALL_SENSOR_ID = 0;
-	public static final double CLAMP_SENSOR_THRESHOLD = 4.0;
+	public static final double CLAMP_SENSOR_THRESHOLD = 2.5;
 	
 	// gatherer constants
 	public static final double GATHERER_SPEED = 0.5;
-	
-	public static final int GATHERER_LIFT = ;
-	public static final int GATHERER_ROTATE = ;
-
+	public static final int GATHERER_LIMIT_ID = 2;
+	public static final int GATHERER_LIFT = 2;
+	public static final int GATHERER_ROTATE = 1;
 }

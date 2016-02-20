@@ -28,10 +28,10 @@ public class Robot extends IterativeRobot {
 	double desiredHeading = 0;
 	boolean isInverted;
 	WFFL waffle;
-	Arduino arduino;
+	// Arduino arduino;
 	Transmission tranny;
 	int listPos = 0;
-	SerialClient sc = new SerialClient();//using serial now because it's good
+	SerialClient sc = new SerialClient();// using serial now because it's good
 	double leftVelocity, rightVelocity;
 	Shooter shooter;
 	DriverStation driverstation;
@@ -39,7 +39,7 @@ public class Robot extends IterativeRobot {
 	// DigitalInput magneticSensor;
 	DigitalOutput dio2;
 	DigitalOutput dio1;
-	Joystick coStick;
+	// Joystick coStick;
 	BallClamp clamp;
 	Gatherer gatherer;
 
@@ -58,7 +58,7 @@ public class Robot extends IterativeRobot {
 		rightS.set(Wiring.RIGHT_MASTER_TALON);
 		robot = new RobotDrive(leftM, rightM);
 		stick = new Joystick(Wiring.JOYSTICK0);
-		coStick = new Joystick(Wiring.JOYSTICK1);
+		// coStick = new Joystick(Wiring.JOYSTICK1);
 		tranny = new Transmission(stick, leftM, rightM);
 		shooter = new Shooter();
 		shooter.initShooter();
@@ -110,9 +110,9 @@ public class Robot extends IterativeRobot {
 
 		dio1 = new DigitalOutput(0);
 		dio2 = new DigitalOutput(1);
-		
+
 		tranny.resetEncoders();
-		
+
 		gatherer = new Gatherer();
 		gatherer.initGatherers(Wiring.GATHERER_LIFT, Wiring.GATHERER_ROTATE, stick);
 
@@ -120,7 +120,7 @@ public class Robot extends IterativeRobot {
 
 	public void autonomousInit() {
 		waffle.reset();
-		arduino.writeSequence(1);
+		// arduino.writeSequence(1);
 		waffle.ahrs.reset();
 		waffle.interpret();
 		System.out.println("JFKDSLFIUESHF " + waffle.list.get(waffle.list.size() - 1).command);
@@ -132,7 +132,7 @@ public class Robot extends IterativeRobot {
 	}
 
 	public void autonomousPeriodic() {
-		SmartDashboard.putNumber("Displacement", (tranny.getLDisplacement() + tranny.getRDisplacement())/2);
+		SmartDashboard.putNumber("Displacement", (tranny.getLDisplacement() + tranny.getRDisplacement()) / 2);
 		Command current = waffle.list.get(listPos);
 		if (current.command.equals("TURN")) {
 			waffle.turnToAngle(current.angle);
@@ -169,7 +169,7 @@ public class Robot extends IterativeRobot {
 			System.out.println("Motor Stoppage achieved!");
 		} else if (current.command.equals("DEFENSE")) {
 			String id = current.id;
-			if(!following) {
+			if (!following) {
 				playbackSetup(id);
 			}
 			playbackIterative();
@@ -178,15 +178,16 @@ public class Robot extends IterativeRobot {
 
 			leftM.set(0);
 			rightM.set(0);
-			
+
 			long brandonThomasBoje = System.currentTimeMillis();
-			brandonThomasBoje += current.time*1000;
-			
+			brandonThomasBoje += current.time * 1000;
+
 			System.out.println("waiting...");
-			
-			while(System.currentTimeMillis() < brandonThomasBoje);
-			//sup ladies			
-			
+
+			while (System.currentTimeMillis() < brandonThomasBoje)
+				;
+			// sup ladies
+
 			current.done = true;
 		}
 
@@ -203,26 +204,26 @@ public class Robot extends IterativeRobot {
 			} else {
 				leftM.set(0);
 				rightM.set(0);
-				
+
 			}
 
 		}
 	}
 
 	public void teleopInit() {
-		arduino.writeSequence(2);
+		// arduino.writeSequence(2);
 		// isInverted = true;
 		// waffle.left.setInverted(true);
 		// waffle.right.setInverted(true);
 		// leftF.setInverted(isInverted);
-//		centerWithAngle();
+		// centerWithAngle();
 		rightM.setEncPosition(0);
 		leftM.setEncPosition(0);
 		leftM.setInverted(true);
 		rightM.setInverted(true);
 		shooter.initShooter();
 		tranny.resetEncoders();
-//		initRecord();
+		// initRecord();
 		// playbackSetup();
 
 		if (DriverStation.getInstance().getAlliance() == DriverStation.Alliance.Blue) {
@@ -238,33 +239,34 @@ public class Robot extends IterativeRobot {
 	public void teleopPeriodic() {
 		// sendRecieveCenterValues();
 		// waffle.myRobot.arcadeDrive(stick); //FOR THE TEST CHASSIS
-		if(tranny.gear == 1){
-			robot.arcadeDrive(stick.getY()*Wiring.LOW_SPEED_MULTIPLIER, -stick.getRawAxis(4)*Wiring.LOW_SPEED_MULTIPLIER);
+		if (tranny.gear == 1) {
+			robot.arcadeDrive(stick.getY() * Wiring.LOW_SPEED_MULTIPLIER, -stick.getRawAxis(4) * Wiring.LOW_SPEED_MULTIPLIER);
 		} else {
 			robot.arcadeDrive(stick.getY(), -stick.getRawAxis(4));
 		}
-		
-//		recordPeriodic();
+
+		// recordPeriodic();
 		// playbackIterative();
 
-		SmartDashboard.putNumber("Voltage", (leftM.getOutputVoltage() + rightM.getOutputVoltage())/2);
-		SmartDashboard.putNumber("Velocity", (tranny.getRVelocity() + tranny.getLVelocity())/2);
-		
+		SmartDashboard.putNumber("Voltage", (leftM.getOutputVoltage() + rightM.getOutputVoltage()) / 2);
+		SmartDashboard.putNumber("Velocity", (tranny.getRVelocity() + tranny.getLVelocity()) / 2);
+
 		tranny.updateShifting();
-		
+
+		gatherer.gathererTalon();
 
 		shooter.updateShooter(stick);
 		clamp.updateBallClamp(stick);
-		if (coStick.getRawButton(1)) {
-			arduino.writeSequence(3);
+		// if (coStick.getRawButton(1)) {
+		// // arduino.writeSequence(3);
+		// }
+
+		if (driverstation.getInstance().getMatchTime() <= 20) {
+			// arduino.writeSequence(4);
 		}
-		
-		 if (driverstation.getInstance().getMatchTime() <= 20) {
-			 arduino.writeSequence(4);
-		 }
 	}
-	
-	public void centerWithAngle(){// comes in as error,angle,distance
+
+	public void centerWithAngle() {// comes in as error,angle,distance
 		String in = sc.read();
 		String err = in.substring(0, in.indexOf(","));
 		String temp = in.substring(in.indexOf(","));
@@ -272,25 +274,37 @@ public class Robot extends IterativeRobot {
 		String dist = temp.substring(temp.indexOf(","));
 		int error = 0;
 		double angle = 0;
-		try{
+		try {
 			error = Integer.parseInt(err);
 			angle = Double.parseDouble(ang);
-		} catch (Exception e){
-			
+		} catch (Exception e) {
+
 		}
-		if (error < 0){
+		if (error < 0) {
 			angle = angle * -1;
 		}
 		double currentAngle = waffle.getCurrentAngle();
 		waffle.turnToAngle(currentAngle + angle);
 	}
-	
+
 	public void testInit() {
 
 	}
 
 	public void testPeriodic() {
-
+		SmartDashboard.putNumber("Gatherer Gyro:", gatherer.getGyro().getAngle());
+		SmartDashboard.putBoolean("Gatherer LS", gatherer.isLimitSwitchTripped());
+		gatherer.manualControl();
+		if (stick.getRawButton(6)) {
+			clamp.close();
+		} else {
+			clamp.open();
+		}
+		if(stick.getRawButton(5)) {
+			gatherer.setSpark(0.5);
+		} else {
+			gatherer.setSpark(0.0);
+		}
 	}
 
 	public void disabledInit() {
@@ -299,7 +313,7 @@ public class Robot extends IterativeRobot {
 
 	public void disabledPeriodic() {
 		// roit gets rekt
-		arduino.writeSequence(0);
+		// arduino.writeSequence(0);
 	}
 
 	public int getRDisplacement() {
