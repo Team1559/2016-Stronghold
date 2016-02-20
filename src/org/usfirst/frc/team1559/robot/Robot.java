@@ -40,6 +40,7 @@ public class Robot extends IterativeRobot {
 	DigitalOutput dio2;
 	DigitalOutput dio1;
 	Joystick coStick;
+	BallClamp clamp;
 	
 
 	// Comments are for a 4 motor drive system whereas uncommented code just
@@ -61,6 +62,7 @@ public class Robot extends IterativeRobot {
 		tranny = new Transmission(stick, leftM, rightM);
 		shooter = new Shooter();
 		shooter.initShooter();
+		clamp = new BallClamp();
 		// magneticSensor = new DigitalInput(Wiring.MAGNET);
 
 		robot.setExpiration(Double.MAX_VALUE);
@@ -248,7 +250,7 @@ public class Robot extends IterativeRobot {
 		tranny.updateShifting();
 
 		shooter.updateShooter(stick);
-		
+		clamp.updateBallClamp(stick);
 		if (coStick.getRawButton(1)) {
 			arduino.writeSequence(3);
 		}

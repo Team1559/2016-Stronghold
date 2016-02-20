@@ -57,4 +57,11 @@ public class Wiring {
 	public static final int SHOOTER_UP_SOLENOID = 6;
 	public static final int SHOOTER_DOWN_SOLENOID = 5;
 	public static final int MAGNET = 0;
+
+
+	// ball clamp
+	public static final int CLAMP_LEFT_ID = 0;
+	public static final int CLAMP_RIGHT_ID = 1;
+	public static final int BTN_CLAMP_CLOSE = 15;
+	public static final int BTN_CLAMP_OPEN = 16;
 }
