@@ -53,6 +53,7 @@ public class Wiring {
 	// shooter constants
 	public static final int SHOOTER_UP_DELAY = 50;
 	public static final int SHOOTER_DOWN_DELAY = 5;
+	public static final int SHOOTER_FIRE_DELAY = 25;
 	public static final int SHOOTER_UP_SOLENOID = 6;
 	public static final int SHOOTER_DOWN_SOLENOID = 5;
 	public static final int MAGNET = 0;

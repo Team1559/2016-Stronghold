@@ -169,7 +169,7 @@ public class Shooter {
 	 */
 
 	public void setSolenoids(boolean s, boolean override) {
-		if(!override) {
+		if (!override) {
 			fireShooter.set(s);
 			downShooter.set(!s);
 		}
@@ -184,6 +184,13 @@ public class Shooter {
 		case 0: // waiting for fire button
 			if (b) {
 				shooting = true;
+			}
+			if (shooting) {
+				shooterCount++;
+			}
+			if (shooterCount >= Wiring.SHOOTER_FIRE_DELAY) {// delaying so we
+															// dont destroy ball
+															// clamps
 				setSolenoids(true, override);
 				shootState = 1;
 				shooterCount = 0;
@@ -228,6 +235,11 @@ public class Shooter {
 		case 0: // waiting for fire button
 			if (input.getRawAxis(Wiring.BTN_SHOOT) >= .9) {
 				shooting = true;
+			}
+			if (shooting) {
+				shooterCount++;
+			}
+			if (shooterCount >= Wiring.SHOOTER_FIRE_DELAY) {
 				setSolenoids(true, override);
 				shootState = 1;
 				shooterCount = 0;
