@@ -255,6 +255,8 @@ public class Robot extends IterativeRobot {
 		} else {
 			robot.arcadeDrive(stick.getY(), -stick.getRawAxis(4));
 		}
+		
+		SmartDashboard.putBoolean("BALL IN!", !clamp.open);
 
 		// recordPeriodic();
 		// playbackIterative();
