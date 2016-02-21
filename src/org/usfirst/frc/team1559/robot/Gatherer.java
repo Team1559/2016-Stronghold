@@ -19,8 +19,8 @@ public class Gatherer {
 	private DigitalInput diGathererBottom;
 	private PowerDistributionPanel pdp = new PowerDistributionPanel();
 	private int gatherState = 0;
-	private final double MID_TARGET = 90;
 	private final double TOP_TARGET = 0;
+	private final double MID_TARGET = Wiring.GATHERER_SAFE_SHOOT_ANGLE;
 	private final double BOTTOM_TARGET = 120;
 	private final double talonIdleCurrent = 1.875;
 	private final double talonStallCurrent = 15.0;
@@ -224,6 +224,10 @@ public class Gatherer {
 				arm = ArmState.MIDBOTDOWN;
 			}
 			break;
+		case STALLED:
+			break;
+		default:
+			break;
 		}
 	}
 
@@ -243,5 +247,12 @@ public class Gatherer {
 		} else {
 			gatherLift.set(liftStop);
 		}
+		if (!diGathererTop.get()) {
+			gyro.reset();
+		}
+	}
+	
+	public boolean shouldNotShoot() {
+		return gyro.getAngle() <= Wiring.GATHERER_SAFE_SHOOT_ANGLE;
 	}
 }

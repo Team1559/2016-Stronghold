@@ -46,7 +46,7 @@ public class Wiring {
 	public static final int BTN_GATHERER_TO_TOP = 7;
 	public static final int BTN_GATHERER_TO_MID = 5;
 	public static final int BTN_GATHERER_TO_BOT = 8;
-	public static final int BTN_SHOOT = 1;
+	public static final int BTN_SHOOT = 3;
 	public static final int GATHERER_ANALOG_INPUT = 1;
 	public static final int PDP_CHANNEL_GATHERER = 3;
 	
@@ -64,8 +64,9 @@ public class Wiring {
 	public static final double CLAMP_SENSOR_THRESHOLD = 2.5;
 	
 	// gatherer constants
-	public static final double GATHERER_SPEED = 0.5;
+	public static final double GATHERER_SPEED = 1.0;
 	public static final int GATHERER_LIMIT_ID = 2;
 	public static final int GATHERER_LIFT = 2;
 	public static final int GATHERER_ROTATE = 1;
+	public static final int GATHERER_SAFE_SHOOT_ANGLE = 75;
 }

@@ -34,7 +34,6 @@ public class Robot extends IterativeRobot {
 	SerialClient sc = new SerialClient();// using serial now because it's good
 	double leftVelocity, rightVelocity;
 	Shooter shooter;
-	DriverStation driverstation;
 	final boolean shooterInversion = false;
 	// DigitalInput magneticSensor;
 	DigitalOutput dio2;
@@ -61,7 +60,7 @@ public class Robot extends IterativeRobot {
 		// coStick = new Joystick(Wiring.JOYSTICK1);
 		tranny = new Transmission(stick, leftM, rightM);
 		shooter = new Shooter();
-		shooter.initShooter();
+		shooter.initShooter(gatherer.shouldNotShoot());
 		clamp = new BallClamp();
 		// magneticSensor = new DigitalInput(Wiring.MAGNET);
 
@@ -127,7 +126,7 @@ public class Robot extends IterativeRobot {
 		leftM.setInverted(false);
 		rightM.setInverted(false);
 		waffle.length = 0;
-		shooter.initShooter();
+		shooter.initShooter(gatherer.shouldNotShoot());
 		tranny.resetEncoders();
 	}
 
@@ -155,7 +154,7 @@ public class Robot extends IterativeRobot {
 			// sendRecieveCenterValues("");
 			leftM.set(0);
 			rightM.set(0);
-			shooter.updateShooter(true);
+			shooter.updateShooter(true, gatherer.shouldNotShoot());
 			if (shooter.shootDone) {
 				current.done = true;
 				tranny.resetEncoders();
@@ -165,7 +164,7 @@ public class Robot extends IterativeRobot {
 		} else if (current.command.equals("STOP")) {
 			leftM.set(0);
 			rightM.set(0);
-			shooter.setSolenoids(false);
+			shooter.setSolenoids(false, gatherer.shouldNotShoot());
 			System.out.println("Motor Stoppage achieved!");
 		} else if (current.command.equals("DEFENSE")) {
 			String id = current.id;
@@ -221,7 +220,7 @@ public class Robot extends IterativeRobot {
 		leftM.setEncPosition(0);
 		leftM.setInverted(true);
 		rightM.setInverted(true);
-		shooter.initShooter();
+		shooter.initShooter(gatherer.shouldNotShoot());
 		tranny.resetEncoders();
 		// initRecord();
 		// playbackSetup();
@@ -255,13 +254,13 @@ public class Robot extends IterativeRobot {
 
 		gatherer.gathererTalon();
 
-		shooter.updateShooter(stick);
-		clamp.updateBallClamp(stick);
+		shooter.updateShooter(stick, gatherer.shouldNotShoot());
+		clamp.updateBallClamp(shooter.shooting);
 		// if (coStick.getRawButton(1)) {
 		// // arduino.writeSequence(3);
 		// }
 
-		if (driverstation.getInstance().getMatchTime() <= 20) {
+		if (DriverStation.getInstance().getMatchTime() <= 20) {
 			// arduino.writeSequence(4);
 		}
 	}
@@ -292,23 +291,26 @@ public class Robot extends IterativeRobot {
 	}
 
 	public void testPeriodic() {
-		SmartDashboard.putNumber("Gatherer Gyro:", gatherer.getGyro().getAngle());
+		System.out.println("Gatherer Gyro:" + gatherer.getGyro().getAngle());
 		SmartDashboard.putBoolean("Gatherer LS", gatherer.isLimitSwitchTripped());
 		gatherer.manualControl();
-		if (stick.getRawButton(6)) {
-			clamp.close();
-		} else {
-			clamp.open();
-		}
-		if(stick.getRawButton(5)) {
+//		gatherer.gathererTalon();
+		// if (stick.getRawButton(6)) {
+		// clamp.close();
+		// } else {
+		// clamp.open();
+		// }
+		clamp.updateBallClamp(shooter.shooting);
+		System.out.println(shooter.shooting);
+		if (stick.getRawButton(5)) {
 			gatherer.setSpark(0.5);
 		} else {
 			gatherer.setSpark(0.0);
 		}
+		shooter.updateShooter(stick, gatherer.shouldNotShoot());
 	}
 
 	public void disabledInit() {
-
 	}
 
 	public void disabledPeriodic() {

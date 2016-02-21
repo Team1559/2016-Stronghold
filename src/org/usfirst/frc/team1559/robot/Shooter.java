@@ -10,24 +10,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Shooter {
 
 	boolean shootDone = false;
-
-	// final int fireButton = 6;
-	// final int YellowButton = 4;
-	// final int BlueButton = 3;
-	// final int RedButton = 2;
-	// final int GreenButton = 1;
-	//
-	// private RobotDrive robot;
-
-	// private CANTalon leftM;
-	// private CANTalon leftS;
-	// private CANTalon rightM;
-	// private CANTalon rightS;
-	// private Joystick stick;
-	// private Solenoid shift1;
-	// private Solenoid shift2;
-	// private Solenoid cocked;
-	// private Relay led;
+	boolean shooting = false;
 
 	Solenoid fireShooter, downShooter;
 
@@ -185,12 +168,14 @@ public class Shooter {
 	 *            The joystick used to control the shooter.
 	 */
 
-	public void setSolenoids(boolean s) {
-		fireShooter.set(s);
-		downShooter.set(!s);
+	public void setSolenoids(boolean s, boolean override) {
+		if(!override) {
+			fireShooter.set(s);
+			downShooter.set(!s);
+		}
 	}
 
-	public void updateShooter(boolean b) {
+	public void updateShooter(boolean b, boolean override) {
 
 		SmartDashboard.putBoolean("SOLENOID", fireShooter.get());
 		SmartDashboard.putNumber("Shoot State", shootState);
@@ -198,7 +183,8 @@ public class Shooter {
 		switch (shootState) {
 		case 0: // waiting for fire button
 			if (b) {
-				setSolenoids(true);
+				shooting = true;
+				setSolenoids(true, override);
 				shootState = 1;
 				shooterCount = 0;
 			}
@@ -211,7 +197,7 @@ public class Shooter {
 			}
 			break;
 		case 2: // recock the catapult
-			setSolenoids(false);
+			setSolenoids(false, override);
 			shootState = 3;
 			break;
 		case 3: // wait for catapult to cock
@@ -220,27 +206,29 @@ public class Shooter {
 				shootState = 4;
 				shooterCount = 0;
 			}
+			shooting = false;
 			break;
 		case 4: // wait for button to go false
-			shootDone = true;
 			shootState = 5;
+			shootDone = true;
 			break;
 		default:
-			setSolenoids(false);
+			setSolenoids(false, override);
 			shootDone = true;
 			break;
 		}
 	}
 
-	public void updateShooter(Joystick input) {
+	public void updateShooter(Joystick input, boolean override) {
 
 		SmartDashboard.putBoolean("SOLENOID", fireShooter.get());
 		SmartDashboard.putNumber("Shoot State", shootState);
 
 		switch (shootState) {
 		case 0: // waiting for fire button
-			if (input.getRawAxis(3) >= .9) {
-				setSolenoids(true);
+			if (input.getRawAxis(Wiring.BTN_SHOOT) >= .9) {
+				shooting = true;
+				setSolenoids(true, override);
 				shootState = 1;
 				shooterCount = 0;
 			}
@@ -253,7 +241,7 @@ public class Shooter {
 			}
 			break;
 		case 2: // recock the catapult
-			setSolenoids(false);
+			setSolenoids(false, override);
 			shootState = 3;
 			break;
 		case 3: // wait for catapult to cock
@@ -262,43 +250,16 @@ public class Shooter {
 				shootState = 4;
 				shooterCount = 0;
 			}
+			shooting = false;
 			break;
 		case 4: // wait for button to go false
-			if (!input.getRawButton(Wiring.BTN_SHOOT))
+			if (!(input.getRawAxis(Wiring.BTN_SHOOT) >= .9))
 				shootState = 0;
 			break;
 		}
 	}
 
-	public void initShooter() {
-		setSolenoids(false);
+	public void initShooter(boolean override) {
+		setSolenoids(false, override);
 	}
-
-	//
-	// int spinnerCount = 0;
-	//
-	// public void gathererGatheringSpinnyThingy() {
-	// switch (spinnerCount) {
-	// case 0:
-	// gatherRotate.set(0.0);
-	// if (stick.getRawButton(9))
-	// spinnerCount = 1;
-	// if (stick.getRawButton(10))
-	// spinnerCount = 2;
-	// break;
-	// case 1:
-	// gatherRotate.set(0.4);
-	// if (!stick.getRawButton(9))
-	// spinnerCount = 0;
-	// break;
-	// case 2:
-	// gatherRotate.set(0.4);
-	// if (!stick.getRawButton(10))
-	// spinnerCount = 0;
-	// break;
-	// case 3:
-	//
-	// break;
-	// }
-	// }
 }
