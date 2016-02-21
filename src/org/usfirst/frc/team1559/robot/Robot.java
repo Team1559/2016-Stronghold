@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.Scanner;
 
 import edu.wpi.first.wpilibj.CANTalon;
+import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobot;
@@ -14,6 +15,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.vision.USBCamera;
 
 public class Robot extends IterativeRobot {
 
@@ -37,6 +39,9 @@ public class Robot extends IterativeRobot {
 	// DigitalInput magneticSensor;
 	DigitalOutput dio2;
 	DigitalOutput dio1;
+	USBCamera frontCam;
+	USBCamera backCam;
+	CameraServer cs;
 
 	// Comments are for a 4 motor drive system whereas uncommented code just
 	// does 2
@@ -52,10 +57,14 @@ public class Robot extends IterativeRobot {
 		rightS.changeControlMode(CANTalon.TalonControlMode.Follower);
 		rightS.set(Wiring.RIGHT_MASTER_TALON);
 		robot = new RobotDrive(leftM, rightM);
-		stick = new Joystick(Wiring.JOYSTICK0);
+		stick = new Joystick(Wiring.JOYSTICK3);
 		tranny = new Transmission(stick, leftM, rightM);
 		shooter = new Shooter();
 		shooter.initShooter();
+		
+		backCam = new USBCamera("cam0");
+		cs = CameraServer.getInstance();
+		cs.setQuality(50);
 		// magneticSensor = new DigitalInput(Wiring.MAGNET);
 
 		robot.setExpiration(Double.MAX_VALUE);
@@ -217,6 +226,12 @@ public class Robot extends IterativeRobot {
 	public void teleopPeriodic() {
 		// sendRecieveCenterValues();
 		// waffle.myRobot.arcadeDrive(stick); //FOR THE TEST CHASSIS
+		if (stick.getRawButton(XBoxController.BUTTON_A)){
+			cs.startAutomaticCapture(frontCam);
+		}
+		if (stick.getRawButton(XBoxController.BUTTON_B)){
+			cs.startAutomaticCapture(backCam);
+		}
 		robot.arcadeDrive(stick.getY(), -stick.getRawAxis(4));
 //		recordPeriodic();
 		// playbackIterative();
