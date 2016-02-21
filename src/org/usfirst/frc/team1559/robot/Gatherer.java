@@ -102,13 +102,13 @@ public class Gatherer {
 		
 		switch (arm) {
 		case ATTOP:
-			if (stick.getRawButton(Wiring.BTN_GATHERER_TO_BOT)) {
-				target = BOTTOM_TARGET;
-				gatherLift.set(liftDown);
-				arm = ArmState.TOPBOTDOWN;
-			}
+//			if (stick.getRawButton(Wiring.BTN_GATHERER_TO_BOT)) {
+//				target = BOTTOM_TARGET;
+//				gatherLift.set(liftDown);
+//				arm = ArmState.TOPBOTDOWN;
+//			}
 			
-			if (stick.getRawButton(Wiring.BTN_GATHERER_TO_MID)) {
+			if (stick.getRawButton(Wiring.GATHER_DOWN_LEVEL_BUT)) {
 				target = MID_TARGET;
 				gatherLift.set(liftDown);
 				arm = ArmState.TOPMIDDOWN;
@@ -121,12 +121,12 @@ public class Gatherer {
 				arm = ArmState.ATMID;
 			}
 			// change of plans
-			if (stick.getRawButton(Wiring.BTN_GATHERER_TO_TOP)) {
+			if (stick.getRawButton(Wiring.GATHER_UP_LEVEL_BUT)) {
 				target = TOP_TARGET;
 				gatherLift.set(liftUp);
 				arm = ArmState.MIDTOPUP;
 			}
-			if (stick.getRawButton(Wiring.BTN_GATHERER_TO_BOT)) {
+			if (stick.getRawButton(Wiring.GATHER_DOWN_LEVEL_BUT)) {
 				target = BOTTOM_TARGET;
 				gatherLift.set(liftDown);
 				arm = ArmState.TOPBOTDOWN;
@@ -138,24 +138,24 @@ public class Gatherer {
 				arm = ArmState.ATBOT;
 			}
 			// change of plans
-			if (stick.getRawButton(Wiring.BTN_GATHERER_TO_TOP)) {
-				target = TOP_TARGET;
-				gatherLift.set(liftUp);
-				arm = ArmState.BOTTOPUP;
-			}
-			if (stick.getRawButton(Wiring.BTN_GATHERER_TO_MID)) {
+//			if (stick.getRawButton(Wiring.BTN_GATHERER_TO_TOP)) {
+//				target = TOP_TARGET;
+//				gatherLift.set(liftUp);
+//				arm = ArmState.BOTTOPUP;
+//			}
+			if (stick.getRawButton(Wiring.GATHER_UP_LEVEL_BUT)) {
 				target = BOTTOM_TARGET;
 				gatherLift.set((angle <= MID_TARGET) ? liftDown : liftUp);
 				arm = ArmState.BOTMIDUP;
 			}
 			break;
 		case ATMID:
-			if (stick.getRawButton(Wiring.BTN_GATHERER_TO_TOP)) {
+			if (stick.getRawButton(Wiring.GATHER_UP_LEVEL_BUT)) {
 				target = TOP_TARGET;
 				gatherLift.set(liftUp);
 				arm = ArmState.MIDTOPUP;
 			}
-			if (stick.getRawButton(Wiring.BTN_GATHERER_TO_BOT)) {
+			if (stick.getRawButton(Wiring.GATHER_DOWN_LEVEL_BUT)) {
 				target = BOTTOM_TARGET;
 				gatherLift.set(liftDown);
 				arm = ArmState.MIDBOTDOWN;
@@ -167,24 +167,24 @@ public class Gatherer {
 				gatherLift.set(liftStop);
 			}
 			// change of plans
-			if (stick.getRawButton(Wiring.BTN_GATHERER_TO_MID)) {
+			if (stick.getRawButton(Wiring.GATHER_UP_LEVEL_BUT)) {
 				target = MID_TARGET;
 				gatherLift.set(liftUp);
 				arm = ArmState.BOTMIDUP;
 			}
-			if (stick.getRawButton(Wiring.BTN_GATHERER_TO_TOP)) {
-				target = TOP_TARGET;
-				gatherLift.set(liftUp);
-				arm = ArmState.MIDTOPUP;
-			}
+//			if (stick.getRawButton(Wiring.BTN_GATHERER_TO_TOP)) {
+//				target = TOP_TARGET;
+//				gatherLift.set(liftUp);
+//				arm = ArmState.MIDTOPUP;
+//			}
 			break;
 		case ATBOT:
-			if (stick.getRawButton(Wiring.BTN_GATHERER_TO_TOP)) {
-				target = TOP_TARGET;
-				gatherLift.set(liftUp);
-				arm = ArmState.BOTMIDUP;
-			}
-			if (stick.getRawButton(Wiring.BTN_GATHERER_TO_MID)) {
+//			if (stick.getRawButton(Wiring.BTN_GATHERER_TO_TOP)) {
+//				target = TOP_TARGET;
+//				gatherLift.set(liftUp);
+//				arm = ArmState.BOTMIDUP;
+//			}
+			if (stick.getRawButton(Wiring.GATHER_UP_LEVEL_BUT)) {
 				target = MID_TARGET;
 				gatherLift.set(liftUp);
 				arm = ArmState.BOTMIDUP;
@@ -196,12 +196,12 @@ public class Gatherer {
 				arm = ArmState.ATMID;
 			}
 			// change of plans
-			if (stick.getRawButton(Wiring.BTN_GATHERER_TO_TOP)) {
+			if (stick.getRawButton(Wiring.GATHER_UP_LEVEL_BUT)) {
 				target = TOP_TARGET;
 				gatherLift.set(liftUp);
 				arm = ArmState.BOTMIDUP;
 			}
-			if (stick.getRawButton(Wiring.BTN_GATHERER_TO_BOT)) {
+			if (stick.getRawButton(Wiring.GATHER_DOWN_LEVEL_BUT)) {
 				target = BOTTOM_TARGET;
 				gatherLift.set(liftDown);
 				arm = ArmState.MIDBOTDOWN;
@@ -219,17 +219,17 @@ public class Gatherer {
 				arm = ArmState.ATTOP;
 			}
 			// change of plans
-			if (stick.getRawButton(Wiring.BTN_GATHERER_TO_BOT)) {
+			if (stick.getRawButton(Wiring.GATHER_DOWN_LEVEL_BUT)) {
 				target = BOTTOM_TARGET;
 				gatherLift.set(liftDown);
 				arm = ArmState.MIDBOTDOWN;
 			}
-			if (stick.getRawButton(Wiring.BTN_GATHERER_TO_MID)) {
-				target = MID_TARGET;
-				gatherLift.set((angle >= MID_TARGET) ? liftDown : liftUp);
-				arm = ArmState.BOTMIDUP;
-			}
-			
+//			if (stick.getRawButton(Wiring.BTN_GATHERER_TO_MID)) {
+//				target = MID_TARGET;
+//				gatherLift.set((angle >= MID_TARGET) ? liftDown : liftUp);
+//				arm = ArmState.BOTMIDUP;
+//			}
+//			
 			if (!diGathererTop.get()) {
 				gatherLift.set(liftStop);
 				arm = ArmState.ATTOP;
@@ -242,16 +242,16 @@ public class Gatherer {
 				gatherLift.set(liftStop);
 			}
 			// change of plans
-			if (stick.getRawButton(Wiring.BTN_GATHERER_TO_MID)) {
+			if (stick.getRawButton(Wiring.GATHER_DOWN_LEVEL_BUT)) {
 				target = MID_TARGET;
 				gatherLift.set(liftDown);
 				arm = ArmState.TOPMIDDOWN;
 			}
-			if (stick.getRawButton(Wiring.BTN_GATHERER_TO_BOT)) {
-				target = BOTTOM_TARGET;
-				gatherLift.set(liftDown);
-				arm = ArmState.MIDBOTDOWN;
-			}
+//			if (stick.getRawButton(Wiring.BTN_GATHERER_TO_BOT)) {
+//				target = BOTTOM_TARGET;
+//				gatherLift.set(liftDown);
+//				arm = ArmState.MIDBOTDOWN;
+//			}
 			
 			if (!diGathererTop.get()) {
 				gatherLift.set(liftStop);
