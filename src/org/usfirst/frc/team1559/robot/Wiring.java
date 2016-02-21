@@ -12,7 +12,7 @@ public class Wiring {
 	 * Format: public static final type VALUE_IN_CAPS = 23;
 	 */
 
-	public static final String WFFL_NAME = "/media/sda1/staple.wffl";
+	public static final String WFFL_NAME = "/media/sda1/rally.wffl";
 	
 	// Talon Slavery
 	public static final int LEFT_MASTER_TALON = 13;
@@ -69,4 +69,6 @@ public class Wiring {
 	public static final int GATHERER_LIFT = 2;
 	public static final int GATHERER_ROTATE = 1;
 	public static final int GATHERER_SAFE_SHOOT_ANGLE = 75;
+
+	public static final double GATHERER_GATHER_POSITION = 88;
 }
