@@ -28,7 +28,7 @@ public class Robot extends IterativeRobot {
 	double desiredHeading = 0;
 	boolean isInverted;
 	WFFL waffle;
-	Arduino arduino;
+//	Arduino arduino;
 	Transmission tranny;
 	int listPos = 0;
 	SerialClient sc = new SerialClient();// using serial now because it's good
@@ -38,7 +38,7 @@ public class Robot extends IterativeRobot {
 	// DigitalInput magneticSensor;
 	DigitalOutput dio2;
 	DigitalOutput dio1;
-	 Joystick coStick;
+//	 Joystick coStick;
 	BallClamp clamp;
 	Gatherer gatherer;
 
@@ -46,7 +46,7 @@ public class Robot extends IterativeRobot {
 	// does 2
 
 	public void robotInit() {
-		arduino = new Arduino(9);
+//		arduino = new Arduino(9);
 		leftM = new CANTalon(Wiring.LEFT_MASTER_TALON);
 		rightM = new CANTalon(Wiring.RIGHT_MASTER_TALON);
 		leftS = new CANTalon(Wiring.LEFT_SLAVE_TALON);
@@ -58,7 +58,7 @@ public class Robot extends IterativeRobot {
 		rightS.set(Wiring.RIGHT_MASTER_TALON);
 		robot = new RobotDrive(leftM, rightM);
 		stick = new Joystick(Wiring.JOYSTICK0);
-		coStick = new Joystick(Wiring.JOYSTICK1);
+//		coStick = new Joystick(Wiring.JOYSTICK1);
 		tranny = new Transmission(stick, leftM, rightM);
 		shooter = new Shooter();
 //		shooter.initShooter(gatherer.shouldNotShoot());
@@ -120,7 +120,7 @@ public class Robot extends IterativeRobot {
 
 	public void autonomousInit() {
 		waffle.reset();
-		 arduino.writeSequence(1);
+//		 arduino.writeSequence(1);
 		waffle.ahrs.reset();
 		waffle.interpret();
 		System.out.println("JFKDSLFIUESHF " + waffle.list.get(waffle.list.size() - 1).command);
@@ -215,7 +215,7 @@ public class Robot extends IterativeRobot {
 	}
 
 	public void teleopInit() {
-		 arduino.writeSequence(2);
+//		 arduino.writeSequence(2);
 		// isInverted = true;
 		// waffle.left.setInverted(true);
 		// waffle.right.setInverted(true);
@@ -270,13 +270,13 @@ public class Robot extends IterativeRobot {
 			gatherer.setSpark(0.0);
 		}
 		
-		 if (coStick.getRawButton(1)) {
-			 arduino.writeSequence(3);
-		 }
-
-		if (DriverStation.getInstance().getMatchTime() <= 20) {
-			 arduino.writeSequence(4);
-		}
+//		 if (coStick.getRawButton(1)) {
+//			 arduino.writeSequence(3);
+//		 }
+//
+//		if (DriverStation.getInstance().getMatchTime() <= 20) {
+//			 arduino.writeSequence(4);
+//		}
 	}
 
 	public void centerWithAngle() {// comes in as error,angle,distance
@@ -329,7 +329,7 @@ public class Robot extends IterativeRobot {
 
 	public void disabledPeriodic() {
 		// roit gets rekt
-		 arduino.writeSequence(0);
+//		 arduino.writeSequence(0);
 	}
 
 	public int getRDisplacement() {
