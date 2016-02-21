@@ -69,6 +69,8 @@ public class Wiring {
 	public static final int GATHERER_LIFT = 2;
 	public static final int GATHERER_ROTATE = 1;
 	public static final int GATHERER_SAFE_SHOOT_ANGLE = 75;
+	public static final int GATHER_UP_LEVEL_BUT = 6;
+	public static final int GATHER_DOWN_LEVEL_BUT = 5;
 
 	public static final double GATHERER_GATHER_POSITION = 88;
 }
