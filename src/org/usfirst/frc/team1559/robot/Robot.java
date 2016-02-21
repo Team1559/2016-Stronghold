@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.Scanner;
 
 import edu.wpi.first.wpilibj.CANTalon;
+import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobot;
@@ -14,6 +15,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.vision.USBCamera;
 
 public class Robot extends IterativeRobot {
 
@@ -41,6 +43,8 @@ public class Robot extends IterativeRobot {
 //	 Joystick coStick;
 	BallClamp clamp;
 	Gatherer gatherer;
+	USBCamera cam;
+	CameraServer cs;
 	
 
 	// Comments are for a 4 motor drive system whereas uncommented code just
@@ -65,8 +69,8 @@ public class Robot extends IterativeRobot {
 //		shooter.initShooter(gatherer.shouldNotShoot());
 		clamp = new BallClamp();
 		// magneticSensor = new DigitalInput(Wiring.MAGNET);
-		
-		
+		cam = new USBCamera("cam0");
+		cs = CameraServer.getInstance();
 		robot.setExpiration(Double.MAX_VALUE);
 
 		leftM.setInverted(true);
@@ -223,6 +227,7 @@ public class Robot extends IterativeRobot {
 		// waffle.right.setInverted(true);
 		// leftF.setInverted(isInverted);
 		// centerWithAngle();
+		cs.startAutomaticCapture();
 		rightM.setEncPosition(0);
 		leftM.setEncPosition(0);
 		leftM.setInverted(true);
@@ -282,26 +287,16 @@ public class Robot extends IterativeRobot {
 //			 arduino.writeSequence(4);
 //		}
 	}
+	private final int CAMERA_BAND = 10;
 
-	public void centerWithAngle() {// comes in as error,angle,distance
-		String in = sc.read();
-		String err = in.substring(0, in.indexOf(","));
-		String temp = in.substring(in.indexOf(","));
-		String ang = temp.substring(0, temp.indexOf(","));
-		String dist = temp.substring(temp.indexOf(","));
-		int error = 0;
-		double angle = 0;
-		try {
-			error = Integer.parseInt(err);
-			angle = Double.parseDouble(ang);
-		} catch (Exception e) {
-
+	public void center(int err){// comes in as error,angle,distance
+		if (err < -CAMERA_BAND){
+			SmartDashboard.putString("Shooting", "Turn Left");
+		} else if (err > CAMERA_BAND){
+			SmartDashboard.putString("Shooting", "Turn Right");
+		} else {
+			SmartDashboard.putString("Shooting", "SHOOT!");
 		}
-		if (error < 0) {
-			angle = angle * -1;
-		}
-		double currentAngle = waffle.getCurrentAngle();
-		waffle.turnToAngle(currentAngle + angle);
 	}
 
 	public void testInit() {
