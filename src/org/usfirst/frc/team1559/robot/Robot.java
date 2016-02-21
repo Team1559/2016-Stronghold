@@ -168,6 +168,9 @@ public class Robot extends IterativeRobot {
 			System.out.println("Motor Stoppage achieved!");
 		} else if (current.command.equals("DEFENSE")) {
 			String id = current.id;
+			if(id.equals("lowbar")){
+				gatherer.lowbarify(); //this should work to get us under the low bar.
+			}
 			if (!following) {
 				playbackSetup(id);
 			}
@@ -194,6 +197,7 @@ public class Robot extends IterativeRobot {
 		if ((current.done == true)) {
 			System.out.println("Current done boi");
 			current.done = false;
+			gatherer.homify();//make sure the gatherer is out of the way
 
 			if (waffle.list.size() - 1 > listPos) {
 				listPos++;

@@ -66,6 +66,24 @@ public class Gatherer {
 		gatherRotate.set(d);
 	}
 
+	public void lowbarify(){
+		if (gyro.getAngle() >= BOTTOM_TARGET) {
+			gatherLift.set(liftStop);
+			arm = ArmState.ATBOT;
+		} else {
+			gatherLift.set(liftDown);
+		}
+	}
+	
+	public void homify(){
+		if (gyro.getAngle() <= TOP_TARGET) {
+			gatherLift.set(liftStop);
+			arm = ArmState.ATTOP;
+		} else {
+			gatherLift.set(liftUp);
+		}
+	}
+	
 	public void gathererTalon() {
 		double angle = gyro.getAngle();
 		if (pdp.getCurrent(Wiring.PDP_CHANNEL_GATHERER) > talonStallCurrent) {
