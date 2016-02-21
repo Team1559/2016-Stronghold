@@ -41,6 +41,7 @@ public class Robot extends IterativeRobot {
 //	 Joystick coStick;
 	BallClamp clamp;
 	Gatherer gatherer;
+	
 
 	// Comments are for a 4 motor drive system whereas uncommented code just
 	// does 2
@@ -64,7 +65,8 @@ public class Robot extends IterativeRobot {
 //		shooter.initShooter(gatherer.shouldNotShoot());
 		clamp = new BallClamp();
 		// magneticSensor = new DigitalInput(Wiring.MAGNET);
-
+		
+		
 		robot.setExpiration(Double.MAX_VALUE);
 
 		leftM.setInverted(true);
@@ -309,6 +311,7 @@ public class Robot extends IterativeRobot {
 	public void testPeriodic() {
 		System.out.println("Gatherer Gyro:" + gatherer.getGyro().getAngle());
 //		SmartDashboard.putBoolean("Gatherer LS", gatherer.isLimitSwitchTripped());
+//		System.out.println(gatherer.isLimitSwitchTripped());
 		gatherer.manualControl();
 //		gatherer.gathererTalon();
 //		 if (stick.getRawButton(6)) {
@@ -317,7 +320,7 @@ public class Robot extends IterativeRobot {
 //		 clamp.open();
 //		 }
 		clamp.updateBallClamp(shooter.shooting);
-		System.out.println(shooter.shooting);
+//		System.out.println(shooter.shooting);
 		if (stick.getRawButton(5) && clamp.open) {
 			gatherer.setSpark(0.5);
 		} else {

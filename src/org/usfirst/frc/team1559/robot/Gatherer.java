@@ -13,6 +13,9 @@ public class Gatherer {
 		STALLED, ATTOP, TOPMIDDOWN, TOPBOTDOWN, ATMID, MIDBOTDOWN, ATBOT, BOTMIDUP, BOTTOPUP, MIDTOPUP,
 	}; // from, to and direction ex. from top to mid going down
 
+	DebounceButton dbUP, dbDOWN;
+	
+	
 	private Talon gatherLift;
 	private Spark gatherRotate;
 	private DigitalInput diGathererTop;
@@ -50,6 +53,9 @@ public class Gatherer {
 		gyro.reset();
 		stick = joy;
 		diGathererTop = new DigitalInput(Wiring.GATHERER_LIMIT_ID);
+		dbUP = new DebounceButton(stick, Wiring.GATHER_UP_LEVEL_BUT);
+		dbDOWN = new DebounceButton(stick, Wiring.GATHER_DOWN_LEVEL_BUT);
+
 	}
 
 	/**
@@ -108,11 +114,11 @@ public class Gatherer {
 //				arm = ArmState.TOPBOTDOWN;
 //			}
 			
-			if (stick.getRawButton(Wiring.GATHER_DOWN_LEVEL_BUT)) {
+			if (dbDOWN.get()) {
 				target = MID_TARGET;
 				gatherLift.set(liftDown);
 				arm = ArmState.TOPMIDDOWN;
-				System.out.println("Middle or bust");
+				System.out.println("MIDDLE OR BUST");
 			}
 			break;
 		case TOPMIDDOWN:
@@ -121,12 +127,12 @@ public class Gatherer {
 				arm = ArmState.ATMID;
 			}
 			// change of plans
-			if (stick.getRawButton(Wiring.GATHER_UP_LEVEL_BUT)) {
+			if (dbUP.get()) {
 				target = TOP_TARGET;
 				gatherLift.set(liftUp);
 				arm = ArmState.MIDTOPUP;
 			}
-			if (stick.getRawButton(Wiring.GATHER_DOWN_LEVEL_BUT)) {
+			if (dbDOWN.get()) {
 				target = BOTTOM_TARGET;
 				gatherLift.set(liftDown);
 				arm = ArmState.TOPBOTDOWN;
@@ -143,19 +149,19 @@ public class Gatherer {
 //				gatherLift.set(liftUp);
 //				arm = ArmState.BOTTOPUP;
 //			}
-			if (stick.getRawButton(Wiring.GATHER_UP_LEVEL_BUT)) {
+			if (dbUP.get()) {
 				target = BOTTOM_TARGET;
 				gatherLift.set((angle <= MID_TARGET) ? liftDown : liftUp);
 				arm = ArmState.BOTMIDUP;
 			}
 			break;
 		case ATMID:
-			if (stick.getRawButton(Wiring.GATHER_UP_LEVEL_BUT)) {
+			if (dbUP.get()) {
 				target = TOP_TARGET;
 				gatherLift.set(liftUp);
 				arm = ArmState.MIDTOPUP;
 			}
-			if (stick.getRawButton(Wiring.GATHER_DOWN_LEVEL_BUT)) {
+			if (dbDOWN.get()) {
 				target = BOTTOM_TARGET;
 				gatherLift.set(liftDown);
 				arm = ArmState.MIDBOTDOWN;
@@ -165,9 +171,10 @@ public class Gatherer {
 			if (angle >= target) {
 				arm = ArmState.ATBOT;
 				gatherLift.set(liftStop);
+				System.out.println("GOING DOWWWWWWN");
 			}
 			// change of plans
-			if (stick.getRawButton(Wiring.GATHER_UP_LEVEL_BUT)) {
+			if (dbUP.get()) {
 				target = MID_TARGET;
 				gatherLift.set(liftUp);
 				arm = ArmState.BOTMIDUP;
@@ -184,7 +191,7 @@ public class Gatherer {
 //				gatherLift.set(liftUp);
 //				arm = ArmState.BOTMIDUP;
 //			}
-			if (stick.getRawButton(Wiring.GATHER_UP_LEVEL_BUT)) {
+			if (dbUP.get()) {
 				target = MID_TARGET;
 				gatherLift.set(liftUp);
 				arm = ArmState.BOTMIDUP;
@@ -196,12 +203,12 @@ public class Gatherer {
 				arm = ArmState.ATMID;
 			}
 			// change of plans
-			if (stick.getRawButton(Wiring.GATHER_UP_LEVEL_BUT)) {
+			if (dbUP.get()) {
 				target = TOP_TARGET;
 				gatherLift.set(liftUp);
 				arm = ArmState.BOTMIDUP;
 			}
-			if (stick.getRawButton(Wiring.GATHER_DOWN_LEVEL_BUT)) {
+			if (dbDOWN.get()) {
 				target = BOTTOM_TARGET;
 				gatherLift.set(liftDown);
 				arm = ArmState.MIDBOTDOWN;
@@ -219,7 +226,7 @@ public class Gatherer {
 				arm = ArmState.ATTOP;
 			}
 			// change of plans
-			if (stick.getRawButton(Wiring.GATHER_DOWN_LEVEL_BUT)) {
+			if (dbDOWN.get()) {
 				target = BOTTOM_TARGET;
 				gatherLift.set(liftDown);
 				arm = ArmState.MIDBOTDOWN;
@@ -242,7 +249,7 @@ public class Gatherer {
 				gatherLift.set(liftStop);
 			}
 			// change of plans
-			if (stick.getRawButton(Wiring.GATHER_DOWN_LEVEL_BUT)) {
+			if (dbDOWN.get()) {
 				target = MID_TARGET;
 				gatherLift.set(liftDown);
 				arm = ArmState.TOPMIDDOWN;
