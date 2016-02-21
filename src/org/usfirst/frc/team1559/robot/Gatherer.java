@@ -16,14 +16,15 @@ public class Gatherer {
 	private Talon gatherLift;
 	private Spark gatherRotate;
 	private DigitalInput diGathererTop;
-	private DigitalInput diGathererBottom;
 	private PowerDistributionPanel pdp = new PowerDistributionPanel();
 	private int gatherState = 0;
 	private final double TOP_TARGET = 0;
-	private final double MID_TARGET = Wiring.GATHERER_SAFE_SHOOT_ANGLE;
-	private final double BOTTOM_TARGET = 120;
+	private final double MID_TARGET = Wiring.GATHERER_GATHER_POSITION; //Wiring.GATHERER_SAFE_SHOOT_ANGLE
+	private final double GATHER_TARGET = 88;
+	private final double BOTTOM_TARGET = 110;
+	private final double LOWBAR_POSITION = 105;
 	private final double talonIdleCurrent = 1.875;
-	private final double talonStallCurrent = 15.0;
+	private final double talonStallCurrent = 12.0;
 	private final double sparkIdleCurrent = 1.625;
 	private final double liftUp = 0.6;
 	private final double liftDown = -0.6;
@@ -80,11 +81,7 @@ public class Gatherer {
 			counter = 0;
 		}
 
-		if (!diGathererTop.get()) {
-			gatherLift.set(liftStop);
-			arm = ArmState.ATTOP;
-			gyro.reset();
-		}
+		
 		switch (arm) {
 		case ATTOP:
 			if (stick.getRawButton(Wiring.BTN_GATHERER_TO_BOT)) {
@@ -92,10 +89,12 @@ public class Gatherer {
 				gatherLift.set(liftDown);
 				arm = ArmState.TOPBOTDOWN;
 			}
+			
 			if (stick.getRawButton(Wiring.BTN_GATHERER_TO_MID)) {
 				target = MID_TARGET;
 				gatherLift.set(liftDown);
 				arm = ArmState.TOPMIDDOWN;
+				System.out.println("Middle or bust");
 			}
 			break;
 		case TOPMIDDOWN:
@@ -189,6 +188,12 @@ public class Gatherer {
 				gatherLift.set(liftDown);
 				arm = ArmState.MIDBOTDOWN;
 			}
+			
+			if (!diGathererTop.get()) {
+				gatherLift.set(liftStop);
+				arm = ArmState.ATTOP;
+				gyro.reset();
+			}
 			break;
 		case BOTTOPUP:
 			if (angle >= target) {
@@ -206,6 +211,12 @@ public class Gatherer {
 				gatherLift.set((angle >= MID_TARGET) ? liftDown : liftUp);
 				arm = ArmState.BOTMIDUP;
 			}
+			
+			if (!diGathererTop.get()) {
+				gatherLift.set(liftStop);
+				arm = ArmState.ATTOP;
+				gyro.reset();
+			}
 			break;
 		case MIDTOPUP:
 			if (angle <= TOP_TARGET) {
@@ -222,6 +233,12 @@ public class Gatherer {
 				target = BOTTOM_TARGET;
 				gatherLift.set(liftDown);
 				arm = ArmState.MIDBOTDOWN;
+			}
+			
+			if (!diGathererTop.get()) {
+				gatherLift.set(liftStop);
+				arm = ArmState.ATTOP;
+				gyro.reset();
 			}
 			break;
 		case STALLED:

@@ -60,7 +60,7 @@ public class Robot extends IterativeRobot {
 		// coStick = new Joystick(Wiring.JOYSTICK1);
 		tranny = new Transmission(stick, leftM, rightM);
 		shooter = new Shooter();
-		shooter.initShooter(gatherer.shouldNotShoot());
+//		shooter.initShooter(gatherer.shouldNotShoot());
 		clamp = new BallClamp();
 		// magneticSensor = new DigitalInput(Wiring.MAGNET);
 
@@ -253,9 +253,16 @@ public class Robot extends IterativeRobot {
 		tranny.updateShifting();
 
 		gatherer.gathererTalon();
-
+		
 		shooter.updateShooter(stick, gatherer.shouldNotShoot());
 		clamp.updateBallClamp(shooter.shooting);
+		
+		if (stick.getRawButton(5) && clamp.open) {
+			gatherer.setSpark(0.5);
+		} else {
+			gatherer.setSpark(0.0);
+		}
+		
 		// if (coStick.getRawButton(1)) {
 		// // arduino.writeSequence(3);
 		// }
@@ -292,17 +299,17 @@ public class Robot extends IterativeRobot {
 
 	public void testPeriodic() {
 		System.out.println("Gatherer Gyro:" + gatherer.getGyro().getAngle());
-		SmartDashboard.putBoolean("Gatherer LS", gatherer.isLimitSwitchTripped());
+//		SmartDashboard.putBoolean("Gatherer LS", gatherer.isLimitSwitchTripped());
 		gatherer.manualControl();
 //		gatherer.gathererTalon();
-		// if (stick.getRawButton(6)) {
-		// clamp.close();
-		// } else {
-		// clamp.open();
-		// }
+//		 if (stick.getRawButton(6)) {
+//		 clamp.close();
+//		 } else {
+//		 clamp.open();
+//		 }
 		clamp.updateBallClamp(shooter.shooting);
 		System.out.println(shooter.shooting);
-		if (stick.getRawButton(5)) {
+		if (stick.getRawButton(5) && clamp.open) {
 			gatherer.setSpark(0.5);
 		} else {
 			gatherer.setSpark(0.0);
