@@ -73,4 +73,6 @@ public class Wiring {
 	public static final int GATHER_DOWN_LEVEL_BUT = 5;
 
 	public static final double GATHERER_GATHER_POSITION = 88;
+
+	public static final int OVERRIDE_BUTT = 4;
 }

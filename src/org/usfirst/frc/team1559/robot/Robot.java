@@ -252,14 +252,16 @@ public class Robot extends IterativeRobot {
 		// recordPeriodic();
 		// playbackIterative();
 
-		SmartDashboard.putNumber("Voltage", (leftM.getOutputVoltage() + rightM.getOutputVoltage()) / 2);
-		SmartDashboard.putNumber("Velocity", (tranny.getRVelocity() + tranny.getLVelocity()) / 2);
-
 		tranny.updateShifting();
 
-		gatherer.gathererTalon();
+		if(stick.getRawButton(Wiring.OVERRIDE_BUTT)){
+			gatherer.manualControl();
+		} else {
+			gatherer.gathererTalon();
+		}
 		
 		shooter.updateShooter(stick, gatherer.shouldNotShoot());
+		
 		clamp.updateBallClamp(shooter.shooting);
 		
 		if (stick.getRawButton(1) && clamp.open) {
