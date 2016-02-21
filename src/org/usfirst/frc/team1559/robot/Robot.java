@@ -263,6 +263,8 @@ public class Robot extends IterativeRobot {
 		shooter.updateShooter(stick, gatherer.shouldNotShoot());
 		
 		clamp.updateBallClamp(shooter.shooting);
+		//ADD THIS IN IF YOU WANT TO MANUALLY DRIVE THE BALL CLAMP
+//		clamp.updateBallClamp(shooter.shooting || stick.getRawButton(Wiring.BALL_CLAMP_OVERRIDE_BUTT));
 		
 		if (stick.getRawButton(1) && clamp.open) {
 			gatherer.setSpark(0.5);

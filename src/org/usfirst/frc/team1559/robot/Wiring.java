@@ -75,4 +75,6 @@ public class Wiring {
 	public static final double GATHERER_GATHER_POSITION = 88;
 
 	public static final int OVERRIDE_BUTT = 4;
+
+	public static final int BALL_CLAMP_OVERRIDE_BUTT = 2;
 }
