@@ -21,6 +21,7 @@ public class Robot extends IterativeRobot {
 
 	RobotDrive robot;
 	boolean shootDone = false;
+	int arduinoCounterForAlison = 0; // dont blame john pls
 	CANTalon leftM;
 	CANTalon leftS;
 	CANTalon rightM;
@@ -30,7 +31,7 @@ public class Robot extends IterativeRobot {
 	double desiredHeading = 0;
 	boolean isInverted;
 	WFFL waffle;
-//	Arduino arduino;
+	Arduino arduino;
 	Transmission tranny;
 	int listPos = 0;
 	SerialClient sc = new SerialClient();// using serial now because it's good
@@ -40,7 +41,7 @@ public class Robot extends IterativeRobot {
 	// DigitalInput magneticSensor;
 	DigitalOutput dio2;
 	DigitalOutput dio1;
-//	 Joystick coStick;
+	 Joystick coStick;
 	BallClamp clamp;
 	Gatherer gatherer;
 	USBCamera cam;
@@ -51,7 +52,7 @@ public class Robot extends IterativeRobot {
 	// does 2
 
 	public void robotInit() {
-//		arduino = new Arduino(9);
+		arduino = new Arduino(8);
 		leftM = new CANTalon(Wiring.LEFT_MASTER_TALON);
 		rightM = new CANTalon(Wiring.RIGHT_MASTER_TALON);
 		leftS = new CANTalon(Wiring.LEFT_SLAVE_TALON);
@@ -126,7 +127,7 @@ public class Robot extends IterativeRobot {
 
 	public void autonomousInit() {
 		waffle.reset();
-//		 arduino.writeSequence(1);
+		 arduino.writeSequence(1);
 		waffle.ahrs.reset();
 		waffle.interpret();
 		System.out.println("JFKDSLFIUESHF " + waffle.list.get(waffle.list.size() - 1).command);
@@ -221,7 +222,7 @@ public class Robot extends IterativeRobot {
 	}
 
 	public void teleopInit() {
-//		 arduino.writeSequence(2);
+		 arduino.writeSequence(2);
 		// isInverted = true;
 		// waffle.left.setInverted(true);
 		// waffle.right.setInverted(true);
@@ -248,6 +249,7 @@ public class Robot extends IterativeRobot {
 	}
 
 	public void teleopPeriodic() {
+		 int lastVal = 0;
 		// sendRecieveCenterValues();
 		// waffle.myRobot.arcadeDrive(stick); //FOR THE TEST CHASSIS
 		if (tranny.gear == 1) {
@@ -281,13 +283,18 @@ public class Robot extends IterativeRobot {
 			gatherer.setSpark(0.0);
 		}
 		
-//		 if (coStick.getRawButton(1)) {
-//			 arduino.writeSequence(3);
-//		 }
-//
-//		if (DriverStation.getInstance().getMatchTime() <= 20) {
-//			 arduino.writeSequence(4);
-//		}
+		 if (coStick.getRawButton(1)) {
+			 arduino.writeSequence(3);
+		 }
+
+		if (DriverStation.getInstance().getMatchTime() <= 20) {
+			 arduino.writeSequence(4);
+		}
+		
+		if (arduinoCounterForAlison - lastVal == 150) {
+			arduino.writeSequence(1);
+		}
+		arduinoCounterForAlison++;
 	}
 	private final int CAMERA_BAND = 10;
 
@@ -327,11 +334,12 @@ public class Robot extends IterativeRobot {
 	}
 
 	public void disabledInit() {
+		 arduino.writeSequence(0);
 	}
 
 	public void disabledPeriodic() {
 		// roit gets rekt
-//		 arduino.writeSequence(0);
+
 	}
 
 	public int getRDisplacement() {
