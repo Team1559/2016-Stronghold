@@ -64,7 +64,7 @@ public class Robot extends IterativeRobot {
 		rightS.set(Wiring.RIGHT_MASTER_TALON);
 		robot = new RobotDrive(leftM, rightM);
 		stick = new Joystick(Wiring.JOYSTICK0);
-//		coStick = new Joystick(Wiring.JOYSTICK1);
+		coStick = new Joystick(Wiring.JOYSTICK1);
 		tranny = new Transmission(stick, leftM, rightM);
 		shooter = new Shooter();
 //		shooter.initShooter(gatherer.shouldNotShoot());
