@@ -49,6 +49,10 @@ public class Wiring {
 	public static final int BTN_SHOOT = 3;
 	public static final int GATHERER_ANALOG_INPUT = 1;
 	public static final int PDP_CHANNEL_GATHERER = 3;
+	public static final double GATHERER_PID_P = .2;
+	public static final double GATHERER_PID_I = 0;
+	public static final double GATHERER_PID_D = 0;
+	public static final double GATHERER_PID_TOLERANCE = 1;
 	
 	// shooter constants
 	public static final int SHOOTER_UP_DELAY = 50;

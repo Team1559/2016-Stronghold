@@ -3,6 +3,7 @@ package org.usfirst.frc.team1559.robot;
 import edu.wpi.first.wpilibj.AnalogGyro;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.Talon;
@@ -14,15 +15,15 @@ public class Gatherer {
 	}; // from, to and direction ex. from top to mid going down
 
 	DebounceButton dbUP, dbDOWN;
-	
-	
+
 	private Talon gatherLift;
 	private Spark gatherRotate;
+	private PIDController pid;
 	private DigitalInput diGathererTop;
 	private PowerDistributionPanel pdp = new PowerDistributionPanel();
 	private int gatherState = 0;
 	private final double TOP_TARGET = 0;
-	private final double MID_TARGET = Wiring.GATHERER_GATHER_POSITION; //Wiring.GATHERER_SAFE_SHOOT_ANGLE
+	private final double MID_TARGET = Wiring.GATHERER_GATHER_POSITION; // Wiring.GATHERER_SAFE_SHOOT_ANGLE
 	private final double GATHER_TARGET = 88;
 	private final double BOTTOM_TARGET = 110;
 	private final double LOWBAR_POSITION = 105;
@@ -72,7 +73,7 @@ public class Gatherer {
 		gatherRotate.set(d);
 	}
 
-	public void lowbarify(){
+	public void lowbarify() {
 		if (gyro.getAngle() >= BOTTOM_TARGET) {
 			gatherLift.set(liftStop);
 			arm = ArmState.ATBOT;
@@ -80,8 +81,8 @@ public class Gatherer {
 			gatherLift.set(liftDown);
 		}
 	}
-	
-	public void homify(){
+
+	public void homify() {
 		if (gyro.getAngle() <= TOP_TARGET) {
 			gatherLift.set(liftStop);
 			arm = ArmState.ATTOP;
@@ -89,7 +90,7 @@ public class Gatherer {
 			gatherLift.set(liftUp);
 		}
 	}
-	
+
 	public void gathererTalon() {
 		double angle = gyro.getAngle();
 		if (pdp.getCurrent(Wiring.PDP_CHANNEL_GATHERER) > talonStallCurrent) {
@@ -105,15 +106,14 @@ public class Gatherer {
 			counter = 0;
 		}
 
-		
 		switch (arm) {
 		case ATTOP:
-//			if (stick.getRawButton(Wiring.BTN_GATHERER_TO_BOT)) {
-//				target = BOTTOM_TARGET;
-//				gatherLift.set(liftDown);
-//				arm = ArmState.TOPBOTDOWN;
-//			}
-			
+			// if (stick.getRawButton(Wiring.BTN_GATHERER_TO_BOT)) {
+			// target = BOTTOM_TARGET;
+			// gatherLift.set(liftDown);
+			// arm = ArmState.TOPBOTDOWN;
+			// }
+
 			if (dbDOWN.get()) {
 				target = MID_TARGET;
 				gatherLift.set(liftDown);
@@ -144,11 +144,11 @@ public class Gatherer {
 				arm = ArmState.ATBOT;
 			}
 			// change of plans
-//			if (stick.getRawButton(Wiring.BTN_GATHERER_TO_TOP)) {
-//				target = TOP_TARGET;
-//				gatherLift.set(liftUp);
-//				arm = ArmState.BOTTOPUP;
-//			}
+			// if (stick.getRawButton(Wiring.BTN_GATHERER_TO_TOP)) {
+			// target = TOP_TARGET;
+			// gatherLift.set(liftUp);
+			// arm = ArmState.BOTTOPUP;
+			// }
 			if (dbUP.get()) {
 				target = BOTTOM_TARGET;
 				gatherLift.set((angle <= MID_TARGET) ? liftDown : liftUp);
@@ -179,18 +179,18 @@ public class Gatherer {
 				gatherLift.set(liftUp);
 				arm = ArmState.BOTMIDUP;
 			}
-//			if (stick.getRawButton(Wiring.BTN_GATHERER_TO_TOP)) {
-//				target = TOP_TARGET;
-//				gatherLift.set(liftUp);
-//				arm = ArmState.MIDTOPUP;
-//			}
+			// if (stick.getRawButton(Wiring.BTN_GATHERER_TO_TOP)) {
+			// target = TOP_TARGET;
+			// gatherLift.set(liftUp);
+			// arm = ArmState.MIDTOPUP;
+			// }
 			break;
 		case ATBOT:
-//			if (stick.getRawButton(Wiring.BTN_GATHERER_TO_TOP)) {
-//				target = TOP_TARGET;
-//				gatherLift.set(liftUp);
-//				arm = ArmState.BOTMIDUP;
-//			}
+			// if (stick.getRawButton(Wiring.BTN_GATHERER_TO_TOP)) {
+			// target = TOP_TARGET;
+			// gatherLift.set(liftUp);
+			// arm = ArmState.BOTMIDUP;
+			// }
 			if (dbUP.get()) {
 				target = MID_TARGET;
 				gatherLift.set(liftUp);
@@ -213,7 +213,7 @@ public class Gatherer {
 				gatherLift.set(liftDown);
 				arm = ArmState.MIDBOTDOWN;
 			}
-			
+
 			if (!diGathererTop.get()) {
 				gatherLift.set(liftStop);
 				arm = ArmState.ATTOP;
@@ -231,12 +231,12 @@ public class Gatherer {
 				gatherLift.set(liftDown);
 				arm = ArmState.MIDBOTDOWN;
 			}
-//			if (stick.getRawButton(Wiring.BTN_GATHERER_TO_MID)) {
-//				target = MID_TARGET;
-//				gatherLift.set((angle >= MID_TARGET) ? liftDown : liftUp);
-//				arm = ArmState.BOTMIDUP;
-//			}
-//			
+			// if (stick.getRawButton(Wiring.BTN_GATHERER_TO_MID)) {
+			// target = MID_TARGET;
+			// gatherLift.set((angle >= MID_TARGET) ? liftDown : liftUp);
+			// arm = ArmState.BOTMIDUP;
+			// }
+			//
 			if (!diGathererTop.get()) {
 				gatherLift.set(liftStop);
 				arm = ArmState.ATTOP;
@@ -254,12 +254,12 @@ public class Gatherer {
 				gatherLift.set(liftDown);
 				arm = ArmState.TOPMIDDOWN;
 			}
-//			if (stick.getRawButton(Wiring.BTN_GATHERER_TO_BOT)) {
-//				target = BOTTOM_TARGET;
-//				gatherLift.set(liftDown);
-//				arm = ArmState.MIDBOTDOWN;
-//			}
-			
+			// if (stick.getRawButton(Wiring.BTN_GATHERER_TO_BOT)) {
+			// target = BOTTOM_TARGET;
+			// gatherLift.set(liftDown);
+			// arm = ArmState.MIDBOTDOWN;
+			// }
+
 			if (!diGathererTop.get()) {
 				gatherLift.set(liftStop);
 				arm = ArmState.ATTOP;
@@ -282,9 +282,11 @@ public class Gatherer {
 	}
 
 	public void manualControl() {
-		if (stick.getPOV() == 315 || stick.getPOV() == 0 || stick.getPOV() == 45) {
+		if (stick.getPOV() == 315 || stick.getPOV() == 0
+				|| stick.getPOV() == 45) {
 			gatherLift.set(liftUp);
-		} else if (stick.getPOV() == 225 || stick.getPOV() == 180 || stick.getPOV() == 135) {
+		} else if (stick.getPOV() == 225 || stick.getPOV() == 180
+				|| stick.getPOV() == 135) {
 			gatherLift.set(liftDown);
 		} else {
 			gatherLift.set(liftStop);
@@ -293,8 +295,27 @@ public class Gatherer {
 			gyro.reset();
 		}
 	}
-	
+
 	public boolean shouldNotShoot() {
 		return gyro.getAngle() <= Wiring.GATHERER_SAFE_SHOOT_ANGLE;
+	}
+
+	/*
+	 * PID loop for the gatherer
+	 */
+	public void initWilliamJulieMerges(double p, double i, double d) {
+		// Shaquisha
+		pid = new PIDController(p,i,d,gyro, gatherLift);
+		pid.setSetpoint(GATHER_TARGET);
+		pid.setPID(p, i, d);
+		pid.setAbsoluteTolerance(Wiring.GATHERER_PID_TOLERANCE);
+	}
+
+	public void enableWilliamJulieMerges() {
+		pid.enable();
+	}
+
+	public void disableWilliamJulieMerges() {
+		pid.disable();
 	}
 }

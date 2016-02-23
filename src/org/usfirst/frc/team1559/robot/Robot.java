@@ -122,6 +122,8 @@ public class Robot extends IterativeRobot {
 
 		gatherer = new Gatherer();
 		gatherer.initGatherers(Wiring.GATHERER_LIFT, Wiring.GATHERER_ROTATE, stick);
+//		gatherer.initWilliamJulieMerges(Wiring.GATHERER_PID_P, Wiring.GATHERER_PID_I, Wiring.GATHERER_PID_D);
+		
 
 	}
 
@@ -269,6 +271,8 @@ public class Robot extends IterativeRobot {
 			gatherer.manualControl();
 		} else {
 			gatherer.gathererTalon();
+//			PID LOOP AMAZE
+//			gatherer.enableWilliamJulieMerges();
 		}
 		
 		shooter.updateShooter(stick, gatherer.shouldNotShoot());
