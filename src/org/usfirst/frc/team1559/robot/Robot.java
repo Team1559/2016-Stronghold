@@ -137,7 +137,11 @@ public class Robot extends IterativeRobot {
 		waffle.length = 0;
 		shooter.initShooter(gatherer.shouldNotShoot());
 		tranny.resetEncoders();
+		givenAngle = false;
 	}
+	private boolean givenAngle = false;
+	private double angle = 0.0;
+	private int nate = 0;
 
 	public void autonomousPeriodic() {
 		SmartDashboard.putNumber("Displacement", (tranny.getLDisplacement() + tranny.getRDisplacement()) / 2);
@@ -160,15 +164,46 @@ public class Robot extends IterativeRobot {
 				System.out.println("PLZ STOP NOW");
 			}
 		} else if (current.command.equals("SHOOT")) {
-			// sendRecieveCenterValues("");
-			leftM.set(0);
-			rightM.set(0);
-			shooter.updateShooter(true, gatherer.shouldNotShoot());
-			if (shooter.shootDone) {
+			switch(nate){
+			case 0:
+				sc.run();
+				angle = centerWithAngle(sc.getSerialIn());
+				nate++;
+				break;
+			case 1:
+				if (waffle.keepTurning){
+					waffle.turnToAngle(angle);
+				} else {
+					nate++;
+				}
+				break;
+			case 2:
+				if (!shooter.shootDone){
+					shooter.updateShooter(true, gatherer.shouldNotShoot());
+				} else {
+					nate++;
+				}
+				break;
+			case 3:
 				current.done = true;
 				tranny.resetEncoders();
 				System.out.println("DONE SHOOTING!");
+				break;
 			}
+//			if (!givenAngle){
+//				sc.run();
+//				angle = centerWithAngle(sc.getSerialIn());
+//				givenAngle = true;
+//			}
+//			waffle.turnToAngle(angle);
+//			if (!waffle.keepTurning){
+//				shooter.updateShooter(true, gatherer.shouldNotShoot());
+//				if (shooter.shootDone) {
+//					current.done = true;
+//					tranny.resetEncoders();
+//					System.out.println("DONE SHOOTING!");
+//				}
+//			}
 
 		} else if (current.command.equals("STOP")) {
 			leftM.set(0);
@@ -301,16 +336,11 @@ public class Robot extends IterativeRobot {
 		arduinoCounterForAlison++;
 	}
 	private final int CAMERA_BAND = 10;
-
-	public void center(int err){// comes in as error,angle,distance
-		if (err < -CAMERA_BAND){
-			SmartDashboard.putString("Shooting", "Turn Left");
-		} else if (err > CAMERA_BAND){
-			SmartDashboard.putString("Shooting", "Turn Right");
-		} else {
-			SmartDashboard.putString("Shooting", "SHOOT!");
-		}
+	
+	public double centerWithAngle(int error){
+		return (error/320.0) * 30;//30 = half of horizontal fov of camera
 	}
+
 
 	public void testInit() {
 
