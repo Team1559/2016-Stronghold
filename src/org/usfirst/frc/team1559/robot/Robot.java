@@ -272,6 +272,7 @@ public class Robot extends IterativeRobot {
 			gatherer.gathererTalon();
 //			PID LOOP AMAZE
 //			gatherer.enableWilliamJulieMerges();
+			//gatherstupid
 		}
 		
 		shooter.updateShooter(stick, gatherer.shouldNotShoot());
