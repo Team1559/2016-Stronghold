@@ -44,7 +44,7 @@ public class Robot extends IterativeRobot {
 	 Joystick coStick;
 	BallClamp clamp;
 	Gatherer gatherer;
-	USBCamera cam;
+//	USBCamera cam;
 	CameraServer cs;
 	
 
@@ -70,7 +70,7 @@ public class Robot extends IterativeRobot {
 //		shooter.initShooter(gatherer.shouldNotShoot());
 		clamp = new BallClamp();
 		// magneticSensor = new DigitalInput(Wiring.MAGNET);
-		cam = new USBCamera("cam0");
+//		cam = new USBCamera("cam0");
 		cs = CameraServer.getInstance();
 		robot.setExpiration(Double.MAX_VALUE);
 
