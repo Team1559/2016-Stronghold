@@ -82,4 +82,6 @@ public class Wiring {
 	public static final int OVERRIDE_BUTT = 4;
 
 	public static final int BALL_CLAMP_OVERRIDE_BUTT = 2;
+	
+	public static final int WILLIAM_DOUGLAS_MERGES = (int) Math.PI;
 }

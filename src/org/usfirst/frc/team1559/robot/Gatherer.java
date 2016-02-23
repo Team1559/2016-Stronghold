@@ -303,7 +303,7 @@ public class Gatherer {
 	/*
 	 * PID loop for the gatherer
 	 */
-	public void initWilliamJulieMerges(double p, double i, double d) {
+	public void initLifterPID(double p, double i, double d) {
 		// Shaquisha
 		pid = new PIDController(p,i,d,gyro, gatherLift);
 		pid.setSetpoint(GATHER_TARGET);
@@ -311,11 +311,11 @@ public class Gatherer {
 		pid.setAbsoluteTolerance(Wiring.GATHERER_PID_TOLERANCE);
 	}
 
-	public void enableWilliamJulieMerges() {
+	public void enableLifterPID() {
 		pid.enable();
 	}
 
-	public void disableWilliamJulieMerges() {
+	public void disableLifterPID() {
 		pid.disable();
 	}
 }
