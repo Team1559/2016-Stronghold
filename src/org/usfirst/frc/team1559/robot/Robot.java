@@ -248,7 +248,6 @@ public class Robot extends IterativeRobot {
 	}
 
 	public void teleopPeriodic() {
-		// sendRecieveCenterValues();
 		// waffle.myRobot.arcadeDrive(stick); //FOR THE TEST CHASSIS
 		if (tranny.gear == 1) {
 			robot.arcadeDrive(stick.getY() * Wiring.LOW_SPEED_MULTIPLIER, -stick.getRawAxis(4) * Wiring.LOW_SPEED_MULTIPLIER);
@@ -289,18 +288,16 @@ public class Robot extends IterativeRobot {
 //			 arduino.writeSequence(4);
 //		}
 	}
-	private final int CAMERA_BAND = 10;
+	private final int CAMERA_BAND = 10;//maybe
 
-	public void center(int err){// comes in as error,angle,distance
-		if (err < -CAMERA_BAND){
-			SmartDashboard.putString("Shooting", "Turn Left");
-		} else if (err > CAMERA_BAND){
-			SmartDashboard.putString("Shooting", "Turn Right");
-		} else {
-			SmartDashboard.putString("Shooting", "SHOOT!");
+	public double centerWithAngle(int error){//this could be a good idea, probably only have to sample 3 or 4 times in auto, 1 or 2 in teleop
+		double angle = (error/320.0) * 30;//where 30 is half of the horizontal fov of the lifecam 3000
+		if (angle < 2.5){
+			angle = 0;
 		}
+		return angle;
+		//code to pass this angle to john's navX code
 	}
-
 	public void testInit() {
 
 	}

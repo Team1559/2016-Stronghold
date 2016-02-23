@@ -310,8 +310,4 @@ public class WFFL {
 		runTime++;
 	}
 
-	public boolean isWithinThresh(int x, int low, int high) {
-		return (low < x && x < high);
-	}
-
 }
