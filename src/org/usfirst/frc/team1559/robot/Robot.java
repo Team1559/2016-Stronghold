@@ -120,8 +120,7 @@ public class Robot extends IterativeRobot {
 
 		tranny.resetEncoders();
 
-		gatherer = new Gatherer();
-		gatherer.initGatherers(Wiring.GATHERER_LIFT, Wiring.GATHERER_ROTATE, stick);
+		gatherer = new Gatherer(Wiring.GATHERER_LIFT, Wiring.GATHERER_ROTATE, stick);
 //		gatherer.initWilliamJulieMerges(Wiring.GATHERER_PID_P, Wiring.GATHERER_PID_I, Wiring.GATHERER_PID_D);
 		
 

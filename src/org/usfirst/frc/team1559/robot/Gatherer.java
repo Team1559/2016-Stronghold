@@ -18,18 +18,18 @@ public class Gatherer {
 
 	private Talon gatherLift;
 	private Spark gatherRotate;
-	private PIDController pid;
+	private PIDController pidController;
 	private DigitalInput diGathererTop;
 	private PowerDistributionPanel pdp = new PowerDistributionPanel();
-	private int gatherState = 0;
+//	private int gatherState = 0;
 	private final double TOP_TARGET = 0;
 	private final double MID_TARGET = Wiring.GATHERER_GATHER_POSITION; // Wiring.GATHERER_SAFE_SHOOT_ANGLE
 	private final double GATHER_TARGET = 88;
 	private final double BOTTOM_TARGET = 110;
-	private final double LOWBAR_POSITION = 105;
-	private final double talonIdleCurrent = 1.875;
+//	private final double LOWBAR_POSITION = 105;
+//	private final double talonIdleCurrent = 1.875;
 	private final double talonStallCurrent = 12.0;
-	private final double sparkIdleCurrent = 1.625;
+//	private final double sparkIdleCurrent = 1.625;
 	private final double liftUp = 0.6;
 	private final double liftDown = -0.6;
 	private final double liftStop = 0.0;
@@ -47,7 +47,7 @@ public class Gatherer {
 	 *            The id for the {@link Spark}
 	 */
 
-	public void initGatherers(int liftId, int rotateId, Joystick joy) {
+	public Gatherer(int liftId, int rotateId, Joystick joy) {
 		gatherLift = new Talon(liftId);
 		gatherRotate = new Spark(rotateId);
 		gyro = new AnalogGyro(Wiring.GATHERER_ANALOG_INPUT);
@@ -56,7 +56,6 @@ public class Gatherer {
 		diGathererTop = new DigitalInput(Wiring.GATHERER_LIMIT_ID);
 		dbUP = new DebounceButton(stick, Wiring.GATHER_UP_LEVEL_BUT);
 		dbDOWN = new DebounceButton(stick, Wiring.GATHER_DOWN_LEVEL_BUT);
-
 	}
 
 	/**
@@ -282,11 +281,9 @@ public class Gatherer {
 	}
 
 	public void manualControl() {
-		if (stick.getPOV() == 315 || stick.getPOV() == 0
-				|| stick.getPOV() == 45) {
+		if (stick.getPOV() == 315 || stick.getPOV() == 0 || stick.getPOV() == 45) {
 			gatherLift.set(liftUp);
-		} else if (stick.getPOV() == 225 || stick.getPOV() == 180
-				|| stick.getPOV() == 135) {
+		} else if (stick.getPOV() == 225 || stick.getPOV() == 180 || stick.getPOV() == 135) {
 			gatherLift.set(liftDown);
 		} else {
 			gatherLift.set(liftStop);
@@ -305,17 +302,17 @@ public class Gatherer {
 	 */
 	public void initLifterPID(double p, double i, double d) {
 		// Shaquisha
-		pid = new PIDController(p,i,d,gyro, gatherLift);
-		pid.setSetpoint(GATHER_TARGET);
-		pid.setPID(p, i, d);
-		pid.setAbsoluteTolerance(Wiring.GATHERER_PID_TOLERANCE);
+		pidController = new PIDController(p, i, d, gyro, gatherLift);
+		pidController.setSetpoint(GATHER_TARGET);
+		pidController.setPID(p, i, d);
+		pidController.setAbsoluteTolerance(Wiring.GATHERER_PID_TOLERANCE);
 	}
 
 	public void enableLifterPID() {
-		pid.enable();
+		pidController.enable();
 	}
 
 	public void disableLifterPID() {
-		pid.disable();
+		pidController.disable();
 	}
 }
