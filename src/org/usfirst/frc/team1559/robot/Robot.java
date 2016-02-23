@@ -317,9 +317,10 @@ public class Robot extends IterativeRobot {
 	}
 
 	public void testPeriodic() {
-		System.out.println("Gatherer Gyro:" + gatherer.getGyro().getAngle());
+//		System.out.println("Gatherer Gyro:" + gatherer.getGyro().getAngle());
+//		System.out.println("BALL SENSOR " + clamp.opSensor.getVoltage());
 //		SmartDashboard.putBoolean("Gatherer LS", gatherer.isLimitSwitchTripped());
-//		System.out.println(gatherer.isLimitSwitchTripped());
+		System.out.println(gatherer.isLimitSwitchTripped());
 		gatherer.manualControl();
 //		gatherer.gathererTalon();
 //		 if (stick.getRawButton(6)) {
