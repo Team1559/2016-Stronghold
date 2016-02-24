@@ -38,6 +38,7 @@ public class Gatherer {
 	private int counter = 0;
 	private AnalogGyro gyro;
 	private Joystick stick;
+	int gatherPosition = 0;
 
 	/**
 	 * Initializes the two motor controls necessary for gatherer usage.
@@ -298,13 +299,47 @@ public class Gatherer {
 		return gyro.getAngle() <= Wiring.GATHERER_SAFE_SHOOT_ANGLE;
 	}
 
+	public void updatePosition(){
+		
+		if(diGathererTop.get() || gyro.getAngle() >= BOTTOM_TARGET){// stop the errors cody!!
+			disableLifterPID();
+		} else {
+			enableLifterPID();
+		}
+		
+		switch(gatherPosition){
+		case 0:
+			if(stick.getRawButton(Wiring.GATHER_DOWN_LEVEL_BUT)){
+				pidController.setSetpoint(GATHER_TARGET);
+				enableLifterPID();
+			}
+			break;
+		case 1:
+			if(stick.getRawButton(Wiring.GATHER_UP_LEVEL_BUT)){
+				pidController.setSetpoint(TOP_TARGET);
+				enableLifterPID();
+			} else if(stick.getRawButton(Wiring.GATHER_DOWN_LEVEL_BUT)){
+				pidController.setSetpoint(BOTTOM_TARGET);
+				enableLifterPID();
+			}
+			break;
+		case 2:
+			if(stick.getRawButton(Wiring.GATHER_UP_LEVEL_BUT)){
+				pidController.setSetpoint(GATHER_TARGET);
+				enableLifterPID();
+			} 
+			break;
+		}
+		
+	}
+	
 	/*
 	 * PID loop for the gatherer
 	 */
 	public void initLifterPID(double p, double i, double d) {
 		// Shaquisha
 		pidController = new PIDController(p, i, d, gyro, gatherLift);
-		pidController.setSetpoint(GATHER_TARGET);
+		pidController.setSetpoint(TOP_TARGET);
 		pidController.setPID(p, i, d);
 		pidController.setAbsoluteTolerance(Wiring.GATHERER_PID_TOLERANCE);
 	}
