@@ -351,7 +351,6 @@ public void updateAutoPosition(){
 		// Shaquisha
 		pidController = new PIDController(p, i, d, gyro, gatherLift);
 		pidController.setSetpoint(TOP_TARGET);
-		pidController.setPID(p, i, d);
 		pidController.setAbsoluteTolerance(Wiring.GATHERER_PID_TOLERANCE);
 	}
 
