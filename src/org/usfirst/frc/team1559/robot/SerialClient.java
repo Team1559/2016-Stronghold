@@ -48,11 +48,6 @@ public class SerialClient{
 			} else {
 				args = -1000;
 			}
-			try{
-				Thread.sleep(1);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
 //		}
 //		System.out.println("We should never see this");
 	}

@@ -143,6 +143,7 @@ public class Robot extends IterativeRobot {
 	private boolean givenAngle = false;
 	private double angle = 0.0;
 	private int nate = 0;
+	private int aimPause = 0;
 
 	public void autonomousPeriodic() {
 		SmartDashboard.putNumber("Displacement", (tranny.getLDisplacement() + tranny.getRDisplacement()) / 2);
@@ -167,12 +168,13 @@ public class Robot extends IterativeRobot {
 		} else if (current.command.equals("SHOOT")) {
 			switch(nate){
 			case 0:
+				System.out.println("CASE 0");
 				sc.run();
 				angle = centerWithAngle(sc.getSerialIn());
 //				System.out.println("ahooing");
-//				System.out.println(angle);
+				System.out.println(angle);
 				if (Math.abs(angle) <= 30){
-					nate++;
+					nate = 1;
 				}
 				break;
 			case 1:
@@ -180,16 +182,20 @@ public class Robot extends IterativeRobot {
 				if (waffle.keepTurning){
 					waffle.turnToAngle(angle);
 					System.out.println("KEEP TURNING");
-				} else if (Math.abs(centerWithAngle(sc.getSerialIn())) > 2){
-					nate--;
+				} else if (Math.abs(sc.getSerialIn()) > 15){
+					if (aimPause++ > 10){
+						System.out.println("PAUSED");
+						waffle.keepTurning = true;
+						nate = 0;
+					}
 				} else{
-					nate++;
+					nate = 2;
 					System.out.println("GOING TO SHOOT");
 				}
 				break;
 			case 2:
 				if (!shooter.shootDone){
-					System.out.println("SHOOT");
+					System.out.println("SHOOT RIGHT MEOW");
 					/*
 					 * 
 					 * 
@@ -204,7 +210,7 @@ public class Robot extends IterativeRobot {
 					 */
 					shooter.updateShooter(true, /*gatherer.shouldNotShoot()*/ false);
 				} else {
-					nate++;
+					nate = 3;
 				}
 				break;
 			case 3:
