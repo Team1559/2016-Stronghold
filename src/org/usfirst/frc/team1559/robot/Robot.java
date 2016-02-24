@@ -190,7 +190,19 @@ public class Robot extends IterativeRobot {
 			case 2:
 				if (!shooter.shootDone){
 					System.out.println("SHOOT");
-					shooter.updateShooter(true, gatherer.shouldNotShoot());
+					/*
+					 * 
+					 * 
+					 * 
+					 * 
+					 * THIS IS NOT SAFE
+					 * 
+					 * 
+					 * 
+					 * 
+					 * 
+					 */
+					shooter.updateShooter(true, /*gatherer.shouldNotShoot()*/ false);
 				} else {
 					nate++;
 				}
