@@ -169,21 +169,27 @@ public class Robot extends IterativeRobot {
 			case 0:
 				sc.run();
 				angle = centerWithAngle(sc.getSerialIn());
-				System.out.println("ahooing");
-				System.out.println(angle);
+//				System.out.println("ahooing");
+//				System.out.println(angle);
 				if (Math.abs(angle) <= 30){
 					nate++;
 				}
 				break;
 			case 1:
+				sc.run();
 				if (waffle.keepTurning){
 					waffle.turnToAngle(angle);
-				} else {
+					System.out.println("KEEP TURNING");
+				} else if (Math.abs(centerWithAngle(sc.getSerialIn())) > 2){
+					nate--;
+				} else{
 					nate++;
+					System.out.println("GOING TO SHOOT");
 				}
 				break;
 			case 2:
 				if (!shooter.shootDone){
+					System.out.println("SHOOT");
 					shooter.updateShooter(true, gatherer.shouldNotShoot());
 				} else {
 					nate++;
@@ -343,6 +349,7 @@ public class Robot extends IterativeRobot {
 	private final int CAMERA_BAND = 10;
 	
 	public double centerWithAngle(int error){
+//		System.out.println(error);
 		return (error/320.0) * 30;//30 = half of horizontal fov of camera
 	}
 

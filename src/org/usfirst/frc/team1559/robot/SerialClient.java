@@ -3,7 +3,7 @@ package org.usfirst.frc.team1559.robot;
 import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.SerialPort.Port;
 
-public class SerialClient extends Thread{
+public class SerialClient{
 	private final int BAUDRATE = 115200;
 	private final String sendChar = "s";
 	SerialPort sp;
@@ -28,9 +28,10 @@ public class SerialClient extends Thread{
 		}
 	}
 	public void run(){
+		sp.reset();
 		System.out.println("Thread is alive!");
 		String str = "";
-		while(!isInterrupted() && isAlive()){
+//		while(!isInterrupted() && isAlive()){
 			String in = "";
 			if (sp.writeString(sendChar) > 0){
 				while(true){
@@ -52,7 +53,7 @@ public class SerialClient extends Thread{
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-		}
+//		}
 //		System.out.println("We should never see this");
 	}
 
