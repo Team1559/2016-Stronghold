@@ -53,7 +53,7 @@ public class SerialClient extends Thread{
 				e.printStackTrace();
 			}
 		}
-		System.out.println("We should never see this");
+//		System.out.println("We should never see this");
 	}
 
 }
