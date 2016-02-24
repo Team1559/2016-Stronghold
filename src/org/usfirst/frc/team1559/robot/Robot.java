@@ -41,7 +41,7 @@ public class Robot extends IterativeRobot {
 	// DigitalInput magneticSensor;
 	DigitalOutput dio2;
 	DigitalOutput dio1;
-	 Joystick coStick;
+//	 Joystick coStick;
 	BallClamp clamp;
 	Gatherer gatherer;
 //	USBCamera cam;
@@ -64,7 +64,7 @@ public class Robot extends IterativeRobot {
 		rightS.set(Wiring.RIGHT_MASTER_TALON);
 		robot = new RobotDrive(leftM, rightM);
 		stick = new Joystick(Wiring.JOYSTICK0);
-		coStick = new Joystick(Wiring.JOYSTICK1);
+//		coStick = new Joystick(Wiring.JOYSTICK1);
 		tranny = new Transmission(stick, leftM, rightM);
 		shooter = new Shooter();
 //		shooter.initShooter(gatherer.shouldNotShoot());
@@ -121,7 +121,7 @@ public class Robot extends IterativeRobot {
 		tranny.resetEncoders();
 
 		gatherer = new Gatherer(Wiring.GATHERER_LIFT, Wiring.GATHERER_ROTATE, stick);
-//		gatherer.initWilliamJulieMerges(Wiring.GATHERER_PID_P, Wiring.GATHERER_PID_I, Wiring.GATHERER_PID_D);
+//		gatherer.initLifterPID(Wiring.GATHERER_PID_P, Wiring.GATHERER_PID_I, Wiring.GATHERER_PID_D);
 		
 
 	}
@@ -131,13 +131,14 @@ public class Robot extends IterativeRobot {
 		 arduino.writeSequence(1);
 		waffle.ahrs.reset();
 		waffle.interpret();
-		System.out.println("JFKDSLFIUESHF " + waffle.list.get(waffle.list.size() - 1).command);
+//		System.out.println("JFKDSLFIUESHF " + waffle.list.get(waffle.list.size() - 1).command);
 		leftM.setInverted(false);
 		rightM.setInverted(false);
 		waffle.length = 0;
 		shooter.initShooter(gatherer.shouldNotShoot());
 		tranny.resetEncoders();
 		givenAngle = false;
+//		gatherer.updateAutoPosition();
 	}
 	private boolean givenAngle = false;
 	private double angle = 0.0;
@@ -168,7 +169,11 @@ public class Robot extends IterativeRobot {
 			case 0:
 				sc.run();
 				angle = centerWithAngle(sc.getSerialIn());
-				nate++;
+				System.out.println("ahooing");
+				System.out.println(angle);
+				if (Math.abs(angle) <= 30){
+					nate++;
+				}
 				break;
 			case 1:
 				if (waffle.keepTurning){
@@ -302,12 +307,12 @@ public class Robot extends IterativeRobot {
 		tranny.updateShifting();
 
 		if(stick.getRawButton(Wiring.OVERRIDE_BUTT)){
+//			gatherer.disableLifterPID();
 			gatherer.manualControl();
 		} else {
-			gatherer.gathererTalon();
-//			PID LOOP AMAZE
-//			gatherer.enableWilliamJulieMerges();
-			//gatherstupid
+//			gatherer.gathererTalon();
+			gatherer.manualControl();
+//			gatherer.updateAutoPosition();
 		}
 		
 		shooter.updateShooter(stick, gatherer.shouldNotShoot());
@@ -322,9 +327,9 @@ public class Robot extends IterativeRobot {
 			gatherer.setSpark(0.0);
 		}
 		
-		 if (coStick.getRawButton(1)) {
-			 arduino.writeSequence(3);
-		 }
+//		 if (coStick.getRawButton(1)) {
+//			 arduino.writeSequence(3);
+//		 }
 
 		if (DriverStation.getInstance().getMatchTime() <= 20) {
 			 arduino.writeSequence(4);
@@ -347,11 +352,12 @@ public class Robot extends IterativeRobot {
 	}
 
 	public void testPeriodic() {
-//		System.out.println("Gatherer Gyro:" + gatherer.getGyro().getAngle());
+		System.out.println("Gatherer Gyro:" + gatherer.getGyro().getAngle());
 //		System.out.println("BALL SENSOR " + clamp.opSensor.getVoltage());
 //		SmartDashboard.putBoolean("Gatherer LS", gatherer.isLimitSwitchTripped());
-		System.out.println(gatherer.isLimitSwitchTripped());
+//		System.out.println(gatherer.isLimitSwitchTripped());
 		gatherer.manualControl();
+//		gatherer.updatePosition();
 //		gatherer.gathererTalon();
 //		 if (stick.getRawButton(6)) {
 //		 clamp.close();
@@ -360,11 +366,11 @@ public class Robot extends IterativeRobot {
 //		 }
 		clamp.updateBallClamp(shooter.shooting);
 //		System.out.println(shooter.shooting);
-		if (stick.getRawButton(5) && clamp.open) {
-			gatherer.setSpark(0.5);
-		} else {
-			gatherer.setSpark(0.0);
-		}
+//		if (stick.getRawButton(5) && clamp.open) {
+//			gatherer.setSpark(0.5);
+//		} else {
+//			gatherer.setSpark(0.0);
+//		}
 		shooter.updateShooter(stick, gatherer.shouldNotShoot());
 	}
 

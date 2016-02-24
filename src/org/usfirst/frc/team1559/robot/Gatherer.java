@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.Talon;
 
 public class Gatherer {
-	//comment
+	//commenth8yhj
 
 	enum ArmState {
 		STALLED, ATTOP, TOPMIDDOWN, TOPBOTDOWN, ATMID, MIDBOTDOWN, ATBOT, BOTMIDUP, BOTTOPUP, MIDTOPUP,
@@ -301,36 +301,47 @@ public class Gatherer {
 
 	public void updatePosition(){
 		
-		if(diGathererTop.get() || gyro.getAngle() >= BOTTOM_TARGET){// stop the errors cody!!
+		if((!diGathererTop.get() && pidController.getSetpoint() != TOP_TARGET)|| gyro.getAngle() >= BOTTOM_TARGET){// stop the errors cody!!
 			disableLifterPID();
+			gatherLift.set(0.0);
 		} else {
 			enableLifterPID();
+			switch(gatherPosition){
+			case 0:
+				if(stick.getRawButton(Wiring.GATHER_DOWN_LEVEL_BUT)){
+					pidController.setSetpoint(GATHER_TARGET);
+					gatherPosition++;
+					
+				}
+				break;
+			case 1:
+				if(stick.getRawButton(Wiring.GATHER_UP_LEVEL_BUT)){
+					pidController.setSetpoint(TOP_TARGET);
+					gatherPosition--;
+					
+				} else if(stick.getRawButton(Wiring.GATHER_DOWN_LEVEL_BUT)){
+					pidController.setSetpoint(BOTTOM_TARGET);
+					gatherPosition++;
+					
+				}
+				break;
+			case 2:
+				if(stick.getRawButton(Wiring.GATHER_UP_LEVEL_BUT)){
+					pidController.setSetpoint(GATHER_TARGET);
+					gatherPosition--;
+					
+				} 
+				break;
+			}
 		}
 		
-		switch(gatherPosition){
-		case 0:
-			if(stick.getRawButton(Wiring.GATHER_DOWN_LEVEL_BUT)){
-				pidController.setSetpoint(GATHER_TARGET);
-				enableLifterPID();
-			}
-			break;
-		case 1:
-			if(stick.getRawButton(Wiring.GATHER_UP_LEVEL_BUT)){
-				pidController.setSetpoint(TOP_TARGET);
-				enableLifterPID();
-			} else if(stick.getRawButton(Wiring.GATHER_DOWN_LEVEL_BUT)){
-				pidController.setSetpoint(BOTTOM_TARGET);
-				enableLifterPID();
-			}
-			break;
-		case 2:
-			if(stick.getRawButton(Wiring.GATHER_UP_LEVEL_BUT)){
-				pidController.setSetpoint(GATHER_TARGET);
-				enableLifterPID();
-			} 
-			break;
-		}
 		
+		
+	}
+	
+public void updateAutoPosition(){
+		pidController.setSetpoint(GATHER_TARGET);
+		enableLifterPID();
 	}
 	
 	/*
