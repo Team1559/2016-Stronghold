@@ -12,7 +12,6 @@ import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.SPI;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * Used to interpret and execute a .wffl file.
@@ -50,28 +49,26 @@ public class WFFL {
 	boolean active;
 	String pattern;
 	ArrayList<Command> list = new ArrayList<Command>();
-	public int cx;
-	public int cy;
-	RobotDrive robot;
+	public int cx, cy;
+	RobotDrive rd;
 	CANTalon rightM, leftM;
 	Transmission tranny;
 
-	public WFFL(String path, RobotDrive rd, CANTalon rightM, CANTalon leftM, Transmission tranny) {
+	public WFFL(String path, RobotDrive rd, Transmission tranny) {
 		this.path = path;
 		this.tranny = tranny;
 		file = new File(path);
 		try {
 			s = new Scanner(file);
 			ahrs = new AHRS(SPI.Port.kMXP);
-			System.out.println("HELLOW from a try catch block");
+			// System.out.println("HELLOW from a try catch block");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-		robot = rd;
-		this.rightM = rightM;
-		this.leftM = leftM;
-
+		this.rd = rd;
+		this.rightM = tranny.getRightMotor();
+		this.leftM = tranny.getLeftMotor();
 	}
 
 	public void interpret() {
@@ -143,7 +140,7 @@ public class WFFL {
 			System.out.println(temp);
 		} else if (command.equals("NOTE")) {
 			System.out.println(raw);
-		}else {
+		} else {
 			System.err.println("UNKNOWN COMMAND:" + raw);
 		}
 		if (s.hasNextLine()) {
@@ -157,8 +154,8 @@ public class WFFL {
 			printAll();
 		}
 	}
-	
-	public double getCurrentAngle(){
+
+	public double getCurrentAngle() {
 		return ahrs.getAngle();
 	}
 
@@ -172,7 +169,7 @@ public class WFFL {
 	}
 
 	public void turnToAngle(double angle) {
-		double kpturn = 0.08;//this is temporary, real value = 0.1
+		double kpturn = 0.08;// this is temporary, real value = 0.1
 		yaw = ahrs.getYaw();
 
 		if ((angle == 180) && (yaw < -0.1)) {
@@ -238,13 +235,18 @@ public class WFFL {
 			kp = kpBase * .05;
 		}
 
-		if (speed < 0) {
-			kp *= -1;
-		}
 		// 0.1 - 0.4 x7
 		// 0.4 - 0.6 x1
 		// 0.6 - 0.7 x.33
-		// 0.7 - 1.0 /20
+		// 0.7 - 1.0 x.05
+
+		// math!
+		// TODO: try it out, stick to what works though
+		// kp = kpBase * 20.045 * (Math.pow(Math.E, -6.164 * speed));
+
+		if (speed < 0) {
+			kp *= -1;
+		}
 
 		unchangedYawError = ahrs.getYaw() - angle;
 		yawError = yaw - angle;
@@ -254,23 +256,23 @@ public class WFFL {
 		} else if (yawError < -180) {
 			yawError = (yawError + 360);
 		}
-		
+
 		System.out.println((tranny.getLDisplacement() + tranny.getRDisplacement()) / 2);
-		
+
 		if (((tranny.getLDisplacement() + tranny.getRDisplacement()) / 2) <= inches) {
 			keepRunning = true;
 			if ((Math.abs(yawError)) >= tolerance) {
 				if ((Math.abs(yawError * kp)) < maxError) {
-					robot.drive(speed, (yawError * kp));
+					rd.drive(speed, (yawError * kp));
 				} else {
 					if (yawError < 0) {
-						robot.drive(speed, -maxError);
+						rd.drive(speed, -maxError);
 					} else {
-						robot.drive(speed, maxError);
+						rd.drive(speed, maxError);
 					}
 				}
 			} else {
-				robot.drive(speed, 0);
+				rd.drive(speed, 0);
 			}
 		} else {
 			keepRunning = false;
@@ -278,40 +280,37 @@ public class WFFL {
 		}
 	}
 
-	public void traction() {
-		double accelVals[] = new double[25];
-		int runTime = 0;
-		double avg = 0;
-		boolean slip = false;
-		// 1.25
+	// maybe one day
 
-		accelVals[runTime] = ahrs.getWorldLinearAccelY();
-		for (int i = 0; i < accelVals.length; i++) {
-			avg += accelVals[i];
-		}
-
-		avg /= accelVals.length;
-
-		if (Math.abs(avg) < .007 && pdp.getCurrent(0) > 40) {
-			slip = true;
-			leftM.set(leftM.get() * .5);
-		} else if (Math.abs(avg) < .007 && pdp.getCurrent(1) > 40) {
-			slip = true;
-			rightM.set(rightM.get() * .5);
-		}
-
-		if (runTime == (int) accelVals.length) {
-			runTime = 0;
-		}
-
-		SmartDashboard.putBoolean("Slip: ", slip);
-		SmartDashboard.putNumber("AVG: ", avg);
-		SmartDashboard.putNumber("Current: ", pdp.getCurrent(0));
-		runTime++;
-	}
-
-	public boolean isWithinThresh(int x, int low, int high) {
-		return (low < x && x < high);
-	}
-
+	// public void traction() {
+	// double accelVals[] = new double[25];
+	// int runTime = 0;
+	// double avg = 0;
+	// boolean slip = false;
+	// // 1.25
+	//
+	// accelVals[runTime] = ahrs.getWorldLinearAccelY();
+	// for (int i = 0; i < accelVals.length; i++) {
+	// avg += accelVals[i];
+	// }
+	//
+	// avg /= accelVals.length;
+	//
+	// if (Math.abs(avg) < .007 && pdp.getCurrent(0) > 40) {
+	// slip = true;
+	// leftM.set(leftM.get() * .5);
+	// } else if (Math.abs(avg) < .007 && pdp.getCurrent(1) > 40) {
+	// slip = true;
+	// rightM.set(rightM.get() * .5);
+	// }
+	//
+	// if (runTime == (int) accelVals.length) {
+	// runTime = 0;
+	// }
+	//
+	// SmartDashboard.putBoolean("Slip: ", slip);
+	// SmartDashboard.putNumber("AVG: ", avg);
+	// SmartDashboard.putNumber("Current: ", pdp.getCurrent(0));
+	// runTime++;
+	// }
 }

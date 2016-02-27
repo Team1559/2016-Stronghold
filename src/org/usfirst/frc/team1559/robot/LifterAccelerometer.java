@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj.interfaces.Accelerometer;
 
 public class LifterAccelerometer {
 
-	Accelerometer accel;
+	private Accelerometer accel;
 	
 	public LifterAccelerometer() {
 		accel = new ADXL345_I2C(I2C.Port.kOnboard, Accelerometer.Range.k4G);
@@ -38,20 +38,22 @@ public class LifterAccelerometer {
 	
 	/*
 	 * Love, m@
+	 * 
+	 * john did you let this cadmonkey in
 	 */
-	private int get3(){
-		return (int)(Math.PI);
-	}
-	
-	private int get2(){
-		return (int)(Math.E);
-	}
-	
-	private int forLoopAmaze() {
-		int i;
-		for (i = 0; i < 2; i++) {
-			i--;
-		}
-		return i;
-	}
+//	private int get3(){
+//		return (int)(Math.PI);
+//	}
+//	
+//	private int get2(){
+//		return (int)(Math.E);
+//	}
+//	
+//	private int forLoopAmaze() {
+//		int i;
+//		for (i = 0; i < 2; i++) {
+//			i--;
+//		}
+//		return i;
+//	}
 }

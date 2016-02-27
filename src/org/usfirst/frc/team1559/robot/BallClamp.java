@@ -5,10 +5,9 @@ import edu.wpi.first.wpilibj.Servo;
 
 public class BallClamp {
 
-	Servo servoLeft;
-	Servo servoRight;
-	AnalogInput opSensor;
-	boolean open = false;
+	private Servo servoLeft, servoRight;
+	private AnalogInput opSensor;
+	private boolean open = false;
 
 	public BallClamp() {
 		servoLeft = new Servo(Wiring.CLAMP_LEFT_ID);
@@ -31,16 +30,14 @@ public class BallClamp {
 	}
 
 	public void updateBallClamp(boolean override) {
-		if ((opSensor.getVoltage() >= Wiring.CLAMP_SENSOR_THRESHOLD)) {
-			if(!override) {
-				close();
-			}
+		if (opSensor.getVoltage() >= Wiring.CLAMP_SENSOR_THRESHOLD && !override) {
+			close();
 		} else {
-			open();
-		}
-		if(override) {
 			open();
 		}
 	}
 
+	public boolean isOpen() {
+		return open;
+	}
 }

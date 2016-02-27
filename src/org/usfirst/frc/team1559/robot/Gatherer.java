@@ -9,12 +9,16 @@ import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.Talon;
 
 public class Gatherer {
-	//commenth8yhj
+	// commenth8yhj
 
 	enum ArmState {
 		STALLED, ATTOP, TOPMIDDOWN, TOPBOTDOWN, ATMID, MIDBOTDOWN, ATBOT, BOTMIDUP, BOTTOPUP, MIDTOPUP,
 	}; // from, to and direction ex. from top to mid going down
 
+	private static final double TOP_TARGET = 0; // home position
+	private static final double MID_TARGET = 88; // gathering position
+	private static final double BOTTOM_TARGET = 110; // low bar position
+	
 	DebounceButton dbUP, dbDOWN;
 
 	private Talon gatherLift;
@@ -22,15 +26,11 @@ public class Gatherer {
 	private PIDController pidController;
 	private DigitalInput diGathererTop;
 	private PowerDistributionPanel pdp = new PowerDistributionPanel();
-//	private int gatherState = 0;
-	private final double TOP_TARGET = 0;
-	private final double MID_TARGET = Wiring.GATHERER_GATHER_POSITION; // Wiring.GATHERER_SAFE_SHOOT_ANGLE
-	private final double GATHER_TARGET = 88;
-	private final double BOTTOM_TARGET = 110;
-//	private final double LOWBAR_POSITION = 105;
-//	private final double talonIdleCurrent = 1.875;
+	// private int gatherState = 0;
+	// private final double LOWBAR_POSITION = 105;
+	// private final double talonIdleCurrent = 1.875;
 	private final double talonStallCurrent = 12.0;
-//	private final double sparkIdleCurrent = 1.625;
+	// private final double sparkIdleCurrent = 1.625;
 	private final double liftUp = 0.6;
 	private final double liftDown = -0.6;
 	private final double liftStop = 0.0;
@@ -43,10 +43,8 @@ public class Gatherer {
 	/**
 	 * Initializes the two motor controls necessary for gatherer usage.
 	 * 
-	 * @param liftId
-	 *            The id for the {@link Talon}
-	 * @param rotateId
-	 *            The id for the {@link Spark}
+	 * @param liftId The id for the {@link Talon}
+	 * @param rotateId The id for the {@link Spark}
 	 */
 
 	public Gatherer(int liftId, int rotateId, Joystick joy) {
@@ -56,15 +54,13 @@ public class Gatherer {
 		gyro.reset();
 		stick = joy;
 		diGathererTop = new DigitalInput(Wiring.GATHERER_LIMIT_ID);
-		dbUP = new DebounceButton(stick, Wiring.GATHER_UP_LEVEL_BUT);
-		dbDOWN = new DebounceButton(stick, Wiring.GATHER_DOWN_LEVEL_BUT);
+		dbUP = new DebounceButton(stick, Wiring.BTN_GATHER_UP_LEVEL);
+		dbDOWN = new DebounceButton(stick, Wiring.BTN_GATHER_DOWN_LEVEL);
 	}
 
 	/**
-	 * Reads input from the joystick in order to control the lifting part of the
-	 * gatherer, which operates on a three-tier elevator-like system. Three
-	 * different buttons are read from the joystick in order to move the
-	 * {@link Talon} to one of the three tiers. Update periodically.
+	 * Reads input from the joystick in order to control the lifting part of the gatherer, which operates on a three-tier elevator-like system. Three different buttons are read from the joystick in order to move the {@link Talon} to one of
+	 * the three tiers. Update periodically.
 	 */
 
 	ArmState arm = ArmState.ATTOP;
@@ -299,51 +295,49 @@ public class Gatherer {
 		return gyro.getAngle() <= Wiring.GATHERER_SAFE_SHOOT_ANGLE;
 	}
 
-	public void updatePosition(){
-		
-		if((!diGathererTop.get() && pidController.getSetpoint() != TOP_TARGET)|| gyro.getAngle() >= BOTTOM_TARGET){// stop the errors cody!!
+	public void updatePosition() {
+
+		if ((!diGathererTop.get() && pidController.getSetpoint() != TOP_TARGET) || gyro.getAngle() >= BOTTOM_TARGET) {// stop the errors cody!!
 			disableLifterPID();
 			gatherLift.set(0.0);
 		} else {
 			enableLifterPID();
-			switch(gatherPosition){
+			switch (gatherPosition) {
 			case 0:
-				if(stick.getRawButton(Wiring.GATHER_DOWN_LEVEL_BUT)){
-					pidController.setSetpoint(GATHER_TARGET);
+				if (stick.getRawButton(Wiring.BTN_GATHER_DOWN_LEVEL)) {
+					pidController.setSetpoint(MID_TARGET);
 					gatherPosition++;
-					
+
 				}
 				break;
 			case 1:
-				if(stick.getRawButton(Wiring.GATHER_UP_LEVEL_BUT)){
+				if (stick.getRawButton(Wiring.BTN_GATHER_UP_LEVEL)) {
 					pidController.setSetpoint(TOP_TARGET);
 					gatherPosition--;
-					
-				} else if(stick.getRawButton(Wiring.GATHER_DOWN_LEVEL_BUT)){
+
+				} else if (stick.getRawButton(Wiring.BTN_GATHER_DOWN_LEVEL)) {
 					pidController.setSetpoint(BOTTOM_TARGET);
 					gatherPosition++;
-					
+
 				}
 				break;
 			case 2:
-				if(stick.getRawButton(Wiring.GATHER_UP_LEVEL_BUT)){
-					pidController.setSetpoint(GATHER_TARGET);
+				if (stick.getRawButton(Wiring.BTN_GATHER_UP_LEVEL)) {
+					pidController.setSetpoint(MID_TARGET);
 					gatherPosition--;
-					
-				} 
+
+				}
 				break;
 			}
 		}
-		
-		
-		
+
 	}
-	
-public void updateAutoPosition(){
-		pidController.setSetpoint(GATHER_TARGET);
+
+	public void updateAutoPosition() {
+		pidController.setSetpoint(MID_TARGET);
 		enableLifterPID();
 	}
-	
+
 	/*
 	 * PID loop for the gatherer
 	 */

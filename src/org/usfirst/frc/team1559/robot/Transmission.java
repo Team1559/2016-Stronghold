@@ -2,54 +2,46 @@ package org.usfirst.frc.team1559.robot;
 
 import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.Solenoid;
 
+/**
+ * Drive system class for shifting and reading encoders.
+ */
 public class Transmission {
 
-	// will eventually be in its own thread to shift gears while driving is
-	// occurring.
-
-	Solenoid shift1;
-	Solenoid shift2;
-	PowerDistributionPanel pdp;
-	int gear;
-	Joystick joy;
-	CANTalon leftM, rightM;
+	private Solenoid shift1, shift2;
+	private int gear;
+	private Joystick stick;
+	private CANTalon leftM, rightM;
 
 	public Transmission(Joystick joy, CANTalon rightM, CANTalon leftM) {
 
 		shift1 = new Solenoid(Wiring.SHIFT_1);
 		shift2 = new Solenoid(Wiring.SHIFT_2);
-		pdp = new PowerDistributionPanel();
 		gear = 1;
-		this.joy = joy;
-		this.rightM = rightM;
+		this.stick = joy;
 		this.leftM = leftM;
+		this.rightM = rightM;
 	}
 
 	public void gear1() {
-
+		gear = 1;
 		shift1.set(false);
 		shift2.set(true);
 		System.out.println("GEAR 1");
-
 	}
 
 	public void gear2() {
-
+		gear = 2;
 		shift1.set(true);
 		shift2.set(false);
-		System.out.println("GEAR 1");
-
+		System.out.println("GEAR 2");
 	}
 
-	//
-	// public double getSpeed() {
-	// /*ADD REAL CODE!*/
-	// return 10.1;
-	// }
-	//
+	public int getGear() {
+		return gear;
+	}
+
 	public int getRDisplacement() {
 		return (rightM.getEncPosition() / Wiring.PULSES_PER_INCH);
 	}
@@ -74,15 +66,18 @@ public class Transmission {
 	public void updateShifting() {
 		double velocity = (getRVelocity() + (double) getLVelocity()) / 2;
 
-		if (velocity >= Wiring.SHIFT_UP_SPEED && joy.getRawButton(9)) {
+		if (velocity >= Wiring.SHIFT_UP_SPEED && stick.getRawButton(9)) {
 			gear2();
-		} else if ((velocity <= Wiring.SHIFT_DOWN_SPEED) || !joy.getRawButton(9)) {
+		} else if ((velocity <= Wiring.SHIFT_DOWN_SPEED) || !stick.getRawButton(9)) {
 			gear1();
 		}
-
 	}
-
-	public PowerDistributionPanel getPDP() {
-		return pdp;
+	
+	public CANTalon getLeftMotor() {
+		return leftM;
+	}
+	
+	public CANTalon getRightMotor() {
+		return rightM;
 	}
 }

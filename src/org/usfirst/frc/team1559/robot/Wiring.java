@@ -60,7 +60,6 @@ public class Wiring {
 	public static final int SHOOTER_FIRE_DELAY = 25;
 	public static final int SHOOTER_UP_SOLENOID = 6;
 	public static final int SHOOTER_DOWN_SOLENOID = 5;
-	public static final int MAGNET = 0;
 
 	// ball clamp
 	public static final int CLAMP_LEFT_ID = 7;
@@ -74,14 +73,10 @@ public class Wiring {
 	public static final int GATHERER_LIFT = 2;
 	public static final int GATHERER_ROTATE = 1;
 	public static final int GATHERER_SAFE_SHOOT_ANGLE = 75;
-	public static final int GATHER_UP_LEVEL_BUT = 6;
-	public static final int GATHER_DOWN_LEVEL_BUT = 5;
+	public static final int BTN_GATHER_UP_LEVEL = 6;
+	public static final int BTN_GATHER_DOWN_LEVEL = 5;
 
-	public static final double GATHERER_GATHER_POSITION = 88;
+	public static final int BTN_GATHERER_OVERRIDE = 4;
 
-	public static final int OVERRIDE_BUTT = 4;
-
-	public static final int BALL_CLAMP_OVERRIDE_BUTT = 2;
-	
-	public static final int WILLIAM_DOUGLAS_MERGES = (int) Math.PI;
+//	public static final int BTN_BALL_CLAMP_OVERRIDE = 2;
 }
