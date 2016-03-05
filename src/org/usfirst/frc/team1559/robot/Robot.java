@@ -50,7 +50,8 @@ public class Robot extends IterativeRobot {
 	// does 2
 
 	public void robotInit() {
-		arduino = new Arduino(8);
+		if(Wiring.hasArduino)
+			arduino = new Arduino(8);
 		leftM = new CANTalon(Wiring.LEFT_MASTER_TALON);
 		rightM = new CANTalon(Wiring.RIGHT_MASTER_TALON);
 		leftS = new CANTalon(Wiring.LEFT_SLAVE_TALON);
@@ -66,7 +67,10 @@ public class Robot extends IterativeRobot {
 		tranny = new Transmission(stick, leftM, rightM);
 		shooter = new Shooter();
 		// shooter.initShooter(gatherer.shouldNotShoot());
-		clamp = new BallClamp();
+		if(Wiring.hasBallClamp){
+			clamp = new BallClamp();
+		}
+		
 		// magneticSensor = new DigitalInput(Wiring.MAGNET);
 		// cam = new USBCamera("cam0");
 		cs = CameraServer.getInstance();
@@ -307,7 +311,7 @@ public class Robot extends IterativeRobot {
 				gatherer.manualControl();
 			} else {
 				// gatherer.gathererTalon();
-				gatherer.manualControl(); // TODO: what?
+//				gatherer.manualControl(); // TODO: what?
 				// gatherer.updateAutoPosition();
 			}
 		}
