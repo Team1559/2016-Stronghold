@@ -15,7 +15,6 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Robot extends IterativeRobot {
 
@@ -126,14 +125,16 @@ public class Robot extends IterativeRobot {
 
 	public void autonomousInit() {
 		waffle.reset();
-		arduino.writeSequence(1);
+		if(Wiring.hasArduino)
+			arduino.writeSequence(1);
+		System.out.println("AHRS: " + waffle.ahrs);
 		waffle.ahrs.reset();
 		waffle.interpret();
 		// System.out.println("JFKDSLFIUESHF " + waffle.list.get(waffle.list.size() - 1).command);
 		leftM.setInverted(false);
 		rightM.setInverted(false);
 		waffle.length = 0;
-		shooter.resetShooter(gatherer.shouldNotShoot());
+		shooter.resetShooter(/*gatherer.shouldNotShoot()*/ false);
 		tranny.resetEncoders();
 		// givenAngle = false;
 		// gatherer.updateAutoPosition();
@@ -228,7 +229,7 @@ public class Robot extends IterativeRobot {
 		} else if (current.command.equals("STOP")) {
 			leftM.set(0);
 			rightM.set(0);
-			shooter.setSolenoids(false, gatherer.shouldNotShoot());
+			shooter.setSolenoids(false, /*gatherer.shouldNotShoot()*/ false);
 			System.out.println("Motor Stoppage achieved!");
 		} else if (current.command.equals("DEFENSE")) {
 			String id = current.id;
@@ -261,7 +262,8 @@ public class Robot extends IterativeRobot {
 		if ((current.done == true)) {
 			System.out.println("Current done boi");
 			current.done = false;
-			gatherer.homify();// make sure the gatherer is out of the way
+			if(Wiring.hasGatherer)
+				gatherer.homify();// make sure the gatherer is out of the way
 
 			if (waffle.list.size() - 1 > listPos) {
 				listPos++;
