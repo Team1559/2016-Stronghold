@@ -33,7 +33,7 @@ public class WFFL {
 	double kpBase = 0.001;
 	final double maxError = 1;
 	final double tolerance = .001;
-	final double turnTolerance = .5;
+	final double turnTolerance = 1;//originally .5
 	int length = 0;
 	double yawError;
 	double unchangedYawError;
@@ -169,7 +169,7 @@ public class WFFL {
 	}
 
 	public void turnToAngle(double angle) {
-		double kpturn = 0.08;// this is temporary, real value = 0.1
+		double kpturn = 0.05;// this is temporary, real value = 0.1
 		yaw = ahrs.getYaw();
 
 		if ((angle == 180) && (yaw < -0.1)) {
