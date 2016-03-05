@@ -88,8 +88,20 @@ public class Robot extends IterativeRobot {
 
 		leftM.enableBrakeMode(true);
 		rightM.enableBrakeMode(true);
-		leftS.enableBrakeMode(true);
-		rightS.enableBrakeMode(true);
+		/*
+		 * 
+		 * 
+		 * 
+		 * 
+		 * CHANGE THIS LATER!!!!!
+		 * 
+		 * 
+		 * 
+		 * 
+		 * 
+		 */
+		leftS.enableBrakeMode(false);
+		rightS.enableBrakeMode(false);
 
 		rightM.setVoltageRampRate(Wiring.VOLTAGE_RAMP_RATE);
 		leftM.setVoltageRampRate(Wiring.VOLTAGE_RAMP_RATE);
@@ -320,6 +332,8 @@ public class Robot extends IterativeRobot {
 				// gatherer.updateAutoPosition();
 			}
 		}
+		
+		System.out.println(pdp.getCurrent(0) + " " + pdp.getCurrent(1) + " " + pdp.getCurrent(2) + " " + pdp.getCurrent(3));
 
 		shooter.updateShooter(stick, /*gatherer.shouldNotShoot()*/ false);
 
