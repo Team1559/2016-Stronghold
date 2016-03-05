@@ -77,6 +77,11 @@ public class Wiring {
 	public static final int BTN_GATHER_DOWN_LEVEL = 5;
 
 	public static final int BTN_GATHERER_OVERRIDE = 4;
+	
+	//camera stuffs
+	public static final int HORIZONTAL_RESOLUTION = 720;
+	public static final double HORIZONTAL_FOV = 60.0;
+	public static final int THRESHOLD = 40;
 
 //	public static final int BTN_BALL_CLAMP_OVERRIDE = 2;
 	
