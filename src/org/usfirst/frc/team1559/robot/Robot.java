@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -19,6 +20,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Robot extends IterativeRobot {
 
 	RobotDrive drive;
+	PowerDistributionPanel pdp;
 	boolean shootDone = false;
 	int arduinoCounterForAlison = 0; // dont blame john pls
 	CANTalon leftM;
@@ -56,11 +58,14 @@ public class Robot extends IterativeRobot {
 		rightM = new CANTalon(Wiring.RIGHT_MASTER_TALON);
 		leftS = new CANTalon(Wiring.LEFT_SLAVE_TALON);
 		rightS = new CANTalon(Wiring.RIGHT_SLAVE_TALON);
-		leftS.changeControlMode(CANTalon.TalonControlMode.Follower);// sets
-		// motor to follower
+		
+		leftS.changeControlMode(CANTalon.TalonControlMode.Follower);// sets motors to followers
 		leftS.set(Wiring.LEFT_MASTER_TALON);// sets to ID of master(leftM)
 		rightS.changeControlMode(CANTalon.TalonControlMode.Follower);
 		rightS.set(Wiring.RIGHT_MASTER_TALON);
+		
+		
+		
 		drive = new RobotDrive(leftM, rightM);
 		stick = new Joystick(Wiring.JOYSTICK0);
 		// coStick = new Joystick(Wiring.JOYSTICK1);
@@ -104,6 +109,8 @@ public class Robot extends IterativeRobot {
 			gatherer = new Gatherer(Wiring.GATHERER_LIFT, Wiring.GATHERER_ROTATE, stick);
 			// gatherer.initLifterPID(Wiring.GATHERER_PID_P, Wiring.GATHERER_PID_I, Wiring.GATHERER_PID_D);
 		}
+		
+		pdp = new PowerDistributionPanel(0);
 
 	}
 
@@ -261,7 +268,7 @@ public class Robot extends IterativeRobot {
 	}
 
 	public void teleopInit() {
-		arduino.writeSequence(2);
+//		arduino.writeSequence(2);
 		// isInverted = true;
 		// waffle.left.setInverted(true);
 		// waffle.right.setInverted(true);
@@ -272,7 +279,7 @@ public class Robot extends IterativeRobot {
 		leftM.setEncPosition(0);
 		leftM.setInverted(true);
 		rightM.setInverted(true);
-		shooter.resetShooter(gatherer.shouldNotShoot());
+		shooter.resetShooter(/*gatherer.shouldNotShoot()*/ false);
 		tranny.resetEncoders();
 		// initRecord();
 		// playbackSetup();
@@ -298,7 +305,7 @@ public class Robot extends IterativeRobot {
 			drive.arcadeDrive(stick.getY(), -stick.getRawAxis(4));
 		}
 
-		SmartDashboard.putBoolean("BALL IN!", !clamp.isOpen());
+//		SmartDashboard.putBoolean("BALL IN!", !clamp.isOpen());
 
 		// recordPeriodic();
 		// playbackIterative();
@@ -316,29 +323,32 @@ public class Robot extends IterativeRobot {
 			}
 		}
 
-		shooter.updateShooter(stick, gatherer.shouldNotShoot());
+		shooter.updateShooter(stick, /*gatherer.shouldNotShoot()*/ false);
 
-		clamp.updateBallClamp(shooter.isShooting());
+		if(Wiring.hasBallClamp)
+			clamp.updateBallClamp(shooter.isShooting());
 		// ADD THIS IN IF YOU WANT TO MANUALLY DRIVE THE BALL CLAMP
 		// clamp.updateBallClamp(shooter.shooting || stick.getRawButton(Wiring.BALL_CLAMP_OVERRIDE_BUTT));
 
-		if (stick.getRawButton(1) && clamp.isOpen()) {
-			gatherer.setSpark(0.5);
-		} else {
-			gatherer.setSpark(0.0);
+		if(Wiring.hasGatherer){
+			if (stick.getRawButton(1) && clamp.isOpen()) {
+				gatherer.setSpark(0.5);
+			} else {
+				gatherer.setSpark(0.0);
+			}
 		}
 
 		// if (coStick.getRawButton(1)) {
 		// arduino.writeSequence(3);
 		// }
 
-		if (DriverStation.getInstance().getMatchTime() <= 20) {
-			arduino.writeSequence(4);
-		}
-
-		if (arduinoCounterForAlison - lastVal == 150) {
-			arduino.writeSequence(1);
-		}
+//		if (DriverStation.getInstance().getMatchTime() <= 20) {
+//			arduino.writeSequence(4);
+//		}
+//
+//		if (arduinoCounterForAlison - lastVal == 150) {
+//			arduino.writeSequence(1);
+//		}
 		arduinoCounterForAlison++;
 	}
 	// private final int CAMERA_BAND = 10;
@@ -353,11 +363,11 @@ public class Robot extends IterativeRobot {
 	}
 
 	public void testPeriodic() {
-		System.out.println("Gatherer Gyro:" + gatherer.getGyro().getAngle());
+//		System.out.println("Gatherer Gyro:" + gatherer.getGyro().getAngle());
 		// System.out.println("BALL SENSOR " + clamp.opSensor.getVoltage());
 		// SmartDashboard.putBoolean("Gatherer LS", gatherer.isLimitSwitchTripped());
 		// System.out.println(gatherer.isLimitSwitchTripped());
-		gatherer.manualControl();
+//		gatherer.manualControl();
 		// gatherer.updatePosition();
 		// gatherer.gathererTalon();
 		// if (stick.getRawButton(6)) {
@@ -365,18 +375,33 @@ public class Robot extends IterativeRobot {
 		// } else {
 		// clamp.open();
 		// }
-		clamp.updateBallClamp(shooter.isShooting());
+//		clamp.updateBallClamp(shooter.isShooting());
 		// System.out.println(shooter.shooting);
 		// if (stick.getRawButton(5) && clamp.open) {
 		// gatherer.setSpark(0.5);
 		// } else {
 		// gatherer.setSpark(0.0);
 		// }
-		shooter.updateShooter(stick, gatherer.shouldNotShoot());
+		
+		if (tranny.getGear() == 1) {
+			drive.arcadeDrive(stick.getY() * Wiring.LOW_SPEED_MULTIPLIER, -stick.getRawAxis(4) * Wiring.LOW_SPEED_MULTIPLIER);
+		} else {
+			drive.arcadeDrive(stick.getY(), -stick.getRawAxis(4));
+		}
+		
+		if(stick.getRawButton(1)){
+			tranny.gear1();
+		} else if(stick.getRawButton(2)){
+			tranny.gear2();
+		}
+		
+		System.out.println(pdp.getCurrent(3));
+		
+//		shooter.updateShooter(stick, /*gatherer.shouldNotShoot()*/false);
 	}
 
 	public void disabledInit() {
-		arduino.writeSequence(0);
+//		arduino.writeSequence(0);
 	}
 
 	public void disabledPeriodic() {
