@@ -128,7 +128,7 @@ public class Robot extends IterativeRobot {
 	private int aimPause = 0;
 
 	public void autonomousPeriodic() {
-		SmartDashboard.putNumber("Displacement", (tranny.getLDisplacement() + tranny.getRDisplacement()) / 2);
+		//SmartDashboard.putNumber("Displacement", (tranny.getLDisplacement() + tranny.getRDisplacement()) / 2);
 		Command current = waffle.list.get(listPos);
 		if (current.command.equals("TURN")) {
 			waffle.turnToAngle(current.angle);
