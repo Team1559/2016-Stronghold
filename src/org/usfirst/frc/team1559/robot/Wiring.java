@@ -79,4 +79,6 @@ public class Wiring {
 	public static final int BTN_GATHERER_OVERRIDE = 4;
 
 //	public static final int BTN_BALL_CLAMP_OVERRIDE = 2;
+	
+	public static final boolean hasGatherer = false;
 }

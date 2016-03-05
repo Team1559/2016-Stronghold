@@ -89,28 +89,6 @@ public class Robot extends IterativeRobot {
 		rightS.setVoltageRampRate(Wiring.VOLTAGE_RAMP_RATE);
 		leftS.setVoltageRampRate(Wiring.VOLTAGE_RAMP_RATE);
 
-		// leftM.changeControlMode(TalonControlMode.Speed);
-		// leftM.setFeedbackDevice(FeedbackDevice.CtreMagEncoder_Relative);
-		// leftM.reverseSensor(false);
-		// leftM.configNominalOutputVoltage(+0.0f, -0.0f);
-		// leftM.configPeakOutputVoltage(+12.0f, -12.0f);
-		// leftM.setProfile(0);
-		// leftM.setF(1);
-		// leftM.setP(0);
-		// leftM.setI(0);
-		// leftM.setD(0);
-		//
-		// rightM.changeControlMode(TalonControlMode.Speed);
-		// rightM.setFeedbackDevice(FeedbackDevice.CtreMagEncoder_Relative);
-		// rightM.reverseSensor(false);
-		// rightM.configNominalOutputVoltage(+0.0f, -0.0f);
-		// rightM.configPeakOutputVoltage(+12.0f, -12.0f);
-		// rightM.setProfile(0);
-		// rightM.setF(1);
-		// rightM.setP(0);
-		// rightM.setI(0);
-		// rightM.setD(0);
-
 		waffle = new WFFL(Wiring.WFFL_NAME, drive, tranny);
 
 		dio1 = new DigitalOutput(0);
@@ -118,8 +96,10 @@ public class Robot extends IterativeRobot {
 
 		tranny.resetEncoders();
 
-		gatherer = new Gatherer(Wiring.GATHERER_LIFT, Wiring.GATHERER_ROTATE, stick);
-		// gatherer.initLifterPID(Wiring.GATHERER_PID_P, Wiring.GATHERER_PID_I, Wiring.GATHERER_PID_D);
+		if(Wiring.hasGatherer){
+			gatherer = new Gatherer(Wiring.GATHERER_LIFT, Wiring.GATHERER_ROTATE, stick);
+			// gatherer.initLifterPID(Wiring.GATHERER_PID_P, Wiring.GATHERER_PID_I, Wiring.GATHERER_PID_D);
+		}
 
 	}
 
@@ -321,13 +301,15 @@ public class Robot extends IterativeRobot {
 
 		tranny.updateShifting();
 
-		if (stick.getRawButton(Wiring.BTN_GATHERER_OVERRIDE)) {
-			// gatherer.disableLifterPID();
-			gatherer.manualControl();
-		} else {
-			// gatherer.gathererTalon();
-			gatherer.manualControl(); // TODO: what?
-			// gatherer.updateAutoPosition();
+		if(Wiring.hasGatherer){
+			if (stick.getRawButton(Wiring.BTN_GATHERER_OVERRIDE)) {
+				// gatherer.disableLifterPID();
+				gatherer.manualControl();
+			} else {
+				// gatherer.gathererTalon();
+				gatherer.manualControl(); // TODO: what?
+				// gatherer.updateAutoPosition();
+			}
 		}
 
 		shooter.updateShooter(stick, gatherer.shouldNotShoot());
