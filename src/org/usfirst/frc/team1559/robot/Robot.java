@@ -146,6 +146,9 @@ public class Robot extends IterativeRobot {
 	private int aimPause = 0;
 
 	public void autonomousPeriodic() {
+		
+//		int rawError = sc.getSerialIn();
+		
 		//SmartDashboard.putNumber("Displacement", (tranny.getLDisplacement() + tranny.getRDisplacement()) / 2);
 		Command current = waffle.list.get(listPos);
 		if (current.command.equals("TURN")) {
@@ -168,12 +171,15 @@ public class Robot extends IterativeRobot {
 		} else if (current.command.equals("SHOOT")) {
 			switch (nate) {
 			case 0:
+				aimPause = 0;
 				System.out.println("CASE 0");
 				sc.run();
 				angle = centerWithAngle(sc.getSerialIn());
+//				if (angle > 10)
+//					angle /= 2;
 				// System.out.println("ahooing");
 				System.out.println(angle);
-				if (Math.abs(angle) <= (Wiring.HORIZONTAL_FOV/2)) {
+				if (Math.abs(angle) <= (60)) {
 					nate = 1;
 				}
 				break;
@@ -182,9 +188,10 @@ public class Robot extends IterativeRobot {
 				if (waffle.keepTurning) {
 					waffle.turnToAngle(angle);
 					System.out.println("KEEP TURNING");
-				} else if (Math.abs(sc.getSerialIn()) > 1) {
-					if (aimPause++ > 10) {
-						System.out.println("PAUSED");
+//					nate = 0;
+				} else if (Math.abs(sc.getSerialIn()) > 18){
+					if(aimPause++ > 5){
+						System.out.println("REGETTING");
 						waffle.keepTurning = true;
 						nate = 0;
 					}
@@ -369,7 +376,7 @@ public class Robot extends IterativeRobot {
 
 	public double centerWithAngle(int error) {
 		System.out.println(error);
-		return error / 11.0;// 30 = half of horizontal fov of camera
+		return error / 13.0;// 30 = half of horizontal fov of camera
 	}
 
 	public void testInit() {
