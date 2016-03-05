@@ -64,8 +64,6 @@ public class Robot extends IterativeRobot {
 		rightS.changeControlMode(CANTalon.TalonControlMode.Follower);
 		rightS.set(Wiring.RIGHT_MASTER_TALON);
 		
-		
-		
 		drive = new RobotDrive(leftM, rightM);
 		stick = new Joystick(Wiring.JOYSTICK0);
 		// coStick = new Joystick(Wiring.JOYSTICK1);
@@ -395,7 +393,7 @@ public class Robot extends IterativeRobot {
 			tranny.gear2();
 		}
 		
-		System.out.println(pdp.getCurrent(3));
+		System.out.println(leftM.getEncPosition());
 		
 //		shooter.updateShooter(stick, /*gatherer.shouldNotShoot()*/false);
 	}
