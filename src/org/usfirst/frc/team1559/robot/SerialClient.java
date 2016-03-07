@@ -7,11 +7,11 @@ public class SerialClient{
 	private final int BAUDRATE = 115200;
 	private final String sendChar = "s";
 	SerialPort sp;
-	private int args = -321;
+	private double args = -1000.0;
 	public SerialClient(){
 		sp = new SerialPort(BAUDRATE, Port.kMXP);
 	}
-	public int getSerialIn(){
+	public double getSerialIn(){
 		synchronized(this){
 			return args;
 		}
@@ -20,7 +20,7 @@ public class SerialClient{
 		synchronized(this){
 //			System.out.println(in);
 			try{
-				args = Integer.parseInt(in);
+				args = Double.valueOf(in);
 			} catch (Exception e){
 				System.out.println("ERROR PARSING");
 				e.printStackTrace();

@@ -169,7 +169,7 @@ public class WFFL {
 	}
 
 	public void turnToAngle(double angle) {
-		double kpturn = 0.055;// this is temporary, real value = 0.1
+		double kpturn = 0.1;// this is temporary, real value = 0.1
 		yaw = ahrs.getYaw();
 
 		if ((angle == 180) && (yaw < -0.1)) {

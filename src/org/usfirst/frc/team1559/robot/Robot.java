@@ -172,34 +172,52 @@ public class Robot extends IterativeRobot {
 		} else if (current.command.equals("SHOOT")) {
 			switch (nate) {
 			case 0:
-				aimPause = 0;
-				System.out.println("CASE 0");
-				sc.run();
-				angle = centerWithAngle(sc.getSerialIn());
-//				if (angle > 10)
-//					angle /= 2;
-				// System.out.println("ahooing");
-				System.out.println(angle);
-				if (Math.abs(angle) <= (60)) {
-					nate = 1;
+				if(aimPause++ < 10){
+					System.out.println("REGETTING");
+					
+				} else {
+					aimPause = 0;
+					System.out.println("CASE 0");
+					sc.run();
+					angle = Double.valueOf(sc.getSerialIn());
+					waffle.ahrs.reset();
+					
+					System.out.println(angle);
+					if (Math.abs(angle) <= Wiring.CAMERA_TOLERANCE) { 
+						nate = 2;
+						System.out.println("GOING TO SHOOT");
+					} else {
+						
+						nate = 1;
+						waffle.keepTurning = true;
+						
+					}
+					
 				}
+				
+				
 				break;
 			case 1:
 				sc.run();
 				if (waffle.keepTurning) {
 					waffle.turnToAngle(angle);
 					System.out.println("KEEP TURNING");
-//					nate = 0;
-				} else if (Math.abs(sc.getSerialIn()) > 18){
-					if(aimPause++ > 5){
-						System.out.println("REGETTING");
-						waffle.keepTurning = true;
-						nate = 0;
-					}
 				} else {
-					nate = 2;
-					System.out.println("GOING TO SHOOT");
+					nate = 0;
 				}
+				
+				
+				
+//				 if (Math.abs(sc.getSerialIn()) > 2){ //ADD THIS TO WIRING CLASS!
+//					if(aimPause++ > 5){
+//						System.out.println("REGETTING");
+//						waffle.keepTurning = true;
+//						nate = 0;
+//					}
+//				} else {
+//					nate = 2;
+//					
+//				}
 				break;
 			case 2:
 				if (!shooter.isShootDone()) {
