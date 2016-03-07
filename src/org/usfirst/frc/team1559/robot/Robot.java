@@ -198,7 +198,7 @@ public class Robot extends IterativeRobot {
 				
 				break;
 			case 1:
-				sc.run();
+//				sc.run();
 				if (waffle.keepTurning) {
 					waffle.turnToAngle(angle);
 					System.out.println("KEEP TURNING");
