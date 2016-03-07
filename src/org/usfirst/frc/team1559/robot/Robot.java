@@ -27,6 +27,7 @@ public class Robot extends IterativeRobot {
 	CANTalon rightM;
 	CANTalon rightS;
 	Joystick stick;
+	Joystick coStick;
 	Timer timer;
 	double desiredHeading = 0;
 	boolean isInverted;
@@ -41,7 +42,7 @@ public class Robot extends IterativeRobot {
 	// DigitalInput magneticSensor;
 	DigitalOutput dio2;
 	DigitalOutput dio1;
-	// Joystick coStick;
+	
 	BallClamp clamp;
 	Gatherer gatherer;
 	// USBCamera cam;
@@ -65,7 +66,7 @@ public class Robot extends IterativeRobot {
 		
 		drive = new RobotDrive(leftM, rightM);
 		stick = new Joystick(Wiring.JOYSTICK0);
-		// coStick = new Joystick(Wiring.JOYSTICK1);
+		coStick = new Joystick(Wiring.JOYSTICK1);
 		tranny = new Transmission(stick, leftM, rightM);
 		shooter = new Shooter();
 		// shooter.initShooter(gatherer.shouldNotShoot());
