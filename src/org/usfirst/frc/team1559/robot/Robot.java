@@ -42,7 +42,7 @@ public class Robot extends IterativeRobot {
 	// DigitalInput magneticSensor;
 	DigitalOutput dio2;
 	DigitalOutput dio1;
-	
+
 	BallClamp clamp;
 	Gatherer gatherer;
 	// USBCamera cam;
@@ -52,28 +52,30 @@ public class Robot extends IterativeRobot {
 	// does 2
 
 	public void robotInit() {
-		if(Wiring.hasArduino)
+		if (Wiring.hasArduino)
 			arduino = new Arduino(8);
 		leftM = new CANTalon(Wiring.LEFT_MASTER_TALON);
 		rightM = new CANTalon(Wiring.RIGHT_MASTER_TALON);
 		leftS = new CANTalon(Wiring.LEFT_SLAVE_TALON);
 		rightS = new CANTalon(Wiring.RIGHT_SLAVE_TALON);
-		
-		leftS.changeControlMode(CANTalon.TalonControlMode.Follower);// sets motors to followers
+
+		leftS.changeControlMode(CANTalon.TalonControlMode.Follower);// sets
+																	// motors to
+																	// followers
 		leftS.set(Wiring.LEFT_MASTER_TALON);// sets to ID of master(leftM)
 		rightS.changeControlMode(CANTalon.TalonControlMode.Follower);
 		rightS.set(Wiring.RIGHT_MASTER_TALON);
-		
+
 		drive = new RobotDrive(leftM, rightM);
 		stick = new Joystick(Wiring.JOYSTICK0);
 		coStick = new Joystick(Wiring.JOYSTICK1);
 		tranny = new Transmission(stick, leftM, rightM);
 		shooter = new Shooter();
 		// shooter.initShooter(gatherer.shouldNotShoot());
-		if(Wiring.hasBallClamp){
+		if (Wiring.hasBallClamp) {
 			clamp = new BallClamp();
 		}
-		
+
 		// magneticSensor = new DigitalInput(Wiring.MAGNET);
 		// cam = new USBCamera("cam0");
 		cs = CameraServer.getInstance();
@@ -94,11 +96,6 @@ public class Robot extends IterativeRobot {
 		 * 
 		 * 
 		 * CHANGE THIS LATER!!!!!
-		 * 
-		 * 
-		 * 
-		 * 
-		 * 
 		 */
 		leftS.enableBrakeMode(false);
 		rightS.enableBrakeMode(false);
@@ -115,27 +112,30 @@ public class Robot extends IterativeRobot {
 
 		tranny.resetEncoders();
 
-		if(Wiring.hasGatherer){
-			gatherer = new Gatherer(Wiring.GATHERER_LIFT, Wiring.GATHERER_ROTATE, stick);
-			// gatherer.initLifterPID(Wiring.GATHERER_PID_P, Wiring.GATHERER_PID_I, Wiring.GATHERER_PID_D);
+		if (Wiring.hasGatherer) {
+			gatherer = new Gatherer(Wiring.GATHERER_LIFT,
+					Wiring.GATHERER_ROTATE, stick);
+			// gatherer.initLifterPID(Wiring.GATHERER_PID_P,
+			// Wiring.GATHERER_PID_I, Wiring.GATHERER_PID_D);
 		}
-		
+
 		pdp = new PowerDistributionPanel(0);
 
 	}
 
 	public void autonomousInit() {
 		waffle.reset();
-		if(Wiring.hasArduino)
+		if (Wiring.hasArduino)
 			arduino.writeSequence(1);
 		System.out.println("AHRS: " + waffle.ahrs);
 		waffle.ahrs.reset();
 		waffle.interpret();
-		// System.out.println("JFKDSLFIUESHF " + waffle.list.get(waffle.list.size() - 1).command);
+		// System.out.println("JFKDSLFIUESHF " +
+		// waffle.list.get(waffle.list.size() - 1).command);
 		leftM.setInverted(false);
 		rightM.setInverted(false);
 		waffle.length = 0;
-		shooter.resetShooter(/*gatherer.shouldNotShoot()*/ false);
+		shooter.resetShooter(/* gatherer.shouldNotShoot() */false);
 		tranny.resetEncoders();
 		// givenAngle = false;
 		// gatherer.updateAutoPosition();
@@ -147,10 +147,11 @@ public class Robot extends IterativeRobot {
 	private int aimPause = 0;
 
 	public void autonomousPeriodic() {
-		
-//		int rawError = sc.getSerialIn();
-		
-		//SmartDashboard.putNumber("Displacement", (tranny.getLDisplacement() + tranny.getRDisplacement()) / 2);
+
+		// int rawError = sc.getSerialIn();
+
+		// SmartDashboard.putNumber("Displacement", (tranny.getLDisplacement() +
+		// tranny.getRDisplacement()) / 2);
 		Command current = waffle.list.get(listPos);
 		if (current.command.equals("TURN")) {
 			waffle.turnToAngle(current.angle);
@@ -172,31 +173,51 @@ public class Robot extends IterativeRobot {
 		} else if (current.command.equals("SHOOT")) {
 			switch (nate) {
 			case 0:
-				if(aimPause++ < 10){
-					System.out.println("Obtaining Vision Target Info....");//not really, just letting the camera catch up
-					
+				if (aimPause++ < 10) {
+					System.out.println("Obtaining Vision Target Info....");// not
+																			// really,
+																			// just
+																			// letting
+																			// the
+																			// camera
+																			// catch
+																			// up
+
 				} else {
 					aimPause = 0;
 					System.out.println("Trying to turn...");
-					angle = sc.grabAngle(); //Hi, nate here. Cleaned up the horrid serial client and everything should work the same, just named differently :)
-											//also, we might need to add the current yaw because john's method is absolute
-					waffle.ahrs.reset();//you guys are resetting the ahrs?
-					
+					angle = sc.grabAngle(); // Hi, nate here. Cleaned up the
+											// horrid serial client and
+											// everything should work the same,
+											// just named differently :)
+											// also, we might need to add the
+											// current yaw because john's method
+											// is absolute
+					waffle.ahrs.reset();// you guys are resetting the ahrs?
+
 					System.out.println(angle);
-					if (Math.abs(angle) <= Wiring.CAMERA_TOLERANCE) { 
+					if (Math.abs(angle) <= Wiring.CAMERA_TOLERANCE) {
 						nate = 2;
 						System.out.println("GOING TO SHOOT");
 					} else {
-						
+
 						nate = 1;
-//						waffle.keepTurning = true; //this should only be controlled by WFFLDrive
-						waffle.turnToAngle(angle); //achieves the same thing...this might solve the issue. You probably shouldn't touch keepTurning.
-												   //you can watch its value but should not change it, otherwise, the method will become unhappy.
-												   //okee-dokee
+						// waffle.keepTurning = true; //this should only be
+						// controlled by WFFLDrive
+						waffle.turnToAngle(angle); // achieves the same
+													// thing...this might solve
+													// the issue. You probably
+													// shouldn't touch
+													// keepTurning.
+													// you can watch its value
+													// but should not change it,
+													// otherwise, the method
+													// will become unhappy.
+													// okee-dokee
 					}
-					
+
 				}
-				
+
 				break;
 			case 1:
 				if (waffle.keepTurning) {
@@ -205,19 +226,18 @@ public class Robot extends IterativeRobot {
 				} else {
 					nate = 0;
 				}
-				
-				
-				
-//				 if (Math.abs(sc.getSerialIn()) > 2){ //ADD THIS TO WIRING CLASS!
-//					if(aimPause++ > 5){
-//						System.out.println("REGETTING");
-//						waffle.keepTurning = true;
-//						nate = 0;
-//					}
-//				} else {
-//					nate = 2;
-//					
-//				}
+
+				// if (Math.abs(sc.getSerialIn()) > 2){ //ADD THIS TO WIRING
+				// CLASS!
+				// if(aimPause++ > 5){
+				// System.out.println("REGETTING");
+				// waffle.keepTurning = true;
+				// nate = 0;
+				// }
+				// } else {
+				// nate = 2;
+				//
+				// }
 				break;
 			case 2:
 				if (!shooter.isShootDone()) {
@@ -226,7 +246,8 @@ public class Robot extends IterativeRobot {
 					 * THIS IS NOT SAFE
 					 */
 					// TODO: MAKE IT SAFE PLEASE
-					shooter.autoShoot(true, /* gatherer.shouldNotShoot() */ false);
+					shooter.autoShoot(true, /* gatherer.shouldNotShoot() */
+							false);
 				} else {
 					nate = 3;
 				}
@@ -241,12 +262,13 @@ public class Robot extends IterativeRobot {
 		} else if (current.command.equals("STOP")) {
 			leftM.set(0);
 			rightM.set(0);
-			shooter.setSolenoids(false, /*gatherer.shouldNotShoot()*/ false);
+			shooter.setSolenoids(false, /* gatherer.shouldNotShoot() */false);
 			System.out.println("Motor Stoppage achieved!");
 		} else if (current.command.equals("DEFENSE")) {
 			String id = current.id;
 			if (id.equals("lowbar")) {
-				gatherer.lowbarify(); // this should work to get us under the low bar.
+				gatherer.lowbarify(); // this should work to get us under the
+										// low bar.
 			}
 			if (!following) {
 				playbackSetup(id);
@@ -274,7 +296,7 @@ public class Robot extends IterativeRobot {
 		if ((current.done == true)) {
 			System.out.println("Current done boi");
 			current.done = false;
-			if(Wiring.hasGatherer)
+			if (Wiring.hasGatherer)
 				gatherer.homify();// make sure the gatherer is out of the way
 
 			if (waffle.list.size() - 1 > listPos) {
@@ -292,7 +314,7 @@ public class Robot extends IterativeRobot {
 	}
 
 	public void teleopInit() {
-//		arduino.writeSequence(2);
+		// arduino.writeSequence(2);
 		// isInverted = true;
 		// waffle.left.setInverted(true);
 		// waffle.right.setInverted(true);
@@ -303,7 +325,7 @@ public class Robot extends IterativeRobot {
 		leftM.setEncPosition(0);
 		leftM.setInverted(true);
 		rightM.setInverted(true);
-		shooter.resetShooter(/*gatherer.shouldNotShoot()*/ false);
+		shooter.resetShooter(/* gatherer.shouldNotShoot() */false);
 		tranny.resetEncoders();
 		// initRecord();
 		// playbackSetup();
@@ -319,44 +341,49 @@ public class Robot extends IterativeRobot {
 	}
 
 	public void teleopPeriodic() {
-		int lastVal = 0;
+		// int lastVal = 0;
 		// sendRecieveCenterValues();
 		// waffle.myRobot.arcadeDrive(stick); //FOR THE TEST CHASSIS
-		// TODO: transmission "gear" variable was never really implemented, rendering this if statement pointless. Reconfirm that driving still works ok.
+		// TODO: transmission "gear" variable was never really implemented,
+		// rendering this if statement pointless. Reconfirm that driving still
+		// works ok.
 		if (tranny.getGear() == 1) {
-			drive.arcadeDrive(stick.getY() * Wiring.LOW_SPEED_MULTIPLIER, -stick.getRawAxis(4) * Wiring.LOW_SPEED_MULTIPLIER);
+			drive.arcadeDrive(stick.getY() * Wiring.LOW_SPEED_MULTIPLIER,
+					-stick.getRawAxis(4) * Wiring.LOW_SPEED_MULTIPLIER);
 		} else {
 			drive.arcadeDrive(stick.getY(), -stick.getRawAxis(4));
 		}
 
-//		SmartDashboard.putBoolean("BALL IN!", !clamp.isOpen());
+		// SmartDashboard.putBoolean("BALL IN!", !clamp.isOpen());
 
 		// recordPeriodic();
 		// playbackIterative();
 
 		tranny.updateShifting();
 
-		if(Wiring.hasGatherer){
+		if (Wiring.hasGatherer) {
 			if (stick.getRawButton(Wiring.BTN_GATHERER_OVERRIDE)) {
 				// gatherer.disableLifterPID();
 				gatherer.manualControl();
 			} else {
 				// gatherer.gathererTalon();
-//				gatherer.manualControl(); // TODO: what?
+				// gatherer.manualControl(); // TODO: what?
 				// gatherer.updateAutoPosition();
 			}
 		}
-		
-		System.out.println(pdp.getCurrent(0) + " " + pdp.getCurrent(1) + " " + pdp.getCurrent(2) + " " + pdp.getCurrent(3));
 
-		shooter.updateShooter(stick, /*gatherer.shouldNotShoot()*/ false);
+		System.out.println(pdp.getCurrent(0) + " " + pdp.getCurrent(1) + " "
+				+ pdp.getCurrent(2) + " " + pdp.getCurrent(3));
 
-		if(Wiring.hasBallClamp)
+		shooter.updateShooter(stick, /* gatherer.shouldNotShoot() */false);
+
+		if (Wiring.hasBallClamp)
 			clamp.updateBallClamp(shooter.isShooting());
 		// ADD THIS IN IF YOU WANT TO MANUALLY DRIVE THE BALL CLAMP
-		// clamp.updateBallClamp(shooter.shooting || stick.getRawButton(Wiring.BALL_CLAMP_OVERRIDE_BUTT));
+		// clamp.updateBallClamp(shooter.shooting ||
+		// stick.getRawButton(Wiring.BALL_CLAMP_OVERRIDE_BUTT));
 
-		if(Wiring.hasGatherer){
+		if (Wiring.hasGatherer) {
 			if (stick.getRawButton(1) && clamp.isOpen()) {
 				gatherer.setSpark(0.5);
 			} else {
@@ -368,15 +395,16 @@ public class Robot extends IterativeRobot {
 		// arduino.writeSequence(3);
 		// }
 
-//		if (DriverStation.getInstance().getMatchTime() <= 20) {
-//			arduino.writeSequence(4);
-//		}
-//
-//		if (arduinoCounterForAlison - lastVal == 150) {
-//			arduino.writeSequence(1);
-//		}
+		// if (DriverStation.getInstance().getMatchTime() <= 20) {
+		// arduino.writeSequence(4);
+		// }
+		//
+		// if (arduinoCounterForAlison - lastVal == 150) {
+		// arduino.writeSequence(1);
+		// }
 		arduinoCounterForAlison++;
 	}
+
 	// private final int CAMERA_BAND = 10;
 
 	public double centerWithAngle(int error) {
@@ -389,11 +417,12 @@ public class Robot extends IterativeRobot {
 	}
 
 	public void testPeriodic() {
-//		System.out.println("Gatherer Gyro:" + gatherer.getGyro().getAngle());
+		// System.out.println("Gatherer Gyro:" + gatherer.getGyro().getAngle());
 		// System.out.println("BALL SENSOR " + clamp.opSensor.getVoltage());
-		// SmartDashboard.putBoolean("Gatherer LS", gatherer.isLimitSwitchTripped());
+		// SmartDashboard.putBoolean("Gatherer LS",
+		// gatherer.isLimitSwitchTripped());
 		// System.out.println(gatherer.isLimitSwitchTripped());
-//		gatherer.manualControl();
+		// gatherer.manualControl();
 		// gatherer.updatePosition();
 		// gatherer.gathererTalon();
 		// if (stick.getRawButton(6)) {
@@ -401,33 +430,34 @@ public class Robot extends IterativeRobot {
 		// } else {
 		// clamp.open();
 		// }
-//		clamp.updateBallClamp(shooter.isShooting());
+		// clamp.updateBallClamp(shooter.isShooting());
 		// System.out.println(shooter.shooting);
 		// if (stick.getRawButton(5) && clamp.open) {
 		// gatherer.setSpark(0.5);
 		// } else {
 		// gatherer.setSpark(0.0);
 		// }
-		
+
 		if (tranny.getGear() == 1) {
-			drive.arcadeDrive(stick.getY() * Wiring.LOW_SPEED_MULTIPLIER, -stick.getRawAxis(4) * Wiring.LOW_SPEED_MULTIPLIER);
+			drive.arcadeDrive(stick.getY() * Wiring.LOW_SPEED_MULTIPLIER,
+					-stick.getRawAxis(4) * Wiring.LOW_SPEED_MULTIPLIER);
 		} else {
 			drive.arcadeDrive(stick.getY(), -stick.getRawAxis(4));
 		}
-		
-		if(stick.getRawButton(1)){
+
+		if (stick.getRawButton(1)) {
 			tranny.gear1();
-		} else if(stick.getRawButton(2)){
+		} else if (stick.getRawButton(2)) {
 			tranny.gear2();
 		}
-		
+
 		System.out.println(leftM.getEncPosition());
-		
-//		shooter.updateShooter(stick, /*gatherer.shouldNotShoot()*/false);
+
+		// shooter.updateShooter(stick, /*gatherer.shouldNotShoot()*/false);
 	}
 
 	public void disabledInit() {
-//		arduino.writeSequence(0);
+		// arduino.writeSequence(0);
 	}
 
 	public void disabledPeriodic() {
@@ -482,7 +512,8 @@ public class Robot extends IterativeRobot {
 		doneFollowing = false;
 		System.out.println(id);
 		try {
-			johnKennethDunaske = new Scanner(new File("/media/sda1/" + id + ".wfflt"));
+			johnKennethDunaske = new Scanner(new File("/media/sda1/" + id
+					+ ".wfflt"));
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
