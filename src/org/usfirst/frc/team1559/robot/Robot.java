@@ -173,14 +173,14 @@ public class Robot extends IterativeRobot {
 			switch (nate) {
 			case 0:
 				if(aimPause++ < 10){
-					System.out.println("Obtaining Vision Target Info....");
+					System.out.println("Obtaining Vision Target Info....");//not really, just letting the camera catch up
 					
 				} else {
 					aimPause = 0;
 					System.out.println("Trying to turn...");
-					sc.run();
-					angle = sc.getSerialIn(); //changed this....the SerialClient Class already does this.
-					waffle.ahrs.reset();
+					angle = sc.grabAngle(); //Hi, nate here. Cleaned up the horrid serial client and everything should work the same, just named differently :)
+											//also, we might need to add the current yaw because john's method is absolute
+					waffle.ahrs.reset();//you guys are resetting the ahrs?
 					
 					System.out.println(angle);
 					if (Math.abs(angle) <= Wiring.CAMERA_TOLERANCE) { 
@@ -192,13 +192,13 @@ public class Robot extends IterativeRobot {
 //						waffle.keepTurning = true; //this should only be controlled by WFFLDrive
 						waffle.turnToAngle(angle); //achieves the same thing...this might solve the issue. You probably shouldn't touch keepTurning.
 												   //you can watch its value but should not change it, otherwise, the method will become unhappy.
+												   //okee-dokee
 					}
 					
 				}
 				
 				break;
 			case 1:
-//				sc.run();
 				if (waffle.keepTurning) {
 					waffle.turnToAngle(angle);
 					System.out.println("KEEP TURNING");

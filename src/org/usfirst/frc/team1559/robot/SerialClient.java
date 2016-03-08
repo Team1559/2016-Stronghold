@@ -7,49 +7,35 @@ public class SerialClient{
 	private final int BAUDRATE = 115200;
 	private final String sendChar = "s";
 	SerialPort sp;
-	private double args = -1000.0;
 	public SerialClient(){
 		sp = new SerialPort(BAUDRATE, Port.kMXP);
 	}
-	public double getSerialIn(){
-		synchronized(this){
-			return args;
-		}
-	}
-	public void setSerialIn(String in){
-		synchronized(this){
-//			System.out.println(in);
-			try{
-				args = Double.valueOf(in);
-			} catch (Exception e){
-				System.out.println("ERROR PARSING!");
-				e.printStackTrace();
-			}
-		}
-	}
-	public void run(){
+	public double grabAngle(){
 		sp.reset();
-		System.out.println("sc.run() is working...");
+		System.out.println("sc.run() is working...");//yeah it is
 		String str = "";
-//		while(!isInterrupted() && isAlive()){
 			String in = "";
-			if (sp.writeString(sendChar) > 0){
+			if (sp.writeString(sendChar) > 0){//send the pi 's', which sends the current angle
+				/*
+				 * The only reason this isn't threaded is 
+				 * because the roborio thread manager is actually slower 
+				 * than this while loop
+				 * THIS HAS BEEN TESTED MULTIPLE TIMES, SO EVERYONE SHUT UP
+				 * Also, thsi is a while loop because we need to construct the value 
+				 * one character at a time, so this should never go through more than 5 or 6 loops.
+				 */
 				while(true){
 					in = sp.readString(1);
 					if (!in.equals("t")){
 						str = str + in;
 					} else {
-						setSerialIn(str);
-//						System.out.println(str);
 						str = "";
-						break;
+						return Double.parseDouble(str);
 					}
 				}
 			} else {
-				args = -1000;
+				return -1000;//-1000 means we don't see anything
 			}
-//		}
-//		System.out.println("We should never see this"); //...and you never will
 	}
 
 }
