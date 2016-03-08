@@ -173,13 +173,13 @@ public class Robot extends IterativeRobot {
 			switch (nate) {
 			case 0:
 				if(aimPause++ < 10){
-					System.out.println("REGETTING");
+					System.out.println("Obtaining Vision Target Info....");
 					
 				} else {
 					aimPause = 0;
-					System.out.println("CASE 0");
+					System.out.println("Trying to turn...");
 					sc.run();
-					angle = Double.valueOf(sc.getSerialIn());
+					angle = sc.getSerialIn(); //changed this....the SerialClient Class already does this.
 					waffle.ahrs.reset();
 					
 					System.out.println(angle);
@@ -189,12 +189,12 @@ public class Robot extends IterativeRobot {
 					} else {
 						
 						nate = 1;
-						waffle.keepTurning = true;
-						
+//						waffle.keepTurning = true; //this should only be controlled by WFFLDrive
+						waffle.turnToAngle(angle); //achieves the same thing...this might solve the issue. You probably shouldn't touch keepTurning.
+												   //you can watch its value but should not change it, otherwise, the method will become unhappy.
 					}
 					
 				}
-				
 				
 				break;
 			case 1:
@@ -237,20 +237,6 @@ public class Robot extends IterativeRobot {
 				System.out.println("DONE SHOOTING!");
 				break;
 			}
-			// if (!givenAngle){
-			// sc.run();
-			// angle = centerWithAngle(sc.getSerialIn());
-			// givenAngle = true;
-			// }
-			// waffle.turnToAngle(angle);
-			// if (!waffle.keepTurning){
-			// shooter.updateShooter(true, gatherer.shouldNotShoot());
-			// if (shooter.shootDone) {
-			// current.done = true;
-			// tranny.resetEncoders();
-			// System.out.println("DONE SHOOTING!");
-			// }
-			// }
 
 		} else if (current.command.equals("STOP")) {
 			leftM.set(0);

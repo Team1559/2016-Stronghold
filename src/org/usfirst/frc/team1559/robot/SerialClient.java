@@ -22,14 +22,14 @@ public class SerialClient{
 			try{
 				args = Double.valueOf(in);
 			} catch (Exception e){
-				System.out.println("ERROR PARSING");
+				System.out.println("ERROR PARSING!");
 				e.printStackTrace();
 			}
 		}
 	}
 	public void run(){
 		sp.reset();
-		System.out.println("Thread is alive!");
+		System.out.println("sc.run() is working...");
 		String str = "";
 //		while(!isInterrupted() && isAlive()){
 			String in = "";
@@ -49,7 +49,7 @@ public class SerialClient{
 				args = -1000;
 			}
 //		}
-//		System.out.println("We should never see this");
+//		System.out.println("We should never see this"); //...and you never will
 	}
 
 }
