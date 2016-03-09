@@ -145,6 +145,7 @@ public class Robot extends IterativeRobot {
 	private double angle = 0.0;
 	private int nate = 0;
 	private int aimPause = 0;
+	private double desiredYarAngle = 0.0;
 
 	public void autonomousPeriodic() {
 
@@ -186,14 +187,8 @@ public class Robot extends IterativeRobot {
 				} else {
 					aimPause = 0;
 					System.out.println("Trying to turn...");
-					angle = sc.grabAngle(); // Hi, nate here. Cleaned up the
-											// horrid serial client and
-											// everything should work the same,
-											// just named differently :)
-											// also, we might need to add the
-											// current yaw because john's method
-											// is absolute
-					waffle.ahrs.reset();// you guys are resetting the ahrs?
+					angle = sc.grabAngle(); 
+					desiredYarAngle = waffle.ahrs.getYaw() + angle;
 
 					System.out.println(angle);
 					if (Math.abs(angle) <= Wiring.CAMERA_TOLERANCE) {
@@ -204,7 +199,7 @@ public class Robot extends IterativeRobot {
 						nate = 1;
 						// waffle.keepTurning = true; //this should only be
 						// controlled by WFFLDrive
-						waffle.turnToAngle(angle); // achieves the same
+						waffle.turnToAngle(desiredYarAngle); // achieves the same
 													// thing...this might solve
 													// the issue. You probably
 													// shouldn't touch
@@ -221,10 +216,13 @@ public class Robot extends IterativeRobot {
 				break;
 			case 1:
 				if (waffle.keepTurning) {
-					waffle.turnToAngle(angle);
+					waffle.turnToAngle(desiredYarAngle);
 					System.out.println("KEEP TURNING");
 				} else {
 					nate = 0;
+while(true){
+	System.out.println("FROM SERIAL "+ sc.grabAngle() + " YWA" + waffle.ahrs.getYaw());
+}
 				}
 
 				// if (Math.abs(sc.getSerialIn()) > 2){ //ADD THIS TO WIRING

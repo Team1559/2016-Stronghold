@@ -29,8 +29,9 @@ public class SerialClient{
 					if (!in.equals("t")){
 						str = str + in;
 					} else {
+						double ret = Double.parseDouble(str);
 						str = "";
-						return Double.parseDouble(str);
+						return ret;
 					}
 				}
 			} else {

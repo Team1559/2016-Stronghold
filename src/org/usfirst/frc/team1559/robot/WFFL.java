@@ -33,7 +33,7 @@ public class WFFL {
 	double kpBase = 0.001;
 	final double maxError = 1;
 	final double tolerance = .001;
-	final double turnTolerance = 1;//originally .5
+	final double turnTolerance = .5;//originally .5
 	int length = 0;
 	double yawError;
 	double unchangedYawError;
