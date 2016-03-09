@@ -196,7 +196,7 @@ public class Robot extends IterativeRobot {
 
 //					System.out.println(angle);
 					
-					if (Math.abs(angle) <= Wiring.CAMERA_TOLERANCE) {
+					if ((Math.abs(angle) <= Wiring.CAMERA_TOLERANCE) && (!waffle.keepTurning)) {
 						 goodFrames++;
 						 
 						if(goodFrames >= 4){
@@ -204,7 +204,7 @@ public class Robot extends IterativeRobot {
 						}
 						
 						
-						System.out.println("GOING TO SHOOT WILL:" + angle + " YAR " + waffle.ahrs.getYaw());
+//						System.out.println("GOING TO SHOOT WILL:" + angle + " YAR " + waffle.ahrs.getYaw());
 					} else {
 
 						nate = 1;
@@ -217,9 +217,9 @@ public class Robot extends IterativeRobot {
 				break;
 			case 1:
 				
-				if (waffle.keepTurning) {
+				if (waffle.keepTurning && (sc.grabAngle() >= Wiring.CAMERA_TOLERANCE)) {
 					waffle.turnToAngle(desiredYarAngle);
-					System.out.println("KEEP TURNING");
+//					System.out.println("KEEP TURNING");
 				} else {
 					nate = 2;
 				}
@@ -238,7 +238,7 @@ public class Robot extends IterativeRobot {
 				break;
 			case 2:
 				if (!shooter.isShootDone()) {
-					System.out.println("SHOOT RIGHT MEOW");
+//					System.out.println("SHOOT RIGHT MEOW");
 					/*
 					 * THIS IS NOT SAFE
 					 */
@@ -253,7 +253,7 @@ public class Robot extends IterativeRobot {
 			case 3:
 				current.done = true;
 				tranny.resetEncoders();
-				System.out.println("DONE SHOOTING!");
+//				System.out.println("DONE SHOOTING!");
 				break;
 			}
 			
@@ -265,7 +265,7 @@ public class Robot extends IterativeRobot {
 			
 		}
 			
-			waffle.turnToAngle(desiredYarAngle);
+//			waffle.turnToAngle(desiredYarAngle);
 
 		} else if (current.command.equals("STOP")) {
 			leftM.set(0);
