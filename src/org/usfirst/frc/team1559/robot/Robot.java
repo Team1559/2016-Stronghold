@@ -146,6 +146,9 @@ public class Robot extends IterativeRobot {
 	private int nate = 0;
 	private int aimPause = 0;
 	private double desiredYarAngle = 0.0;
+	private int counterer = 0;
+	private double oldAngle = 0.0;
+	private boolean tick = true;
 
 	public void autonomousPeriodic() {
 
@@ -172,28 +175,28 @@ public class Robot extends IterativeRobot {
 				System.out.println("PLZ STOP NOW");
 			}
 		} else if (current.command.equals("SHOOT")) {
+			
+			if(tick){
+			
 			switch (nate) {
 			case 0:
-				if (aimPause++ < 10) {
-					System.out.println("Obtaining Vision Target Info....");// not
-																			// really,
-																			// just
-																			// letting
-																			// the
-																			// camera
-																			// catch
-																			// up
-
-				} else {
-					aimPause = 0;
-					System.out.println("Trying to turn...");
+//					aimPause = 0;
+//					System.out.println("Trying to turn...");
+//					oldAngle = angle;
 					angle = sc.grabAngle(); 
-					desiredYarAngle = waffle.ahrs.getYaw() + angle;
+					
+					if(angle != -1000){
+						desiredYarAngle = waffle.ahrs.getYaw() + angle;
+					} else {
+						desiredYarAngle = waffle.ahrs.getYaw();
+					}
+					
 
-					System.out.println(angle);
+//					System.out.println(angle);
+					
 					if (Math.abs(angle) <= Wiring.CAMERA_TOLERANCE) {
 						nate = 2;
-						System.out.println("GOING TO SHOOT");
+						System.out.println("GOING TO SHOOT WILL:" + angle + " YAR " + waffle.ahrs.getYaw());
 					} else {
 
 						nate = 1;
@@ -211,18 +214,16 @@ public class Robot extends IterativeRobot {
 													// okee-dokee
 					}
 
-				}
+				
 
 				break;
 			case 1:
+				
 				if (waffle.keepTurning) {
 					waffle.turnToAngle(desiredYarAngle);
 					System.out.println("KEEP TURNING");
 				} else {
-					nate = 0;
-while(true){
-	System.out.println("FROM SERIAL "+ sc.grabAngle() + " YWA" + waffle.ahrs.getYaw());
-}
+					nate = 2;
 				}
 
 				// if (Math.abs(sc.getSerialIn()) > 2){ //ADD THIS TO WIRING
@@ -248,6 +249,7 @@ while(true){
 							false);
 				} else {
 					nate = 3;
+					
 				}
 				break;
 			case 3:
@@ -256,12 +258,22 @@ while(true){
 				System.out.println("DONE SHOOTING!");
 				break;
 			}
+			
+			tick = !tick;
+			
+		} else {
+			tick = !tick;
+//			System.out.println("nope.");
+			
+		}
+			
+			waffle.turnToAngle(desiredYarAngle);
 
 		} else if (current.command.equals("STOP")) {
 			leftM.set(0);
 			rightM.set(0);
 			shooter.setSolenoids(false, /* gatherer.shouldNotShoot() */false);
-			System.out.println("Motor Stoppage achieved!");
+//			System.out.println("Motor Stoppage achieved!");
 		} else if (current.command.equals("DEFENSE")) {
 			String id = current.id;
 			if (id.equals("lowbar")) {

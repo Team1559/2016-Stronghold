@@ -89,5 +89,5 @@ public class Wiring {
 	public static final boolean hasArduino = false;
 	public static boolean hasBallClamp = false;
 	
-	public static final double CAMERA_TOLERANCE = 2;
+	public static final double CAMERA_TOLERANCE = .6;
 }
