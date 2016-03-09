@@ -193,13 +193,11 @@ public class Robot extends IterativeRobot {
 						desiredYarAngle = waffle.ahrs.getYaw();
 					}
 					
-
-//					System.out.println(angle);
 					
-					if ((Math.abs(angle) <= Wiring.CAMERA_TOLERANCE) && (!waffle.keepTurning)) {
+					if ((Math.abs(angle) <= Wiring.CAMERA_TOLERANCE)/* && (!waffle.keepTurning)*/) {
 						 goodFrames++;
 						 
-						if(goodFrames >= 4){
+						if(goodFrames >= 2){ //Make sure we have at least 2 good frames increase to pause longer?
 							nate = 2;
 						}
 						
@@ -217,24 +215,13 @@ public class Robot extends IterativeRobot {
 				break;
 			case 1:
 				
-				if (waffle.keepTurning && (sc.grabAngle() >= Wiring.CAMERA_TOLERANCE)) {
+				if (waffle.keepTurning) {
 					waffle.turnToAngle(desiredYarAngle);
 //					System.out.println("KEEP TURNING");
 				} else {
-					nate = 2;
+					nate = 0;
 				}
 
-				// if (Math.abs(sc.getSerialIn()) > 2){ //ADD THIS TO WIRING
-				// CLASS!
-				// if(aimPause++ > 5){
-				// System.out.println("REGETTING");
-				// waffle.keepTurning = true;
-				// nate = 0;
-				// }
-				// } else {
-				// nate = 2;
-				//
-				// }
 				break;
 			case 2:
 				if (!shooter.isShootDone()) {
@@ -253,7 +240,6 @@ public class Robot extends IterativeRobot {
 			case 3:
 				current.done = true;
 				tranny.resetEncoders();
-//				System.out.println("DONE SHOOTING!");
 				break;
 			}
 			
@@ -261,11 +247,10 @@ public class Robot extends IterativeRobot {
 			
 		} else {
 			tick = !tick;
-//			System.out.println("nope.");
 			
 		}
 			
-//			waffle.turnToAngle(desiredYarAngle);
+
 
 		} else if (current.command.equals("STOP")) {
 			leftM.set(0);
