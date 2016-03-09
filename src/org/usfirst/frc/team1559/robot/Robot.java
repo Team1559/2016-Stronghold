@@ -146,7 +146,7 @@ public class Robot extends IterativeRobot {
 	private int nate = 0;
 	private int aimPause = 0;
 	private double desiredYarAngle = 0.0;
-	private int counterer = 0;
+	private int goodFrames = 0;
 	private double oldAngle = 0.0;
 	private boolean tick = true;
 
@@ -176,6 +176,8 @@ public class Robot extends IterativeRobot {
 			}
 		} else if (current.command.equals("SHOOT")) {
 			
+			System.out.println("YAY" + goodFrames);
+			
 			if(tick){
 			
 			switch (nate) {
@@ -195,26 +197,22 @@ public class Robot extends IterativeRobot {
 //					System.out.println(angle);
 					
 					if (Math.abs(angle) <= Wiring.CAMERA_TOLERANCE) {
-						nate = 2;
+						 goodFrames++;
+						 
+						if(goodFrames >= 4){
+							nate = 2;
+						}
+						
+						
 						System.out.println("GOING TO SHOOT WILL:" + angle + " YAR " + waffle.ahrs.getYaw());
 					} else {
 
 						nate = 1;
+						goodFrames = 0;
 						// waffle.keepTurning = true; //this should only be
 						// controlled by WFFLDrive
-						waffle.turnToAngle(desiredYarAngle); // achieves the same
-													// thing...this might solve
-													// the issue. You probably
-													// shouldn't touch
-													// keepTurning.
-													// you can watch its value
-													// but should not change it,
-													// otherwise, the method
-													// will become unhappy.
-													// okee-dokee
+						waffle.turnToAngle(desiredYarAngle); 
 					}
-
-				
 
 				break;
 			case 1:
