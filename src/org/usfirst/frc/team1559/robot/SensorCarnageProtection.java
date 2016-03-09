@@ -17,8 +17,24 @@ public class SensorCarnageProtection {
 	 * TODO: Add things
 	 * 
 	 */
+	
+	private boolean lifterDead;
+	
 	public SensorCarnageProtection(){
-		
+		lifterDead = false;
 	}
+	
+	public void killLifter(){
+		lifterDead = true;
+	}
+	
+	public void unKillLifter(){
+		lifterDead = false;
+	}
+	
+	public boolean lifterDead(){
+		return lifterDead;
+	}
+	
 	
 }

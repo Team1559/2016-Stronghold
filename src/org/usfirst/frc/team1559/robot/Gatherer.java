@@ -279,9 +279,9 @@ public class Gatherer {
 	}
 
 	public void manualControl() {
-		if (stick.getPOV() == 315 || stick.getPOV() == 0 || stick.getPOV() == 45) {
+		if (stick.getRawButton(Wiring.BTN_GATHER_UP_LEVEL)) {
 			gatherLift.set(liftUp);
-		} else if (stick.getPOV() == 225 || stick.getPOV() == 180 || stick.getPOV() == 135) {
+		} else if (stick.getRawButton(Wiring.BTN_GATHER_DOWN_LEVEL)) {
 			gatherLift.set(liftDown);
 		} else {
 			gatherLift.set(liftStop);

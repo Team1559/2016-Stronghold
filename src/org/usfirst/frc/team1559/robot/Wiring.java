@@ -85,9 +85,9 @@ public class Wiring {
 
 //	public static final int BTN_BALL_CLAMP_OVERRIDE = 2;
 	
-	public static final boolean hasGatherer = false;
+	public static final boolean hasGatherer = true;
 	public static final boolean hasArduino = false;
-	public static boolean hasBallClamp = false;
+	public static boolean hasBallClamp = true;
 	
 	public static final double CAMERA_TOLERANCE = .6;
 }

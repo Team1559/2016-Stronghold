@@ -47,6 +47,7 @@ public class Robot extends IterativeRobot {
 	Gatherer gatherer;
 	// USBCamera cam;
 	CameraServer cs;
+	SensorCarnageProtection scp;
 
 	// Comments are for a 4 motor drive system whereas uncommented code just
 	// does 2
@@ -90,15 +91,8 @@ public class Robot extends IterativeRobot {
 
 		leftM.enableBrakeMode(true);
 		rightM.enableBrakeMode(true);
-		/*
-		 * 
-		 * 
-		 * 
-		 * 
-		 * CHANGE THIS LATER!!!!!
-		 */
-		leftS.enableBrakeMode(false);
-		rightS.enableBrakeMode(false);
+		leftS.enableBrakeMode(true);
+		rightS.enableBrakeMode(true);
 
 		rightM.setVoltageRampRate(Wiring.VOLTAGE_RAMP_RATE);
 		leftM.setVoltageRampRate(Wiring.VOLTAGE_RAMP_RATE);
@@ -120,6 +114,8 @@ public class Robot extends IterativeRobot {
 		}
 
 		pdp = new PowerDistributionPanel(0);
+		
+		scp = new SensorCarnageProtection();
 
 	}
 
@@ -135,7 +131,7 @@ public class Robot extends IterativeRobot {
 		leftM.setInverted(false);
 		rightM.setInverted(false);
 		waffle.length = 0;
-		shooter.resetShooter(/* gatherer.shouldNotShoot() */false);
+		shooter.resetShooter(gatherer.shouldNotShoot());
 		tranny.resetEncoders();
 		// givenAngle = false;
 		// gatherer.updateAutoPosition();
@@ -151,6 +147,7 @@ public class Robot extends IterativeRobot {
 	private boolean tick = true;
 
 	public void autonomousPeriodic() {
+		gatherer.lowbarify();
 
 		// int rawError = sc.getSerialIn();
 
@@ -230,8 +227,7 @@ public class Robot extends IterativeRobot {
 					 * THIS IS NOT SAFE
 					 */
 					// TODO: MAKE IT SAFE PLEASE
-					shooter.autoShoot(true, /* gatherer.shouldNotShoot() */
-							false);
+					shooter.autoShoot(true, gatherer.shouldNotShoot());
 				} else {
 					nate = 3;
 					
@@ -255,7 +251,7 @@ public class Robot extends IterativeRobot {
 		} else if (current.command.equals("STOP")) {
 			leftM.set(0);
 			rightM.set(0);
-			shooter.setSolenoids(false, /* gatherer.shouldNotShoot() */false);
+			shooter.setSolenoids(false, gatherer.shouldNotShoot());
 //			System.out.println("Motor Stoppage achieved!");
 		} else if (current.command.equals("DEFENSE")) {
 			String id = current.id;
@@ -318,7 +314,7 @@ public class Robot extends IterativeRobot {
 		leftM.setEncPosition(0);
 		leftM.setInverted(true);
 		rightM.setInverted(true);
-		shooter.resetShooter(/* gatherer.shouldNotShoot() */false);
+		shooter.resetShooter(gatherer.shouldNotShoot());
 		tranny.resetEncoders();
 		// initRecord();
 		// playbackSetup();
@@ -347,6 +343,12 @@ public class Robot extends IterativeRobot {
 			drive.arcadeDrive(stick.getY(), -stick.getRawAxis(4));
 		}
 
+		
+		if(coStick.getRawButton(1)){
+			scp.killLifter();
+		} else if(coStick.getRawButton(2)){
+			scp.unKillLifter();
+		}
 		// SmartDashboard.putBoolean("BALL IN!", !clamp.isOpen());
 
 		// recordPeriodic();
@@ -355,11 +357,10 @@ public class Robot extends IterativeRobot {
 		tranny.updateShifting();
 
 		if (Wiring.hasGatherer) {
-			if (stick.getRawButton(Wiring.BTN_GATHERER_OVERRIDE)) {
-				// gatherer.disableLifterPID();
+			if (scp.lifterDead()) {
 				gatherer.manualControl();
 			} else {
-				// gatherer.gathererTalon();
+				 gatherer.gathererTalon();
 				// gatherer.manualControl(); // TODO: what?
 				// gatherer.updateAutoPosition();
 			}
@@ -368,7 +369,7 @@ public class Robot extends IterativeRobot {
 		System.out.println(pdp.getCurrent(0) + " " + pdp.getCurrent(1) + " "
 				+ pdp.getCurrent(2) + " " + pdp.getCurrent(3));
 
-		shooter.updateShooter(stick, /* gatherer.shouldNotShoot() */false);
+		shooter.updateShooter(stick, gatherer.shouldNotShoot());
 
 		if (Wiring.hasBallClamp)
 			clamp.updateBallClamp(shooter.isShooting());

@@ -66,9 +66,9 @@ public class Transmission {
 	public void updateShifting() {
 		double velocity = (getRVelocity() + (double) getLVelocity()) / 2;
 
-		if (/*velocity >= Wiring.SHIFT_UP_SPEED && */stick.getRawButton(9)) {
+		if (velocity >= Wiring.SHIFT_UP_SPEED && stick.getRawButton(9)) {
 			gear2();
-		} else if (/*(velocity <= Wiring.SHIFT_DOWN_SPEED) || */!stick.getRawButton(9)) {
+		} else if ((velocity <= Wiring.SHIFT_DOWN_SPEED) || !stick.getRawButton(9)) {
 			gear1();
 		}
 	}
