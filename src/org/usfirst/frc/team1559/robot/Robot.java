@@ -199,7 +199,7 @@ public class Robot extends IterativeRobot {
 					if ((Math.abs(angle) <= Wiring.CAMERA_TOLERANCE)/* && (!waffle.keepTurning)*/) {
 						 goodFrames++;/*ugly*/System.out.println("YAY" + goodFrames);
 						 
-						if(goodFrames >= 1){ //Make sure we have at least 2 good frames increase to pause longer?
+						if(goodFrames >= 0){ //Make sure we have at least 2 good frames increase to pause longer?
 							nate = 2;
 						}
 						
