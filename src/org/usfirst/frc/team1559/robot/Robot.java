@@ -169,6 +169,7 @@ public class Robot extends IterativeRobot {
 			}
 		} else if (current.command.equals("GO")) {
 			waffle.drive(desiredHeading, current.dist, current.speed);
+			System.out.println(tranny.getLDisplacement() + " " + tranny.getRDisplacement());
 			if (waffle.keepRunning == false) {
 				leftM.set(0);
 				rightM.set(0);
@@ -177,9 +178,7 @@ public class Robot extends IterativeRobot {
 				System.out.println("PLZ STOP NOW");
 			}
 		} else if (current.command.equals("SHOOT")) {
-			
-			
-			
+
 			if(tick){
 			
 			switch (nate) {
