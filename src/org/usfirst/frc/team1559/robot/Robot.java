@@ -435,8 +435,12 @@ public class Robot extends IterativeRobot {
 		// } else {
 		// clamp.open();
 		// }
-		 clamp.updateBallClamp(shooter.isShooting());
-		 System.out.println(clamp.readSensor());
+//		 clamp.updateBallClamp(shooter.isShooting());
+//		 System.out.println(clamp.readSensor());
+		
+		System.out.println((tranny.getLDisplacement() + tranny.getRDisplacement())/2);
+		
+		
 		// System.out.println(shooter.shooting);
 		// if (stick.getRawButton(5) && clamp.open) {
 		// gatherer.setSpark(0.5);
