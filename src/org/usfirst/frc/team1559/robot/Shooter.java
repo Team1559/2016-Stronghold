@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 public class Shooter {
 
+	public static boolean bored = true;
 	private boolean shootDone = false;
 	private boolean shooting = false;
 
@@ -37,6 +38,7 @@ public class Shooter {
 
 	public void autoShoot(boolean b, boolean override) {
 
+		bored = false;
 		SmartDashboard.putBoolean("SOLENOID", fireShooter.get());
 		SmartDashboard.putNumber("Shoot State", shootState);
 
@@ -80,12 +82,14 @@ public class Shooter {
 		default:
 			setSolenoids(false, override);
 			shootDone = true;
+			bored = true;
 			break;
 		}
 	}
 
 	public void updateShooter(Joystick input, boolean override) {
 
+		bored = false;
 		SmartDashboard.putBoolean("SOLENOID", fireShooter.get());
 		SmartDashboard.putNumber("Shoot State", shootState);
 
@@ -123,8 +127,10 @@ public class Shooter {
 			shooting = false;
 			break;
 		case 4: // wait for button to go false
-			if (!(input.getRawAxis(Wiring.BTN_SHOOT) >= .9))
+			if (!(input.getRawAxis(Wiring.BTN_SHOOT) >= .9)) {
 				shootState = 0;
+				bored = true;
+			}
 			break;
 		}
 	}
