@@ -31,7 +31,7 @@ public class BallClamp {
 	}
 
 	public void updateBallClamp(boolean override) {
-		if (opSensor.getAverageVoltage() >= Wiring.CLAMP_SENSOR_THRESHOLD && !override) {
+		if (((opSensor.getAverageVoltage() >= Wiring.CLAMP_LOW) && (opSensor.getAverageVoltage() <= Wiring.CLAMP_HIGH)) && !override) {
 			close();
 		} else {
 			open();

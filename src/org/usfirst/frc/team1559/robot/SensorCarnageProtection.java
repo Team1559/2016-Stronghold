@@ -21,7 +21,7 @@ public class SensorCarnageProtection {
 	private boolean lifterDead;
 	
 	public SensorCarnageProtection(){
-		lifterDead = false;
+		lifterDead = true;
 	}
 	
 	public void killLifter(){
