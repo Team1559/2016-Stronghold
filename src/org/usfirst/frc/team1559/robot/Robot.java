@@ -382,7 +382,7 @@ public class Robot extends IterativeRobot {
 					gatherer.stopDriving();
 				}
 			}
-				gatherer.manualControl();
+//				gatherer.manualControl();
 		}
 		
 		
@@ -390,7 +390,8 @@ public class Robot extends IterativeRobot {
 		shooter.updateShooter(stick, gatherer.shouldNotShoot());
 
 		if (Wiring.hasBallClamp)
-			clamp.updateBallClamp(shooter.isShooting());
+//			clamp.updateBallClamp(shooter.isShooting());
+			clamp.updateBallClampAbsolute(shooter.isShooting());
 		// ADD THIS IN IF YOU WANT TO MANUALLY DRIVE THE BALL CLAMP
 		// clamp.updateBallClamp(shooter.shooting ||
 		// stick.getRawButton(Wiring.BALL_CLAMP_OVERRIDE_BUTT));
