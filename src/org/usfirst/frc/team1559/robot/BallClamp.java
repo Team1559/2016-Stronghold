@@ -43,7 +43,7 @@ public class BallClamp {
 			//don't have ball :(
 			if(!override){
 				if (((opSensor.getAverageVoltage() >= Wiring.CLAMP_LOW) && (opSensor.getAverageVoltage() <= Wiring.CLAMP_HIGH))) {
-					ballIn = true;
+//					ballIn = true;
 					close();
 					clampy++;
 				}
