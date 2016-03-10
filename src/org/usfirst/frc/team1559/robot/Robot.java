@@ -373,16 +373,17 @@ public class Robot extends IterativeRobot {
 
 		if (Wiring.hasGatherer) {
 			if(!coStick.getRawButton(1)){
-				gatherer.manualControl();
-			} else {
-				if(coStick.getRawAxis(1) < -.5){
-					gatherer.copilotManualControlDOWN();
-				} else if(coStick.getRawAxis(1) > .5){
-					gatherer.copilotManualControlUP();
-				} else {
-					gatherer.stopDriving();
-				}
+//				gatherer.manualControl();
+//			} else {
+//				if(coStick.getRawAxis(1) > .5){
+//					gatherer.copilotManualControlDOWN();
+//				} else if(coStick.getRawAxis(1) < -.5){
+//					gatherer.copilotManualControlUP();
+//				} else {
+//					gatherer.stopDriving();
+//				}
 			}
+				gatherer.manualControl();
 		}
 		
 		
@@ -445,7 +446,7 @@ public class Robot extends IterativeRobot {
 //		 clamp.updateBallClamp(shooter.isShooting());
 //		 System.out.println(clamp.readSensor());
 		
-		System.out.println((tranny.getLDisplacement() + tranny.getRDisplacement())/2);
+		System.out.println(tranny.getLDisplacement() + "    " +  tranny.getRDisplacement());
 		
 		
 		// System.out.println(shooter.shooting);
