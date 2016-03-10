@@ -152,7 +152,7 @@ public class Robot extends IterativeRobot {
 
 	public void autonomousPeriodic() {
 		gatherer.lowbarify();
-		clamp.updateBallClamp(shooter.isShooting());
+		clamp.updateBallClampAbsolute(shooter.isShooting());
 
 		// int rawError = sc.getSerialIn();
 
@@ -397,7 +397,7 @@ public class Robot extends IterativeRobot {
 		// stick.getRawButton(Wiring.BALL_CLAMP_OVERRIDE_BUTT));
 
 		if (Wiring.hasGatherer) {
-			if (stick.getRawButton(1) && clamp.isOpen()) {
+			if (stick.getRawButton(1)) {
 				gatherer.setSpark(0.5);
 			} else {
 				gatherer.setSpark(0.0);
