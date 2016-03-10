@@ -290,6 +290,23 @@ public class Gatherer {
 			gyro.reset();
 		}
 	}
+	
+	public void copilotManualControlDOWN(){
+		gatherLift.set(liftDown);
+	}
+	
+	public void copilotManualControlUP(){
+		if(!diGathererTop.get()){
+			gatherLift.set(liftUp);
+		} else {
+			gatherLift.set(liftStop);
+		}
+		
+	}
+	
+	public void stopDriving(){
+		gatherLift.set(liftStop);
+	}
 
 	public boolean shouldNotShoot() {
 		return gyro.getAngle() <= Wiring.GATHERER_SAFE_SHOOT_ANGLE;

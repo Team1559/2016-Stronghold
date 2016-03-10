@@ -349,11 +349,12 @@ public class Robot extends IterativeRobot {
 			clamp.resetClampy();
 		}
 		
-		if(coStick.getRawButton(1)){
-			scp.killGatherer();
-		} else if(coStick.getRawButton(2)){
-			scp.unKillGatherer();
-		}
+		
+//		if(coStick.getRawButton(1)){
+//			scp.killGatherer();
+//		} else if(coStick.getRawButton(2)){
+//			scp.unKillGatherer();
+//		}
 		
 		if(coStick.getRawButton(11)){
 			scp.killEncoders();
@@ -371,10 +372,16 @@ public class Robot extends IterativeRobot {
 		}
 
 		if (Wiring.hasGatherer) {
-			if (scp.gathererDead()) {
+			if(!coStick.getRawButton(1)){
 				gatherer.manualControl();
 			} else {
-				 gatherer.gathererTalon();
+				if(coStick.getRawAxis(1) < -.5){
+					gatherer.copilotManualControlDOWN();
+				} else if(coStick.getRawAxis(1) > .5){
+					gatherer.copilotManualControlUP();
+				} else {
+					gatherer.stopDriving();
+				}
 			}
 		}
 		
