@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.util.Scanner;
 
 import edu.wpi.first.wpilibj.CANTalon;
-import edu.wpi.first.wpilibj.CameraServer;
+//import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobot;
@@ -46,7 +46,7 @@ public class Robot extends IterativeRobot {
 	BallClamp clamp;
 	Gatherer gatherer;
 	// USBCamera cam;
-	CameraServer cs;
+//	CameraServer cs;
 	SensorCarnageProtection scp;
 	Flashlight deLight;
 
@@ -83,7 +83,7 @@ public class Robot extends IterativeRobot {
 
 		// magneticSensor = new DigitalInput(Wiring.MAGNET);
 		// cam = new USBCamera("cam0");
-		cs = CameraServer.getInstance();
+//		cs = CameraServer.getInstance();
 		drive.setExpiration(Double.MAX_VALUE);
 
 		leftM.setInverted(true);
@@ -313,7 +313,7 @@ public class Robot extends IterativeRobot {
 		// waffle.right.setInverted(true);
 		// leftF.setInverted(isInverted);
 		// centerWithAngle();
-		cs.startAutomaticCapture();
+//		cs.startAutomaticCapture();
 		rightM.setEncPosition(0);
 		leftM.setEncPosition(0);
 		leftM.setInverted(true);
@@ -419,7 +419,8 @@ public class Robot extends IterativeRobot {
 		// } else {
 		// clamp.open();
 		// }
-		// clamp.updateBallClamp(shooter.isShooting());
+		 clamp.updateBallClamp(shooter.isShooting());
+		 System.out.println(clamp.readSensor());
 		// System.out.println(shooter.shooting);
 		// if (stick.getRawButton(5) && clamp.open) {
 		// gatherer.setSpark(0.5);
@@ -427,21 +428,23 @@ public class Robot extends IterativeRobot {
 		// gatherer.setSpark(0.0);
 		// }
 
-		if (tranny.getGear() == 1) {
-			drive.arcadeDrive(stick.getY() * Wiring.LOW_SPEED_MULTIPLIER,
-					-stick.getRawAxis(4) * Wiring.LOW_SPEED_MULTIPLIER);
-		} else {
-			drive.arcadeDrive(stick.getY(), -stick.getRawAxis(4));
-		}
+//		if (tranny.getGear() == 1) {
+//			drive.arcadeDrive(stick.getY() * Wiring.LOW_SPEED_MULTIPLIER,
+//					-stick.getRawAxis(4) * Wiring.LOW_SPEED_MULTIPLIER);
+//		} else {
+//			drive.arcadeDrive(stick.getY(), -stick.getRawAxis(4));
+//		}
+//
+//		if (stick.getRawButton(1)) {
+//			tranny.gear1();
+//		} else if (stick.getRawButton(2)) {
+//			tranny.gear2();
+//		}
+//
+//		System.out.println(leftM.getEncPosition());
 
-		if (stick.getRawButton(1)) {
-			tranny.gear1();
-		} else if (stick.getRawButton(2)) {
-			tranny.gear2();
-		}
-
-		System.out.println(leftM.getEncPosition());
-
+		
+		
 		// shooter.updateShooter(stick, /*gatherer.shouldNotShoot()*/false);
 	}
 

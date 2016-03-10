@@ -8,7 +8,8 @@ public class BallClamp {
 	private Servo servoLeft, servoRight;
 	private AnalogInput opSensor;
 	private boolean open = false;
-
+	
+	
 	public BallClamp() {
 		servoLeft = new Servo(Wiring.CLAMP_LEFT_ID);
 		servoRight = new Servo(Wiring.CLAMP_RIGHT_ID);
@@ -30,13 +31,17 @@ public class BallClamp {
 	}
 
 	public void updateBallClamp(boolean override) {
-		if (opSensor.getVoltage() >= Wiring.CLAMP_SENSOR_THRESHOLD && !override) {
+		if (opSensor.getAverageVoltage() >= Wiring.CLAMP_SENSOR_THRESHOLD && !override) {
 			close();
 		} else {
 			open();
 		}
 	}
 
+	public double readSensor(){
+		return opSensor.getAverageVoltage();
+	}
+	
 	public boolean isOpen() {
 		return open;
 	}
