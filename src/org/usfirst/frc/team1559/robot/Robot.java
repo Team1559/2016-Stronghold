@@ -152,6 +152,7 @@ public class Robot extends IterativeRobot {
 
 	public void autonomousPeriodic() {
 		gatherer.lowbarify();
+		clamp.updateBallClamp(shooter.isShooting());
 
 		// int rawError = sc.getSerialIn();
 
@@ -177,7 +178,7 @@ public class Robot extends IterativeRobot {
 			}
 		} else if (current.command.equals("SHOOT")) {
 			
-			System.out.println("YAY" + goodFrames);
+			
 			
 			if(tick){
 			
@@ -196,9 +197,9 @@ public class Robot extends IterativeRobot {
 					
 					
 					if ((Math.abs(angle) <= Wiring.CAMERA_TOLERANCE)/* && (!waffle.keepTurning)*/) {
-						 goodFrames++;
+						 goodFrames++;/*ugly*/System.out.println("YAY" + goodFrames);
 						 
-						if(goodFrames >= 2){ //Make sure we have at least 2 good frames increase to pause longer?
+						if(goodFrames >= 1){ //Make sure we have at least 2 good frames increase to pause longer?
 							nate = 2;
 						}
 						
