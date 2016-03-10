@@ -19,9 +19,12 @@ public class SensorCarnageProtection {
 	 */
 	
 	private boolean lifterDead;
+	private boolean encodersDead;
+	
 	
 	public SensorCarnageProtection(){
 		lifterDead = true;
+		encodersDead = false;
 	}
 	
 	public void killLifter(){
@@ -36,5 +39,15 @@ public class SensorCarnageProtection {
 		return lifterDead;
 	}
 	
+	public boolean encodersDead(){
+		return encodersDead;
+	}
 	
+	public void killEncoders(){
+		encodersDead = true;
+	}
+	
+	public void unKillEncoders(){
+		encodersDead = false;
+	}
 }

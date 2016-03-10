@@ -73,6 +73,15 @@ public class Transmission {
 		}
 	}
 	
+	public void limpShifting() {
+		
+		if (stick.getRawButton(9)) {
+			gear2();
+		} else if (!stick.getRawButton(9)) {
+			gear1();
+		}
+	}
+	
 	public CANTalon getLeftMotor() {
 		return leftM;
 	}

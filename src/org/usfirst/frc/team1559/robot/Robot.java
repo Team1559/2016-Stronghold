@@ -351,11 +351,21 @@ public class Robot extends IterativeRobot {
 		} else if(coStick.getRawButton(2)){
 			scp.unKillLifter();
 		}
+		
+		if(coStick.getRawButton(11)){
+			scp.killEncoders();
+		} else if(coStick.getRawButton(12)){
+			scp.unKillEncoders();
+		}
 		// SmartDashboard.putBoolean("BALL IN!", !clamp.isOpen());
 
 		deLight.updateLight(coStick);
 
-		tranny.updateShifting();
+		if(!scp.encodersDead()){
+			tranny.updateShifting();
+		} else {
+			tranny.limpShifting();
+		}
 
 		if (Wiring.hasGatherer) {
 			if (scp.lifterDead()) {
