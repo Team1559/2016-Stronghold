@@ -48,6 +48,7 @@ public class Robot extends IterativeRobot {
 	// USBCamera cam;
 	CameraServer cs;
 	SensorCarnageProtection scp;
+	Flashlight deLight;
 
 	// Comments are for a 4 motor drive system whereas uncommented code just
 	// does 2
@@ -72,6 +73,9 @@ public class Robot extends IterativeRobot {
 		coStick = new Joystick(Wiring.JOYSTICK1);
 		tranny = new Transmission(stick, leftM, rightM);
 		shooter = new Shooter();
+		
+		deLight = new Flashlight();
+		
 		// shooter.initShooter(gatherer.shouldNotShoot());
 		if (Wiring.hasBallClamp) {
 			clamp = new BallClamp();
@@ -330,12 +334,9 @@ public class Robot extends IterativeRobot {
 	}
 
 	public void teleopPeriodic() {
-		// int lastVal = 0;
-		// sendRecieveCenterValues();
-		// waffle.myRobot.arcadeDrive(stick); //FOR THE TEST CHASSIS
-		// TODO: transmission "gear" variable was never really implemented,
-		// rendering this if statement pointless. Reconfirm that driving still
-		// works ok.
+		// recordPeriodic();
+		// playbackIterative();
+		
 		if (tranny.getGear() == 1) {
 			drive.arcadeDrive(stick.getY() * Wiring.LOW_SPEED_MULTIPLIER,
 					-stick.getRawAxis(4) * Wiring.LOW_SPEED_MULTIPLIER);
@@ -351,8 +352,7 @@ public class Robot extends IterativeRobot {
 		}
 		// SmartDashboard.putBoolean("BALL IN!", !clamp.isOpen());
 
-		// recordPeriodic();
-		// playbackIterative();
+		deLight.updateLight(coStick);
 
 		tranny.updateShifting();
 
@@ -361,13 +361,8 @@ public class Robot extends IterativeRobot {
 				gatherer.manualControl();
 			} else {
 				 gatherer.gathererTalon();
-				// gatherer.manualControl(); // TODO: what?
-				// gatherer.updateAutoPosition();
 			}
 		}
-
-		System.out.println(pdp.getCurrent(0) + " " + pdp.getCurrent(1) + " "
-				+ pdp.getCurrent(2) + " " + pdp.getCurrent(3));
 
 		shooter.updateShooter(stick, gatherer.shouldNotShoot());
 
