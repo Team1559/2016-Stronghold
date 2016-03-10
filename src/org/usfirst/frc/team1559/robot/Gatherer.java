@@ -296,7 +296,7 @@ public class Gatherer {
 	}
 	
 	public void copilotManualControlUP(){
-		if(!diGathererTop.get()){
+		if(diGathererTop.get()){
 			gatherLift.set(liftUp);
 		} else {
 			gatherLift.set(liftStop);

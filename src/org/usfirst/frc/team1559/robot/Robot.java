@@ -372,15 +372,15 @@ public class Robot extends IterativeRobot {
 
 		if (Wiring.hasGatherer) {
 			if(!coStick.getRawButton(1)){
-//				gatherer.manualControl();
-//			} else {
-//				if(coStick.getRawAxis(1) > .5){
-//					gatherer.copilotManualControlDOWN();
-//				} else if(coStick.getRawAxis(1) < -.5){
-//					gatherer.copilotManualControlUP();
-//				} else {
-//					gatherer.stopDriving();
-//				}
+				gatherer.manualControl();
+			} else {
+				if(coStick.getRawAxis(1) > .5){
+					gatherer.copilotManualControlDOWN();
+				} else if(coStick.getRawAxis(1) < -.5){
+					gatherer.copilotManualControlUP();
+				} else {
+					gatherer.stopDriving();
+				}
 			}
 				gatherer.manualControl();
 		}
