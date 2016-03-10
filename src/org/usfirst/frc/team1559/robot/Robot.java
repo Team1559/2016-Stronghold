@@ -345,11 +345,14 @@ public class Robot extends IterativeRobot {
 			drive.arcadeDrive(stick.getY(), -stick.getRawAxis(4));
 		}
 
+		if(coStick.getRawButton(3)){
+			clamp.resetClampy();
+		}
 		
 		if(coStick.getRawButton(1)){
-			scp.killLifter();
+			scp.killGatherer();
 		} else if(coStick.getRawButton(2)){
-			scp.unKillLifter();
+			scp.unKillGatherer();
 		}
 		
 		if(coStick.getRawButton(11)){
@@ -368,12 +371,14 @@ public class Robot extends IterativeRobot {
 		}
 
 		if (Wiring.hasGatherer) {
-			if (scp.lifterDead()) {
+			if (scp.gathererDead()) {
 				gatherer.manualControl();
 			} else {
 				 gatherer.gathererTalon();
 			}
 		}
+		
+		
 
 		shooter.updateShooter(stick, gatherer.shouldNotShoot());
 

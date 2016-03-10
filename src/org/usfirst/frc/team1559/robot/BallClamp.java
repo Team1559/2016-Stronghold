@@ -33,6 +33,10 @@ public class BallClamp {
 		open = true;
 	}
 
+	public void resetClampy(){
+		clampy = 0;
+	}
+	
 	public void updateBallClampAbsolute(boolean override){
 		switch(clampy){
 		case 0:

@@ -18,25 +18,25 @@ public class SensorCarnageProtection {
 	 * 
 	 */
 	
-	private boolean lifterDead;
+	private boolean gathererDead;
 	private boolean encodersDead;
 	
 	
 	public SensorCarnageProtection(){
-		lifterDead = true;
+		gathererDead = true;
 		encodersDead = false;
 	}
 	
-	public void killLifter(){
-		lifterDead = true;
+	public void killGatherer(){
+		gathererDead = true;
 	}
 	
-	public void unKillLifter(){
-		lifterDead = false;
+	public void unKillGatherer(){
+		gathererDead = false;
 	}
 	
-	public boolean lifterDead(){
-		return lifterDead;
+	public boolean gathererDead(){
+		return gathererDead;
 	}
 	
 	public boolean encodersDead(){
