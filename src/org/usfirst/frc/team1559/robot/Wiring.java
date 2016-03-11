@@ -93,6 +93,7 @@ public class Wiring {
 	
 	public static final double CAMERA_TOLERANCE = .6;
 	
-	public static final int FLASH_DIO = 6;//dio
+	public static final int FLASH_DIO = 3;//dio
 	public static final int FLASH_BUTT_ON = 7;
+	public static final int FLASH_BUTT_STROBE = 8;
 }
