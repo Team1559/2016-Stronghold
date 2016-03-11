@@ -343,10 +343,6 @@ public class Robot extends IterativeRobot {
 		} else {
 			drive.arcadeDrive(stick.getY(), -stick.getRawAxis(4));
 		}
-
-		if(coStick.getRawButton(3)){
-			clamp.resetClampy();
-		}
 		
 		
 //		if(coStick.getRawButton(1)){
@@ -391,7 +387,12 @@ public class Robot extends IterativeRobot {
 
 		if (Wiring.hasBallClamp)
 //			clamp.updateBallClamp(shooter.isShooting());
-			clamp.updateBallClampAbsolute(shooter.isShooting());
+			if(coStick.getRawButton(3)){
+				clamp.resetClampy();
+			} else {
+				clamp.updateBallClampAbsolute(shooter.isShooting());
+			}
+			
 		// ADD THIS IN IF YOU WANT TO MANUALLY DRIVE THE BALL CLAMP
 		// clamp.updateBallClamp(shooter.shooting ||
 		// stick.getRawButton(Wiring.BALL_CLAMP_OVERRIDE_BUTT));
