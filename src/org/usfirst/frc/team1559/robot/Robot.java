@@ -342,33 +342,35 @@ public class Robot extends IterativeRobot {
 		// playbackIterative();
 		
 		
-		//get cam angle
-		angle = sc.grabAngle(); 
-		
-		if(angle != -1000){
-			desiredYarAngle = waffle.ahrs.getYaw() + angle;
+		if (tranny.getGear() == 1) {
+			drive.arcadeDrive(stick.getY() * Wiring.LOW_SPEED_MULTIPLIER,
+					-stick.getRawAxis(4) * Wiring.LOW_SPEED_MULTIPLIER);
 		} else {
-			desiredYarAngle = waffle.ahrs.getYaw();
+			drive.arcadeDrive(stick.getY(), -stick.getRawAxis(4));
 		}
+		
+//		//get cam angle
+//		angle = sc.grabAngle(); 
+//		
+//		if(angle != -1000){
+//			desiredYarAngle = waffle.ahrs.getYaw() + angle;
+//		} else {
+//			desiredYarAngle = waffle.ahrs.getYaw();
+//		}
 		
 		//give him a huge light
-		if((Math.abs(angle) <= Wiring.CAMERA_TOLERANCE)){
-			SmartDashboard.putBoolean("AIMED", true);
-		} else { 
-			SmartDashboard.putBoolean("AIMED", false);
-		}
+//		if((Math.abs(angle) <= Wiring.CAMERA_TOLERANCE)){
+//			SmartDashboard.putBoolean("AIMED", true);
+//		} else { 
+//			SmartDashboard.putBoolean("AIMED", false);
+//		}
 		
 		//auto aiming
-		if(stick.getRawAxis(2) >= .9){
-			waffle.turnToAngle(angle);
-		} else {
-			if (tranny.getGear() == 1) {
-				drive.arcadeDrive(stick.getY() * Wiring.LOW_SPEED_MULTIPLIER,
-						-stick.getRawAxis(4) * Wiring.LOW_SPEED_MULTIPLIER);
-			} else {
-				drive.arcadeDrive(stick.getY(), -stick.getRawAxis(4));
-			}
-		}
+//		if(stick.getRawAxis(2) >= .9){
+//			waffle.turnToAngle(angle);
+//		} else {
+//			
+//		}
 		
 //		if(coStick.getRawButton(1)){
 //			scp.killGatherer();
