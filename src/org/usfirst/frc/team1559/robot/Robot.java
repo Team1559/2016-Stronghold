@@ -499,6 +499,8 @@ public class Robot extends IterativeRobot {
 		
 		
 		// shooter.updateShooter(stick, /*gatherer.shouldNotShoot()*/false);
+		
+		System.out.println(gatherer.getGyro().getAngle());
 	}
 
 	public void disabledInit() {

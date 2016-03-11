@@ -191,10 +191,10 @@ public class WFFL {
 			correctionTurn = 0.5;
 		} else if (correctionTurn < -0.5) {
 			correctionTurn = -0.5;
-		} else if (correctionTurn < .05 && correctionTurn > 0) {
-			correctionTurn = .05;
-		} else if (correctionTurn > -.05 && correctionTurn < 0) {
-			correctionTurn = -.05;
+		} else if (correctionTurn < .1 && correctionTurn > 0) {
+			correctionTurn = .1;
+		} else if (correctionTurn > -.1 && correctionTurn < 0) {
+			correctionTurn = -.1;
 		}
 
 		System.out.println(yawError);
