@@ -472,7 +472,8 @@ public class Robot extends IterativeRobot {
 //		 clamp.updateBallClamp(shooter.isShooting());
 //		 System.out.println(clamp.readSensor());
 		
-		System.out.println(tranny.getLDisplacement() + "    " +  tranny.getRDisplacement());
+//		System.out.println(tranny.getLDisplacement() + "    " +  tranny.getRDisplacement());
+		
 		
 		
 		// System.out.println(shooter.shooting);
