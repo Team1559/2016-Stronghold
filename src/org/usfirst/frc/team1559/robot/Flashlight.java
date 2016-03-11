@@ -31,11 +31,11 @@ public class Flashlight {
 	}
 	
 	public void turnOn(){
-		daLight.set(false);
+		daLight.set(true);
 	}
 	
 	public void turnOff(){
-		daLight.set(true);
+		daLight.set(false);
 	}
 	
 }
