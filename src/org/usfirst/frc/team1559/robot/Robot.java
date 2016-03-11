@@ -366,9 +366,9 @@ public class Robot extends IterativeRobot {
 //		}
 		
 //		auto aiming
-		if(stick.getRawAxis(2) >= .9){
-			SmartDashboard.putNumber("ERROR ANGLE", sc.grabAngle());
-		}
+//		if(stick.getRawAxis(2) >= .9){
+//			SmartDashboard.putNumber("ERROR ANGLE", sc.grabAngle());
+//		}
 		
 //		if(coStick.getRawButton(1)){
 //			scp.killGatherer();
