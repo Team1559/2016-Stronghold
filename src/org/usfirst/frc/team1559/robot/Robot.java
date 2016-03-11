@@ -365,12 +365,10 @@ public class Robot extends IterativeRobot {
 //			SmartDashboard.putBoolean("AIMED", false);
 //		}
 		
-		//auto aiming
-//		if(stick.getRawAxis(2) >= .9){
-//			waffle.turnToAngle(angle);
-//		} else {
-//			
-//		}
+//		auto aiming
+		if(stick.getRawAxis(2) >= .9){
+			SmartDashboard.putNumber("ERROR ANGLE", sc.grabAngle());
+		}
 		
 //		if(coStick.getRawButton(1)){
 //			scp.killGatherer();
