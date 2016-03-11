@@ -474,8 +474,6 @@ public class Robot extends IterativeRobot {
 		
 //		System.out.println(tranny.getLDisplacement() + "    " +  tranny.getRDisplacement());
 		
-		
-		
 		// System.out.println(shooter.shooting);
 		// if (stick.getRawButton(5) && clamp.open) {
 		// gatherer.setSpark(0.5);
