@@ -408,7 +408,7 @@ public class Robot extends IterativeRobot {
 		
 		
 
-		shooter.updateShooter(stick, gatherer.shouldNotShoot());
+		shooter.updateShooter(stick, /*gatherer.shouldNotShoot()*/ false); //this is correct!
 
 		if (Wiring.hasBallClamp)
 //			clamp.updateBallClamp(shooter.isShooting());
