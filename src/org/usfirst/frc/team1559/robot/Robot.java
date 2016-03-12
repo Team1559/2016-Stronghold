@@ -425,9 +425,12 @@ public class Robot extends IterativeRobot {
 		if (Wiring.hasGatherer) {
 			if (stick.getRawButton(1)) {
 				gatherer.setSpark(0.5);
+			} else if(stick.getRawButton(3)){
+				gatherer.setSpark(-0.5);
 			} else {
 				gatherer.setSpark(0.0);
 			}
+			
 		}
 
 		// if (coStick.getRawButton(1)) {
