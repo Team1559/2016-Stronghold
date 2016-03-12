@@ -33,7 +33,7 @@ public class WFFL {
 	double kpBase = 0.001;
 	final double maxError = 1;
 	final double tolerance = .001;
-	final double turnTolerance = .60;// originally .5
+	final double turnTolerance = .55;// originally .5
 	int length = 0;
 	double yawError;
 	double unchangedYawError;
@@ -188,9 +188,9 @@ public class WFFL {
 			yawError = (yawError + 360);
 		}
 
-		kpturn = Math.abs((yawError / 180)) + .1;
+		kpturn = (yawError / 180) + .1;
 
-		double correctionTurn = kpturn * yawError; // DELETE " * yawError"
+		double correctionTurn = kpturn; // DELETE " * yawError"
 		if (correctionTurn >= 0.5) {
 			correctionTurn = 0.5;
 		} else if (correctionTurn <= -0.5) {
