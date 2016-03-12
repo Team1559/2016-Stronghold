@@ -191,14 +191,14 @@ public class WFFL {
 		kpturn = Math.abs((yawError / 180)) + .1;
 
 		double correctionTurn = kpturn * yawError;
-		if (correctionTurn >= 0.6) {
-			correctionTurn = 0.6;
-		} else if (correctionTurn <= -0.6) {
-			correctionTurn = -0.6;
-		} else if (correctionTurn <= .1 && correctionTurn > 0) {
-			correctionTurn = .1;
-		} else if (correctionTurn >= -.1 && correctionTurn < 0) {
-			correctionTurn = -.1;
+		if (correctionTurn >= 0.5) {
+			correctionTurn = 0.5;
+		} else if (correctionTurn <= -0.5) {
+			correctionTurn = -0.5;
+		} else if (correctionTurn <= .125 && correctionTurn > 0) {
+			correctionTurn = .125;
+		} else if (correctionTurn >= -.125 && correctionTurn < 0) {
+			correctionTurn = -.125;
 		} else { // well crap clause
 			System.out.print("well crap = " + correctionTurn);
 		}
