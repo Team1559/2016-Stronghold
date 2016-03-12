@@ -195,10 +195,10 @@ public class WFFL {
 			correctionTurn = 0.5;
 		} else if (correctionTurn <= -0.5) {
 			correctionTurn = -0.5;
-		} else if (correctionTurn <= .125 && correctionTurn > 0) {
-			correctionTurn = .125;
-		} else if (correctionTurn >= -.125 && correctionTurn < 0) {
-			correctionTurn = -.125;
+		} else if (correctionTurn <= .3 && correctionTurn > 0) {
+			correctionTurn = .3;
+		} else if (correctionTurn >= -.3 && correctionTurn < 0) {
+			correctionTurn = -.3;
 		} else { // well crap clause
 			System.out.print("well crap = " + correctionTurn);
 		}
