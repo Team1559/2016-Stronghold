@@ -136,7 +136,7 @@ public class Robot extends IterativeRobot {
 		leftM.setInverted(false);
 		rightM.setInverted(false);
 		waffle.length = 0;
-		shooter.resetShooter(gatherer.shouldNotShoot());
+//		shooter.resetShooter(gatherer.shouldNotShoot());
 		tranny.resetEncoders();
 		// givenAngle = false;
 		// gatherer.updateAutoPosition();
@@ -153,7 +153,7 @@ public class Robot extends IterativeRobot {
 
 	public void autonomousPeriodic() {
 		gatherer.lowbarify();
-		clamp.updateBallClampAbsolute(shooter.isShooting());
+//		clamp.updateBallClampAbsolute(shooter.isShooting());
 
 		// int rawError = sc.getSerialIn();
 
@@ -256,7 +256,7 @@ public class Robot extends IterativeRobot {
 		} else if (current.command.equals("STOP")) {
 			leftM.set(0);
 			rightM.set(0);
-			shooter.setSolenoids(false, gatherer.shouldNotShoot());
+//			shooter.setSolenoids(false, gatherer.shouldNotShoot());
 //			System.out.println("Motor Stoppage achieved!");
 		} else if (current.command.equals("DEFENSE")) {
 			String id = current.id;
@@ -290,8 +290,8 @@ public class Robot extends IterativeRobot {
 		if ((current.done == true)) {
 			System.out.println("Current done boi");
 			current.done = false;
-			if (Wiring.hasGatherer)
-				gatherer.homify();// make sure the gatherer is out of the way
+//			if (Wiring.hasGatherer)
+//				gatherer.homify();// make sure the gatherer is out of the way
 
 			if (waffle.list.size() - 1 > listPos) {
 				listPos++;
@@ -319,7 +319,7 @@ public class Robot extends IterativeRobot {
 		leftM.setEncPosition(0);
 		leftM.setInverted(true);
 		rightM.setInverted(true);
-		shooter.resetShooter(gatherer.shouldNotShoot());
+//		shooter.resetShooter(gatherer.shouldNotShoot());
 		tranny.resetEncoders();
 		// initRecord();
 		// playbackSetup();
