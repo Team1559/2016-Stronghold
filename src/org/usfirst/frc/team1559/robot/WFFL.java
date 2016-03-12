@@ -190,7 +190,7 @@ public class WFFL {
 
 		kpturn = Math.abs((yawError / 180)) + .1;
 
-		double correctionTurn = kpturn * yawError;
+		double correctionTurn = kpturn * yawError; // DELETE " * yawError"
 		if (correctionTurn >= 0.5) {
 			correctionTurn = 0.5;
 		} else if (correctionTurn <= -0.5) {
