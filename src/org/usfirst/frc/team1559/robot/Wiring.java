@@ -89,7 +89,7 @@ public class Wiring {
 	
 	public static final boolean hasGatherer = true;
 	public static final boolean hasArduino = false;
-	public static boolean hasBallClamp = true;
+	public static boolean hasBallClamp = false;
 	
 	public static final double CAMERA_TOLERANCE = .61;
 	
