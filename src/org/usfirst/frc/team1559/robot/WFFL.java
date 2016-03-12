@@ -33,7 +33,7 @@ public class WFFL {
 	double kpBase = 0.001;
 	final double maxError = 1;
 	final double tolerance = .001;
-	final double turnTolerance = 1;//originally .5
+	final double turnTolerance = .60;//originally .5
 	int length = 0;
 	double yawError;
 	double unchangedYawError;
@@ -169,7 +169,7 @@ public class WFFL {
 	}
 
 	public void turnToAngle(double angle) {
-		double kpturn = 0.1;
+		double kpturn = 0.1; //change to .15?
 		yaw = ahrs.getYaw();
 
 		if ((angle == 180) && (yaw < -0.1)) {
@@ -187,14 +187,16 @@ public class WFFL {
 		}
 
 		double correctionTurn = kpturn * yawError;
-		if (correctionTurn > 0.5) {
+		if (correctionTurn >= 0.5) {
 			correctionTurn = 0.5;
-		} else if (correctionTurn < -0.5) {
+		} else if (correctionTurn <= -0.5) {
 			correctionTurn = -0.5;
-		} else if (correctionTurn < .1 && correctionTurn > 0) {
+		} else if (correctionTurn <= .1 && correctionTurn > 0) {
 			correctionTurn = .1;
-		} else if (correctionTurn > -.1 && correctionTurn < 0) {
+		} else if (correctionTurn >= -.1 && correctionTurn < 0) {
 			correctionTurn = -.1;
+		} else { // well crap clause
+			System.out.print("well crap = " + correctionTurn);
 		}
 
 		System.out.println(yawError);
