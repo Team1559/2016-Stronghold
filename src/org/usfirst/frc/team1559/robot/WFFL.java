@@ -33,7 +33,7 @@ public class WFFL {
 	double kpBase = 0.001;
 	final double maxError = 1;
 	final double tolerance = .001;
-	final double turnTolerance = .60;//originally .5
+	final double turnTolerance = .60;// originally .5
 	int length = 0;
 	double yawError;
 	double unchangedYawError;
@@ -109,7 +109,8 @@ public class WFFL {
 
 			// (String command, double dist, double speed, double time, double
 			// angle, String id, boolean active, String pattern)
-			list.add(new Command("TURN", 0, Wiring.OPTIMAL_TURNT_SPEED, 0, angle, "", false, ""));
+			list.add(new Command("TURN", 0, Wiring.OPTIMAL_TURNT_SPEED, 0,
+					angle, "", false, ""));
 
 		} else if (command.equals("SHOOT")) {
 			// System.out.println("SHOOT!");
@@ -122,7 +123,8 @@ public class WFFL {
 			temp = temp.substring(0, temp.indexOf("\""));
 			id = temp;
 
-			temp = raw.substring(raw.indexOf("active=\"") + 8, raw.length() - 2);
+			temp = raw
+					.substring(raw.indexOf("active=\"") + 8, raw.length() - 2);
 			active = Boolean.valueOf(temp);
 
 			// (String command, double dist, double speed, double time, double
@@ -169,7 +171,7 @@ public class WFFL {
 	}
 
 	public void turnToAngle(double angle) {
-		double kpturn = 0.1; //change to .15?
+		double kpturn = 0.1; // change to .15?
 		yaw = ahrs.getYaw();
 
 		if ((angle == 180) && (yaw < -0.1)) {
@@ -186,11 +188,13 @@ public class WFFL {
 			yawError = (yawError + 360);
 		}
 
+		kpturn = Math.abs((yawError / 180)) + .1;
+
 		double correctionTurn = kpturn * yawError;
-		if (correctionTurn >= 0.5) {
-			correctionTurn = 0.5;
-		} else if (correctionTurn <= -0.5) {
-			correctionTurn = -0.5;
+		if (correctionTurn >= 0.6) {
+			correctionTurn = 0.6;
+		} else if (correctionTurn <= -0.6) {
+			correctionTurn = -0.6;
 		} else if (correctionTurn <= .1 && correctionTurn > 0) {
 			correctionTurn = .1;
 		} else if (correctionTurn >= -.1 && correctionTurn < 0) {
@@ -259,7 +263,8 @@ public class WFFL {
 			yawError = (yawError + 360);
 		}
 
-		System.out.println((tranny.getLDisplacement() + tranny.getRDisplacement()) / 2);
+		System.out.println((tranny.getLDisplacement() + tranny
+				.getRDisplacement()) / 2);
 
 		if (((tranny.getLDisplacement() + tranny.getRDisplacement()) / 2) <= inches) {
 			keepRunning = true;
