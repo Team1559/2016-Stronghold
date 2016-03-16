@@ -26,7 +26,8 @@ public class Shooter {
 	/**
 	 * Enable/disable the shooter based on joystick input.
 	 * 
-	 * @param input The joystick used to control the shooter.
+	 * @param input
+	 *            The joystick used to control the shooter.
 	 */
 
 	public void setSolenoids(boolean s, boolean override) {
@@ -50,7 +51,9 @@ public class Shooter {
 			if (shooting) {
 				shooterCount++;
 			}
-			if (shooterCount >= Wiring.SHOOTER_FIRE_DELAY) {// delaying so we don't destroy ball clamps
+			if (shooterCount >= Wiring.SHOOTER_FIRE_DELAY) {// delaying so we
+															// don't destroy
+															// ball clamps
 				setSolenoids(true, override);
 				shootState = 1;
 				shooterCount = 0;
@@ -142,7 +145,7 @@ public class Shooter {
 	public boolean isShooting() {
 		return shooting;
 	}
-	
+
 	public boolean isShootDone() {
 		return shootDone;
 	}

@@ -47,9 +47,10 @@ public class Robot extends IterativeRobot {
 	BallClamp clamp;
 	Gatherer gatherer;
 	// USBCamera cam;
-//	CameraServer cs;
+	// CameraServer cs;
 	SensorCarnageProtection scp;
 	Flashlight deLight;
+	public final double kP = 0.0135;
 
 	// Comments are for a 4 motor drive system whereas uncommented code just
 	// does 2
@@ -74,9 +75,9 @@ public class Robot extends IterativeRobot {
 		coStick = new Joystick(Wiring.JOYSTICK1);
 		tranny = new Transmission(stick, leftM, rightM);
 		shooter = new Shooter();
-		
+
 		deLight = new Flashlight();
-		
+
 		// shooter.initShooter(gatherer.shouldNotShoot());
 		if (Wiring.hasBallClamp) {
 			clamp = new BallClamp();
@@ -84,7 +85,7 @@ public class Robot extends IterativeRobot {
 
 		// magneticSensor = new DigitalInput(Wiring.MAGNET);
 		// cam = new USBCamera("cam0");
-//		cs = CameraServer.getInstance();
+		// cs = CameraServer.getInstance();
 		drive.setExpiration(Double.MAX_VALUE);
 
 		leftM.setInverted(true);
@@ -119,7 +120,7 @@ public class Robot extends IterativeRobot {
 		}
 
 		pdp = new PowerDistributionPanel(0);
-		
+
 		scp = new SensorCarnageProtection();
 
 	}
@@ -136,14 +137,14 @@ public class Robot extends IterativeRobot {
 		leftM.setInverted(false);
 		rightM.setInverted(false);
 		waffle.length = 0;
-//		shooter.resetShooter(gatherer.shouldNotShoot());
+		// shooter.resetShooter(gatherer.shouldNotShoot());
 		tranny.resetEncoders();
 		// givenAngle = false;
 		// gatherer.updateAutoPosition();
 	}
 
 	// private boolean givenAngle = false;
-	private double angle = 0.0;
+
 	private int nate = 0;
 	private int aimPause = 0;
 	private double desiredYarAngle = 0.0;
@@ -152,8 +153,9 @@ public class Robot extends IterativeRobot {
 	private boolean tick = true;
 
 	public void autonomousPeriodic() {
+		double angle = 0.0;
 		gatherer.lowbarify();
-//		clamp.updateBallClampAbsolute(shooter.isShooting());
+		// clamp.updateBallClampAbsolute(shooter.isShooting());
 
 		// int rawError = sc.getSerialIn();
 
@@ -170,7 +172,8 @@ public class Robot extends IterativeRobot {
 			}
 		} else if (current.command.equals("GO")) {
 			waffle.drive(desiredHeading, current.dist, current.speed);
-			System.out.println(tranny.getLDisplacement() + " " + tranny.getRDisplacement());
+			System.out.println(tranny.getLDisplacement() + " "
+					+ tranny.getRDisplacement());
 			if (waffle.keepRunning == false) {
 				leftM.set(0);
 				rightM.set(0);
@@ -180,84 +183,89 @@ public class Robot extends IterativeRobot {
 			}
 		} else if (current.command.equals("SHOOT")) {
 
-			if(tick){
-			
-			switch (nate) {
-			case 0:
-//					aimPause = 0;
-//					System.out.println("Trying to turn...");
-//					oldAngle = angle;
-					angle = sc.grabAngle(); 
-					
-					if(angle != -1000){
+			if (tick) {
+				angle = sc.grabAngle();
+
+				switch (nate) {
+				case 0:
+					// aimPause = 0;
+					// System.out.println("Trying to turn...");
+					// oldAngle = angle;
+
+					if (angle != -1000) {
+						// double speed = angle * kP;
 						desiredYarAngle = waffle.ahrs.getYaw() + angle;
 					} else {
-						desiredYarAngle = waffle.ahrs.getYaw();
+						// desiredYarAngle = waffle.ahrs.getYaw();
 					}
-					
-					
-					if ((Math.abs(angle) <= Wiring.CAMERA_TOLERANCE)/* && (!waffle.keepTurning)*/) {
-						 goodFrames++;/*ugly*/System.out.println("YAY" + goodFrames);
-						 
-						if(goodFrames >= 0){ //Make sure we have at least 2 good frames increase to pause longer?
-							nate = 2;
+
+					if ((Math.abs(angle) <= Wiring.CAMERA_TOLERANCE)/*
+																	 * &&
+																	 * (!waffle
+																	 * .
+																	 * keepTurning
+																	 * )
+																	 */) {
+						goodFrames++;/* ugly */
+						System.out.println("YAY" + goodFrames);
+
+						if (goodFrames >= 2) { // Make sure we have at least 2
+												// good frames increase to pause
+												// longer?
+							nate = 2;// move to shoot state
 						}
-						
-						
-//						System.out.println("GOING TO SHOOT WILL:" + angle + " YAR " + waffle.ahrs.getYaw());
+
+						// System.out.println("GOING TO SHOOT WILL:" + angle +
+						// " YAR " + waffle.ahrs.getYaw());
 					} else {
 
 						nate = 1;
 						goodFrames = 0;
 						// waffle.keepTurning = true; //this should only be
 						// controlled by WFFLDrive
-						waffle.turnToAngle(desiredYarAngle); 
+						waffle.turnToAngle(desiredYarAngle);
 					}
 
-				break;
-			case 1:
-				
-				if (waffle.keepTurning) {
-					waffle.turnToAngle(desiredYarAngle);
-//					System.out.println("KEEP TURNING");
-				} else {
-					nate = 0;
+					break;
+				case 1:
+
+					if (waffle.keepTurning) {
+						waffle.turnToAngle(desiredYarAngle);
+						// System.out.println("KEEP TURNING");
+					} else {
+						nate = 0;
+					}
+
+					break;
+				case 2:
+					if (!shooter.isShootDone()) {
+						// System.out.println("SHOOT RIGHT MEOW");
+						/*
+						 * THIS IS NOT SAFE
+						 */
+						// TODO: MAKE IT SAFE PLEASE
+						shooter.autoShoot(true, gatherer.shouldNotShoot());
+					} else {
+						nate = 3;
+
+					}
+					break;
+				case 3:
+					current.done = true;
+					tranny.resetEncoders();
+					break;
 				}
 
-				break;
-			case 2:
-				if (!shooter.isShootDone()) {
-//					System.out.println("SHOOT RIGHT MEOW");
-					/*
-					 * THIS IS NOT SAFE
-					 */
-					// TODO: MAKE IT SAFE PLEASE
-					shooter.autoShoot(true, gatherer.shouldNotShoot());
-				} else {
-					nate = 3;
-					
-				}
-				break;
-			case 3:
-				current.done = true;
-				tranny.resetEncoders();
-				break;
+			} else {
+				sc.send("s");
+
 			}
-			
-			tick = !tick;
-			
-		} else {
-			tick = !tick;
-			
-		}
-			
-
 
 		} else if (current.command.equals("STOP")) {
 			leftM.set(0);
 			rightM.set(0);
-//			shooter.setSolenoids(false, gatherer.shouldNotShoot());
-//			System.out.println("Motor Stoppage achieved!");
+			// shooter.setSolenoids(false, gatherer.shouldNotShoot());
+			// System.out.println("Motor Stoppage achieved!");
 		} else if (current.command.equals("DEFENSE")) {
 			String id = current.id;
 			if (id.equals("lowbar")) {
@@ -284,14 +292,15 @@ public class Robot extends IterativeRobot {
 			// sup ladies
 
 			current.done = true;
+
 		}
 
 		// when a command is completed, we reset and move on to the next one
 		if ((current.done == true)) {
 			System.out.println("Current done boi");
 			current.done = false;
-//			if (Wiring.hasGatherer)
-//				gatherer.homify();// make sure the gatherer is out of the way
+			// if (Wiring.hasGatherer)
+			// gatherer.homify();// make sure the gatherer is out of the way
 
 			if (waffle.list.size() - 1 > listPos) {
 				listPos++;
@@ -305,6 +314,7 @@ public class Robot extends IterativeRobot {
 			}
 
 		}
+		tick = !tick;
 	}
 
 	public void teleopInit() {
@@ -314,12 +324,12 @@ public class Robot extends IterativeRobot {
 		// waffle.right.setInverted(true);
 		// leftF.setInverted(isInverted);
 		// centerWithAngle();
-//		cs.startAutomaticCapture();
+		// cs.startAutomaticCapture();
 		rightM.setEncPosition(0);
 		leftM.setEncPosition(0);
 		leftM.setInverted(true);
 		rightM.setInverted(true);
-//		shooter.resetShooter(gatherer.shouldNotShoot());
+		// shooter.resetShooter(gatherer.shouldNotShoot());
 		tranny.resetEncoders();
 		// initRecord();
 		// playbackSetup();
@@ -331,93 +341,90 @@ public class Robot extends IterativeRobot {
 			dio1.set(false);
 			dio2.set(true);
 		}
-		
+
 		desiredYarAngle = 0;
-		angle = 0;
 
 	}
 
 	public void teleopPeriodic() {
 		// recordPeriodic();
 		// playbackIterative();
-		
-		
+
 		if (tranny.getGear() == 1) {
 			drive.arcadeDrive(stick.getY() * Wiring.LOW_SPEED_MULTIPLIER,
 					-stick.getRawAxis(4) * Wiring.LOW_SPEED_MULTIPLIER);
 		} else {
 			drive.arcadeDrive(stick.getY(), -stick.getRawAxis(4));
 		}
-		
-//		//get cam angle
-//		angle = sc.grabAngle(); 
-//		
-//		if(angle != -1000){
-//			desiredYarAngle = waffle.ahrs.getYaw() + angle;
-//		} else {
-//			desiredYarAngle = waffle.ahrs.getYaw();
-//		}
-		
-		//give him a huge light
-//		if((Math.abs(angle) <= Wiring.CAMERA_TOLERANCE)){
-//			SmartDashboard.putBoolean("AIMED", true);
-//		} else { 
-//			SmartDashboard.putBoolean("AIMED", false);
-//		}
-		
-//		auto aiming
-//		if(stick.getRawAxis(2) >= .9){
-//			SmartDashboard.putNumber("ERROR ANGLE", sc.grabAngle());
-//		}
-		
-//		if(coStick.getRawButton(1)){
-//			scp.killGatherer();
-//		} else if(coStick.getRawButton(2)){
-//			scp.unKillGatherer();
-//		}
-		
-		if(coStick.getRawButton(11)){
+
+		// //get cam angle
+		// angle = sc.grabAngle();
+		//
+		// if(angle != -1000){
+		// desiredYarAngle = waffle.ahrs.getYaw() + angle;
+		// } else {
+		// desiredYarAngle = waffle.ahrs.getYaw();
+		// }
+
+		// give him a huge light
+		// if((Math.abs(angle) <= Wiring.CAMERA_TOLERANCE)){
+		// SmartDashboard.putBoolean("AIMED", true);
+		// } else {
+		// SmartDashboard.putBoolean("AIMED", false);
+		// }
+
+		// auto aiming
+		// if(stick.getRawAxis(2) >= .9){
+		// SmartDashboard.putNumber("ERROR ANGLE", sc.grabAngle());
+		// }
+
+		// if(coStick.getRawButton(1)){
+		// scp.killGatherer();
+		// } else if(coStick.getRawButton(2)){
+		// scp.unKillGatherer();
+		// }
+
+		if (coStick.getRawButton(11)) {
 			scp.killEncoders();
-		} else if(coStick.getRawButton(12)){
+		} else if (coStick.getRawButton(12)) {
 			scp.unKillEncoders();
 		}
 		// SmartDashboard.putBoolean("BALL IN!", !clamp.isOpen());
 
 		deLight.updateLight(coStick);
 
-		if(!scp.encodersDead()){
+		if (!scp.encodersDead()) {
 			tranny.updateShifting();
 		} else {
 			tranny.limpShifting();
 		}
 
 		if (Wiring.hasGatherer) {
-			if(!coStick.getRawButton(1)){
+			if (!coStick.getRawButton(1)) {
 				gatherer.manualControl();
 			} else {
-				if(coStick.getRawAxis(1) > .5){
+				if (coStick.getRawAxis(1) > .5) {
 					gatherer.copilotManualControlDOWN();
-				} else if(coStick.getRawAxis(1) < -.5){
+				} else if (coStick.getRawAxis(1) < -.5) {
 					gatherer.copilotManualControlUP();
 				} else {
 					gatherer.stopDriving();
 				}
 			}
-//				gatherer.manualControl();
+			// gatherer.manualControl();
 		}
-		
-		
 
-//		shooter.updateShooter(stick, /*gatherer.shouldNotShoot()*/ false); //this is correct!
+		// shooter.updateShooter(stick, /*gatherer.shouldNotShoot()*/ false);
+		// //this is correct!
 
 		if (Wiring.hasBallClamp)
-//			clamp.updateBallClamp(shooter.isShooting());
-			if(coStick.getRawButton(3)){
+			// clamp.updateBallClamp(shooter.isShooting());
+			if (coStick.getRawButton(3)) {
 				clamp.resetClampy();
 			} else {
 				clamp.updateBallClampAbsolute(shooter.isShooting());
 			}
-			
+
 		// ADD THIS IN IF YOU WANT TO MANUALLY DRIVE THE BALL CLAMP
 		// clamp.updateBallClamp(shooter.shooting ||
 		// stick.getRawButton(Wiring.BALL_CLAMP_OVERRIDE_BUTT));
@@ -425,12 +432,12 @@ public class Robot extends IterativeRobot {
 		if (Wiring.hasGatherer) {
 			if (stick.getRawButton(1)) {
 				gatherer.setSpark(0.5);
-			} else if(stick.getRawButton(3)){
+			} else if (stick.getRawButton(3)) {
 				gatherer.setSpark(-0.5);
 			} else {
 				gatherer.setSpark(0.0);
 			}
-			
+
 		}
 
 		// if (coStick.getRawButton(1)) {
@@ -472,11 +479,12 @@ public class Robot extends IterativeRobot {
 		// } else {
 		// clamp.open();
 		// }
-//		 clamp.updateBallClamp(shooter.isShooting());
-//		 System.out.println(clamp.readSensor());
-		
-//		System.out.println(tranny.getLDisplacement() + "    " +  tranny.getRDisplacement());
-		
+		// clamp.updateBallClamp(shooter.isShooting());
+		// System.out.println(clamp.readSensor());
+
+		// System.out.println(tranny.getLDisplacement() + "    " +
+		// tranny.getRDisplacement());
+
 		// System.out.println(shooter.shooting);
 		// if (stick.getRawButton(5) && clamp.open) {
 		// gatherer.setSpark(0.5);
@@ -484,25 +492,23 @@ public class Robot extends IterativeRobot {
 		// gatherer.setSpark(0.0);
 		// }
 
-//		if (tranny.getGear() == 1) {
-//			drive.arcadeDrive(stick.getY() * Wiring.LOW_SPEED_MULTIPLIER,
-//					-stick.getRawAxis(4) * Wiring.LOW_SPEED_MULTIPLIER);
-//		} else {
-//			drive.arcadeDrive(stick.getY(), -stick.getRawAxis(4));
-//		}
-//
-//		if (stick.getRawButton(1)) {
-//			tranny.gear1();
-//		} else if (stick.getRawButton(2)) {
-//			tranny.gear2();
-//		}
-//
-//		System.out.println(leftM.getEncPosition());
+		// if (tranny.getGear() == 1) {
+		// drive.arcadeDrive(stick.getY() * Wiring.LOW_SPEED_MULTIPLIER,
+		// -stick.getRawAxis(4) * Wiring.LOW_SPEED_MULTIPLIER);
+		// } else {
+		// drive.arcadeDrive(stick.getY(), -stick.getRawAxis(4));
+		// }
+		//
+		// if (stick.getRawButton(1)) {
+		// tranny.gear1();
+		// } else if (stick.getRawButton(2)) {
+		// tranny.gear2();
+		// }
+		//
+		// System.out.println(leftM.getEncPosition());
 
-		
-		
 		// shooter.updateShooter(stick, /*gatherer.shouldNotShoot()*/false);
-		
+
 		System.out.println(gatherer.getGyro().getAngle());
 	}
 
