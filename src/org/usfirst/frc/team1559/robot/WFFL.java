@@ -9,7 +9,6 @@ import java.util.Scanner;
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.CANTalon;
-import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.SPI;
 
@@ -18,44 +17,44 @@ import edu.wpi.first.wpilibj.SPI;
  */
 public class WFFL {
 
-	String raw;
-	String command;
-	String path;
-	Scanner s;
-	double distance = 0;
-	File file;
-	PowerDistributionPanel pdp = new PowerDistributionPanel();
-	boolean keepRunning = true;
-	boolean keepTurning = true;
-	double yaw = 0.0;
-	final double kpturn = 0.009;
-	double gyro_yaw;
-	double kpBase = 0.001;
-	final double maxError = 1;
-	final double tolerance = .001;
-	final double turnTolerance = .55;// originally .5
-	int length = 0;
-	double yawError;
-	double unchangedYawError;
-	double gyro_angle;
-	AHRS ahrs;
-	long global_startTime = System.currentTimeMillis() / 1000;
-	double time;
-	double dist;
-	double speed;
-	String id;
-	String temp;
-	double angle; // clockwise
-	boolean active;
-	String pattern;
-	ArrayList<Command> list = new ArrayList<Command>();
-	public int cx, cy;
-	RobotDrive rd;
-	CANTalon rightM, leftM;
-	Transmission tranny;
+	private String raw;
+	private String command;
+	private Scanner s;
+	private File file;
+	private boolean keepRunning = true;
+	private boolean keepTurning = true;
+	private double yaw = 0.0;
+	private double kpBase = 0.001;
+	private final double maxError = 1;
+	private final double tolerance = .001;
+	private final double turnTolerance = .55;// originally .5
+	private double yawError;
+	private AHRS ahrs;
+	private double time;
+	private double dist;
+	private double speed;
+	private String id;
+	private String temp;
+	private double angle; // clockwise
+	private boolean active;
+	private String pattern;
+	private ArrayList<Command> list = new ArrayList<Command>();
+	private RobotDrive rd;
+	private CANTalon rightM, leftM;
+	private Transmission tranny;
+	// private String path;
+	// private double distance = 0;
+	// private PowerDistributionPanel pdp = new PowerDistributionPanel();
+	// private final double kpturn = 0.009;
+	// private double gyro_yaw;
+	// private int length = 0;
+	// private double unchangedYawError;
+	// private double gyro_angle;
+	// private long global_startTime = System.currentTimeMillis() / 1000;
+	// private int cx, cy;
 
 	public WFFL(String path, RobotDrive rd, Transmission tranny) {
-		this.path = path;
+		// this.path = path;
 		this.tranny = tranny;
 		file = new File(path);
 		try {
@@ -90,7 +89,7 @@ public class WFFL {
 			System.out.println(dist);
 			temp = raw.substring(raw.indexOf("speed=\"") + 7, raw.length() - 2);
 			speed = Double.valueOf(temp);
-			global_startTime = System.currentTimeMillis() / 1000;
+			// global_startTime = System.currentTimeMillis() / 1000;
 
 			// (String command, double dist, double speed, double time, double
 			// angle, String id, boolean active, String pattern)
@@ -105,7 +104,7 @@ public class WFFL {
 		} else if (command.equals("TURN")) {
 			temp = raw.substring(raw.indexOf(" ") + 1);
 			angle = Double.valueOf(temp);
-			global_startTime = System.currentTimeMillis() / 1000;
+			// global_startTime = System.currentTimeMillis() / 1000;
 
 			// (String command, double dist, double speed, double time, double
 			// angle, String id, boolean active, String pattern)
@@ -123,8 +122,8 @@ public class WFFL {
 			temp = temp.substring(0, temp.indexOf("\""));
 			id = temp;
 
-			temp = raw
-					.substring(raw.indexOf("active=\"") + 8, raw.length() - 2);
+			temp = raw.substring(raw.indexOf("active=\"") + 8,
+					raw.length() - 2);
 			active = Boolean.valueOf(temp);
 
 			// (String command, double dist, double speed, double time, double
@@ -254,7 +253,7 @@ public class WFFL {
 			kp *= -1;
 		}
 
-		unchangedYawError = ahrs.getYaw() - angle;
+		// unchangedYawError = ahrs.getYaw() - angle;
 		yawError = yaw - angle;
 
 		if (yawError > 180) {
@@ -263,10 +262,11 @@ public class WFFL {
 			yawError = (yawError + 360);
 		}
 
-		System.out.println((tranny.getLDisplacement() + tranny
-				.getRDisplacement()) / 2);
+		System.out.println(
+				(tranny.getLDisplacement() + tranny.getRDisplacement()) / 2);
 
-		if (((tranny.getLDisplacement() + tranny.getRDisplacement()) / 2) <= inches) {
+		if (((tranny.getLDisplacement() + tranny.getRDisplacement())
+				/ 2) <= inches) {
 			keepRunning = true;
 			if ((Math.abs(yawError)) >= tolerance) {
 				if ((Math.abs(yawError * kp)) < maxError) {
@@ -320,12 +320,44 @@ public class WFFL {
 	// SmartDashboard.putNumber("Current: ", pdp.getCurrent(0));
 	// runTime++;
 	// }
-	
+
 	public double getLeftM() {
 		return leftM.get();
 	}
-	
+
 	public double getRightM() {
 		return rightM.get();
 	}
+
+	public AHRS getAHRS() {
+		return ahrs;
+	}
+
+	public void resetAHRS() {
+		ahrs.reset();
+	}
+
+	public boolean isTurning() {
+		return keepTurning;
+	}
+
+	public boolean isRunning() {
+		return keepRunning;
+	}
+
+	public void setTurning(boolean b) {
+		keepTurning = b;
+	}
+
+	public void setRunning(boolean b) {
+		keepRunning = b;
+	}
+
+	public ArrayList<Command> getList() {
+		return list;
+	}
+
+	// public void resetLength() {
+	// this.length = 0;
+	// }
 }

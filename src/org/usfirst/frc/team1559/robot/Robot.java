@@ -15,7 +15,6 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Robot extends IterativeRobot {
 
@@ -70,6 +69,7 @@ public class Robot extends IterativeRobot {
 																	// motors to
 																	// followers
 		leftS.set(Wiring.LEFT_MASTER_TALON);// sets to ID of master(leftM)
+
 		rightS.changeControlMode(CANTalon.TalonControlMode.Follower);
 		rightS.set(Wiring.RIGHT_MASTER_TALON);
 
@@ -141,14 +141,14 @@ public class Robot extends IterativeRobot {
 		waffle.reset();
 		if (Wiring.hasArduino)
 			arduino.writeSequence(1);
-		System.out.println("AHRS: " + waffle.ahrs);
-		waffle.ahrs.reset();
+		System.out.println("AHRS: " + waffle.getAHRS());
+		waffle.resetAHRS();
 		waffle.interpret();
 		// System.out.println("JFKDSLFIUESHF " +
 		// waffle.list.get(waffle.list.size() - 1).command);
 		leftM.setInverted(false);
 		rightM.setInverted(false);
-		waffle.length = 0;
+//		waffle.resetLength();
 		// shooter.resetShooter(gatherer.shouldNotShoot());
 		tranny.resetEncoders();
 		// givenAngle = false;
@@ -174,20 +174,20 @@ public class Robot extends IterativeRobot {
 
 		// SmartDashboard.putNumber("Displacement", (tranny.getLDisplacement() +
 		// tranny.getRDisplacement()) / 2);
-		Command current = waffle.list.get(listPos);
+		Command current = waffle.getList().get(listPos);
 		if (current.command.equals("TURN")) {
 			waffle.turnToAngle(current.angle);
-			if (waffle.keepTurning == false) {
+			if (waffle.isTurning() == false) {
 				desiredHeading = current.angle;
 				current.done = true;
-				waffle.length = 0;
+//				waffle.resetLength();
 				tranny.resetEncoders();
 			}
 		} else if (current.command.equals("GO")) {
 			waffle.drive(desiredHeading, current.dist, current.speed);
 			System.out.println(tranny.getLDisplacement() + " "
 					+ tranny.getRDisplacement());
-			if (waffle.keepRunning == false) {
+			if (waffle.isRunning() == false) {
 				leftM.set(0);
 				rightM.set(0);
 				current.done = true;
@@ -245,7 +245,7 @@ public class Robot extends IterativeRobot {
 					break;
 				case 1:
 
-					if (waffle.keepTurning) {
+					if (waffle.isTurning()) {
 						waffle.turnToAngle(desiredYarAngle);
 						// System.out.println("KEEP TURNING");
 					} else {
@@ -274,7 +274,7 @@ public class Robot extends IterativeRobot {
 
 			} else {
 				sc.send("s");
-				ang = waffle.ahrs.getYaw();
+				ang = waffle.getAHRS().getYaw();
 			}
 
 		} else if (current.command.equals("STOP")) {
@@ -318,11 +318,11 @@ public class Robot extends IterativeRobot {
 			// if (Wiring.hasGatherer)
 			// gatherer.homify();// make sure the gatherer is out of the way
 
-			if (waffle.list.size() - 1 > listPos) {
+			if (waffle.getList().size() - 1 > listPos) {
 				listPos++;
-				waffle.length = 0;
-				waffle.keepRunning = true;
-				waffle.keepTurning = true;
+//				waffle.resetLength();
+				waffle.setRunning(true);
+				waffle.setTurning(true);
 			} else {
 				leftM.set(0);
 				rightM.set(0);
