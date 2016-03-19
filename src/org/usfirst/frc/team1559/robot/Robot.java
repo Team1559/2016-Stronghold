@@ -43,6 +43,8 @@ public class Robot extends IterativeRobot {
 	// DigitalInput magneticSensor;
 	DigitalOutput dio2;
 	DigitalOutput dio1;
+	File fillet;
+	FileWriter filletWrite;
 
 	BallClamp clamp;
 	Gatherer gatherer;
@@ -51,6 +53,7 @@ public class Robot extends IterativeRobot {
 	SensorCarnageProtection scp;
 	Flashlight deLight;
 	public final double kP = 0.0135;
+	int lineNum = 0;
 
 	// Comments are for a 4 motor drive system whereas uncommented code just
 	// does 2
@@ -77,6 +80,15 @@ public class Robot extends IterativeRobot {
 		shooter = new Shooter();
 
 		deLight = new Flashlight();
+		
+		fillet = new File("/media/sda1/camlog.csv");
+		try {
+			filletWrite = new FileWriter(fillet);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		
 
 		// shooter.initShooter(gatherer.shouldNotShoot());
 		if (Wiring.hasBallClamp) {
@@ -151,6 +163,7 @@ public class Robot extends IterativeRobot {
 	private int goodFrames = 0;
 	private double oldAngle = 0.0;
 	private boolean tick = true;
+	private double ang = 0.0;
 
 	public void autonomousPeriodic() {
 		double angle = 0.0;
@@ -194,7 +207,7 @@ public class Robot extends IterativeRobot {
 
 					if (angle != -1000) {
 						// double speed = angle * kP;
-						desiredYarAngle = waffle.ahrs.getYaw() + angle;
+						desiredYarAngle = ang + angle;
 					} else {
 						// desiredYarAngle = waffle.ahrs.getYaw();
 					}
@@ -217,6 +230,9 @@ public class Robot extends IterativeRobot {
 
 						// System.out.println("GOING TO SHOOT WILL:" + angle +
 						// " YAR " + waffle.ahrs.getYaw());
+						
+						
+						
 					} else {
 
 						nate = 1;
@@ -258,7 +274,7 @@ public class Robot extends IterativeRobot {
 
 			} else {
 				sc.send("s");
-
+				ang = waffle.ahrs.getYaw();
 			}
 
 		} else if (current.command.equals("STOP")) {
@@ -314,6 +330,22 @@ public class Robot extends IterativeRobot {
 			}
 
 		}
+		
+		if (fillet.exists()) {
+			try {
+				filletWrite.write(lineNum);
+				filletWrite.write(Double.toString(angle));
+				filletWrite.write(Double.toString(waffle.getLeftM()));
+				filletWrite.write(Double.toString(waffle.getRightM()));
+				filletWrite.write("/n");
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		} else {
+			System.out.println("well crap, no file :(");
+		}
+			
+		
 		tick = !tick;
 	}
 

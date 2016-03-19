@@ -320,4 +320,12 @@ public class WFFL {
 	// SmartDashboard.putNumber("Current: ", pdp.getCurrent(0));
 	// runTime++;
 	// }
+	
+	public double getLeftM() {
+		return leftM.get();
+	}
+	
+	public double getRightM() {
+		return rightM.get();
+	}
 }
