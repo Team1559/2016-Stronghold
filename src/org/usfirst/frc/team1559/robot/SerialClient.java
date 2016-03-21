@@ -14,16 +14,21 @@ public class SerialClient {
 
 	public double grabAngle() {
 		double ret = -1000; 
-		int bcount = sp.getBytesReceived();
-		if (bcount > 0) {
-			String in = sp.readString();
-			if (in.endsWith("t")) {
-				in = in.substring(0, in.charAt('t'));
-				try {
-					ret = Double.parseDouble(in);
-				} catch (Exception e) {
+		try{
+			int bcount = sp.getBytesReceived();
+			if (bcount > 0) {
+				String in = sp.readString();
+				if (in.endsWith("t")) {
+					in = in.substring(0, in.charAt('t'));
+					try {
+						ret = Double.parseDouble(in);
+					} catch (Exception e) {
+					}
 				}
 			}
+			
+		} catch (Exception e){
+			System.out.println("THIS IS AN IO ERROR");
 		}
 		
 		return ret;
