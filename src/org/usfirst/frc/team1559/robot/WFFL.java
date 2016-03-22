@@ -156,8 +156,13 @@ public class WFFL {
 		}
 	}
 
+	
+	public double getYawError(){
+		return yawError;
+	}
+	
 	public double getCurrentAngle() {
-		return ahrs.getAngle();
+		return ahrs.getYaw();
 	}
 
 	public void reset() {

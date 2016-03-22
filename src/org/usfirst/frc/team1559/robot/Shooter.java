@@ -78,7 +78,7 @@ public class Shooter {
 			}
 			shooting = false;
 			break;
-		case 4: // wait for button to go false
+		case 4:
 			shootState = 5;
 			shootDone = true;
 			break;

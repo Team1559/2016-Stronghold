@@ -168,6 +168,7 @@ public class Robot extends IterativeRobot {
 	public void autonomousPeriodic() {
 		double angle = 0.0;
 		gatherer.lowbarify();
+		sc.sp.flush();
 		// clamp.updateBallClampAbsolute(shooter.isShooting());
 
 		// int rawError = sc.getSerialIn();
@@ -196,12 +197,14 @@ public class Robot extends IterativeRobot {
 			}
 		} else if (current.command.equals("SHOOT")) {
 
+			ang = waffle.getCurrentAngle();
+			
 			if (tick) {
 				angle = sc.grabAngle();
 
 				switch (nate) {
 				case 0:
-					// aimPause = 0;
+					 
 					// System.out.println("Trying to turn...");
 					// oldAngle = angle;
 
@@ -212,31 +215,16 @@ public class Robot extends IterativeRobot {
 						// desiredYarAngle = waffle.ahrs.getYaw();
 					}
 
-					if ((Math.abs(angle) <= Wiring.CAMERA_TOLERANCE)/*
-																	 * &&
-																	 * (!waffle
-																	 * .
-																	 * keepTurning
-																	 * )
-																	 */) {
-						goodFrames++;/* ugly */
-						System.out.println("YAY" + goodFrames);
+					if (((Math.abs(angle) <= Wiring.CAMERA_TOLERANCE) && (aimPause++ > 10)) && !waffle.isTurning()) {
+						System.out.println("READY TO SHOOT");
+							
+						aimPause = 0;
+							nate = 10;// move to shoot state
 
-						if (goodFrames >= 2) { // Make sure we have at least 2
-												// good frames increase to pause
-												// longer?
-							nate = 2;// move to shoot state
-						}
-
-						// System.out.println("GOING TO SHOOT WILL:" + angle +
-						// " YAR " + waffle.ahrs.getYaw());
-						
-						
-						
 					} else {
 
 						nate = 1;
-						goodFrames = 0;
+//						goodFrames = 0;
 						// waffle.keepTurning = true; //this should only be
 						// controlled by WFFLDrive
 						waffle.turnToAngle(desiredYarAngle);
@@ -255,12 +243,10 @@ public class Robot extends IterativeRobot {
 					break;
 				case 2:
 					if (!shooter.isShootDone()) {
-						// System.out.println("SHOOT RIGHT MEOW");
-						/*
-						 * THIS IS NOT SAFE
-						 */
-						// TODO: MAKE IT SAFE PLEASE
-						shooter.autoShoot(true, gatherer.shouldNotShoot());
+						 System.out.println("SHOOT RIGHT MEOW");
+						 
+						 //change this!!!!!
+						shooter.autoShoot(true, false); //this is unsafe, but correct.
 					} else {
 						nate = 3;
 
@@ -269,6 +255,10 @@ public class Robot extends IterativeRobot {
 				case 3:
 					current.done = true;
 					tranny.resetEncoders();
+					break;
+					
+				case 10:
+					System.out.println("hellow i am a shooting robit.");
 					break;
 				}
 
@@ -333,11 +323,16 @@ public class Robot extends IterativeRobot {
 		
 		if (fillet.exists()) {
 			try {
-				filletWrite.write(lineNum);
-				filletWrite.write(Double.toString(angle));
-				filletWrite.write(Double.toString(waffle.getLeftM()));
-				filletWrite.write(Double.toString(waffle.getRightM()));
-				filletWrite.write("/n");
+				filletWrite.write(String.valueOf(nate) + ",");
+				filletWrite.write(Double.toString(angle) + ",");
+				filletWrite.write(Double.toString(waffle.getLeftM()) + ",");
+				filletWrite.write(Double.toString(waffle.getRightM()) + ",");
+				filletWrite.write(String.valueOf(waffle.isTurning()) + ",");
+				filletWrite.write(String.valueOf(waffle.getYawError()));
+				if(shooter.isShooting()){
+					filletWrite.write("SHOOTING!,");
+				}
+				filletWrite.write("\n");
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
