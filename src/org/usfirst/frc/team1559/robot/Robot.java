@@ -44,6 +44,7 @@ public class Robot extends IterativeRobot {
 	DigitalOutput dio1;
 	File fillet;
 	FileWriter filletWrite;
+	int counter = 0;
 
 	BallClamp clamp;
 	Gatherer gatherer;
@@ -164,9 +165,10 @@ public class Robot extends IterativeRobot {
 	private double oldAngle = 0.0;
 	private boolean tick = true;
 	private double ahrsAngle = 0.0;
+	double cameraAngle = 0.0;
 
 	public void autonomousPeriodic() {
-		double cameraAngle = 0.0;
+
 		gatherer.lowbarify();
 		sc.sp.flush();
 		// clamp.updateBallClampAbsolute(shooter.isShooting());
@@ -199,27 +201,37 @@ public class Robot extends IterativeRobot {
 
 			ahrsAngle = waffle.getCurrentAngle();
 			
-			if (tick) {
+			if (!tick) {			
 				cameraAngle = sc.grabAngle();
-
+			} else {
+				sc.send("s");
+				ahrsAngle = waffle.getAHRS().getYaw();
+			}
 				switch (nate) {
 				case 0:
 					if (cameraAngle != -1000) {
 						desiredYarAngle = ahrsAngle + cameraAngle;
+						
 					} else {
 						desiredYarAngle = ahrsAngle;
 					}
-
+					
 					System.out.println("Checking for alignment...AHRS YAW:" + ahrsAngle + "...WILL ANGLE:" + cameraAngle + "...KEEPTURNING: " + waffle.isTurning());
 					if (((Math.abs(cameraAngle) <= Wiring.CAMERA_TOLERANCE)) && !waffle.isTurning()) { 
 						//took out pause, because this is to see if we're already lined up
+						
+						
+						
 						System.out.println("READY TO SHOOT");
 							
 						aimPause = 0;
 						nate = 10;// move to shoot state (nate = 2)
 
+					} else if(!waffle.isTurning() && (counter++ > 50)) {
+						
+						counter = 0;
+						
 					} else {
-
 						nate = 1;
 						waffle.turnToAngle(desiredYarAngle);
 						
@@ -256,11 +268,6 @@ public class Robot extends IterativeRobot {
 					System.out.println("hellow i am a shooting robit.");
 					break;
 				}
-
-			} else {
-				sc.send("s");
-				ahrsAngle = waffle.getAHRS().getYaw();
-			}
 
 		} else if (current.command.equals("STOP")) {
 			leftM.set(0);
