@@ -232,7 +232,7 @@ public class Robot extends IterativeRobot {
 						waffle.turnToAngle(desiredYarAngle);
 						// System.out.println("KEEP TURNING");
 					} else {
-						nate = 10; //should be 0, to restart
+						nate = 0; //should be 0, to restart
 					}
 
 					break;
