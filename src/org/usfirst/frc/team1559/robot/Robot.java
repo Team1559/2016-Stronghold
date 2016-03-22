@@ -163,10 +163,10 @@ public class Robot extends IterativeRobot {
 	private int goodFrames = 0;
 	private double oldAngle = 0.0;
 	private boolean tick = true;
-	private double ang = 0.0;
+	private double ahrsAngle = 0.0;
 
 	public void autonomousPeriodic() {
-		double angle = 0.0;
+		double cameraAngle = 0.0;
 		gatherer.lowbarify();
 		sc.sp.flush();
 		// clamp.updateBallClampAbsolute(shooter.isShooting());
@@ -196,37 +196,22 @@ public class Robot extends IterativeRobot {
 				System.out.println("PLZ STOP NOW");
 			}
 		} else if (current.command.equals("SHOOT")) {
-			
-			/*
-			 * 
-			 * Hello.
-			 * It's me.
-			 * 
-			 * Something to try:
-			 * - Running the state machine once
-			 * 		-> The turnToAngle method has been improved, and may not need to receive updates more than once.
-			 * - I will be running through the numbers with Excel later today.
-			 * 
-			 * Love,
-			 * Adele
-			 * 
-			 */
 
-			ang = waffle.getCurrentAngle();
+			ahrsAngle = waffle.getCurrentAngle();
 			
 			if (tick) {
-				angle = sc.grabAngle();
+				cameraAngle = sc.grabAngle();
 
 				switch (nate) {
 				case 0:
-					if (angle != -1000) {
-						desiredYarAngle = ang + angle;
+					if (cameraAngle != -1000) {
+						desiredYarAngle = ahrsAngle + cameraAngle;
 					} else {
-						desiredYarAngle = ang;
+						desiredYarAngle = ahrsAngle;
 					}
 
-					System.out.println("Checking for alignment...AHRS YAW:" + ang + "...WILL ANGLE:" + angle + "...KEEPTURNING: " + waffle.isTurning());
-					if (((Math.abs(angle) <= Wiring.CAMERA_TOLERANCE)) && !waffle.isTurning()) { 
+					System.out.println("Checking for alignment...AHRS YAW:" + ahrsAngle + "...WILL ANGLE:" + cameraAngle + "...KEEPTURNING: " + waffle.isTurning());
+					if (((Math.abs(cameraAngle) <= Wiring.CAMERA_TOLERANCE)) && !waffle.isTurning()) { 
 						//took out pause, because this is to see if we're already lined up
 						System.out.println("READY TO SHOOT");
 							
@@ -247,7 +232,7 @@ public class Robot extends IterativeRobot {
 						waffle.turnToAngle(desiredYarAngle);
 						// System.out.println("KEEP TURNING");
 					} else {
-						nate = 0;
+						nate = 10; //should be 0, to restart
 					}
 
 					break;
@@ -274,7 +259,7 @@ public class Robot extends IterativeRobot {
 
 			} else {
 				sc.send("s");
-				ang = waffle.getAHRS().getYaw();
+				ahrsAngle = waffle.getAHRS().getYaw();
 			}
 
 		} else if (current.command.equals("STOP")) {
@@ -334,7 +319,7 @@ public class Robot extends IterativeRobot {
 		if (fillet.exists()) {
 			try {
 				filletWrite.write(String.valueOf(nate) + ",");
-				filletWrite.write(Double.toString(angle) + ",");
+				filletWrite.write(Double.toString(cameraAngle) + ",");
 				filletWrite.write(Double.toString(waffle.getLeftM()) + ",");
 				filletWrite.write(Double.toString(waffle.getRightM()) + ",");
 				filletWrite.write(String.valueOf(waffle.isTurning()) + ",");
