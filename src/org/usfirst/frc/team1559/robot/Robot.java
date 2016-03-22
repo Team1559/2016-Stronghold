@@ -196,6 +196,21 @@ public class Robot extends IterativeRobot {
 				System.out.println("PLZ STOP NOW");
 			}
 		} else if (current.command.equals("SHOOT")) {
+			
+			/*
+			 * 
+			 * Hello.
+			 * It's me.
+			 * 
+			 * Something to try:
+			 * - Running the state machine once
+			 * 		-> The turnToAngle method has been improved, and may not need to receive updates more than once.
+			 * - I will be running through the numbers with Excel later today.
+			 * 
+			 * Love,
+			 * Adele
+			 * 
+			 */
 
 			ang = waffle.getCurrentAngle();
 			
@@ -204,30 +219,25 @@ public class Robot extends IterativeRobot {
 
 				switch (nate) {
 				case 0:
-					 
-					// System.out.println("Trying to turn...");
-					// oldAngle = angle;
-
 					if (angle != -1000) {
-						// double speed = angle * kP;
 						desiredYarAngle = ang + angle;
 					} else {
-						// desiredYarAngle = waffle.ahrs.getYaw();
+						desiredYarAngle = ang;
 					}
 
-					if (((Math.abs(angle) <= Wiring.CAMERA_TOLERANCE) && (aimPause++ > 10)) && !waffle.isTurning()) {
+					System.out.println("Checking for alignment...AHRS YAW:" + ang + "...WILL ANGLE:" + angle + "...KEEPTURNING: " + waffle.isTurning());
+					if (((Math.abs(angle) <= Wiring.CAMERA_TOLERANCE)) && !waffle.isTurning()) { 
+						//took out pause, because this is to see if we're already lined up
 						System.out.println("READY TO SHOOT");
 							
 						aimPause = 0;
-							nate = 10;// move to shoot state
+						nate = 10;// move to shoot state (nate = 2)
 
 					} else {
 
 						nate = 1;
-//						goodFrames = 0;
-						// waffle.keepTurning = true; //this should only be
-						// controlled by WFFLDrive
 						waffle.turnToAngle(desiredYarAngle);
+						
 					}
 
 					break;
