@@ -42,6 +42,7 @@ public class WFFL {
 	private RobotDrive rd;
 	private CANTalon rightM, leftM;
 	private Transmission tranny;
+
 	// private String path;
 	// private double distance = 0;
 	// private PowerDistributionPanel pdp = new PowerDistributionPanel();
@@ -122,8 +123,8 @@ public class WFFL {
 			temp = temp.substring(0, temp.indexOf("\""));
 			id = temp;
 
-			temp = raw.substring(raw.indexOf("active=\"") + 8,
-					raw.length() - 2);
+			temp = raw
+					.substring(raw.indexOf("active=\"") + 8, raw.length() - 2);
 			active = Boolean.valueOf(temp);
 
 			// (String command, double dist, double speed, double time, double
@@ -156,11 +157,10 @@ public class WFFL {
 		}
 	}
 
-	
-	public double getYawError(){
+	public double getYawError() {
 		return yawError;
 	}
-	
+
 	public double getCurrentAngle() {
 		return ahrs.getYaw();
 	}
@@ -192,13 +192,12 @@ public class WFFL {
 			yawError = (yawError + 360);
 		}
 
-		
-		if(yawError < 0){
+		if (yawError < 0) {
 			kpturn = (yawError / 180) - .1;
 		} else {
 			kpturn = (yawError / 180) + .1;
 		}
-		
+
 		double correctionTurn = kpturn; // DELETE " * yawError"
 		if (correctionTurn >= 0.5) {
 			correctionTurn = 0.5;
@@ -212,7 +211,7 @@ public class WFFL {
 			System.out.print("oh well (crap)");
 		}
 
-		System.out.println(yawError);
+		// System.out.println(yawError);
 		if ((Math.abs(yawError) > turnTolerance)) {
 			keepTurning = true;
 			if (yawError > 0) {
@@ -272,11 +271,10 @@ public class WFFL {
 			yawError = (yawError + 360);
 		}
 
-		System.out.println(
-				(tranny.getLDisplacement() + tranny.getRDisplacement()) / 2);
+		System.out.println((tranny.getLDisplacement() + tranny
+				.getRDisplacement()) / 2);
 
-		if (((tranny.getLDisplacement() + tranny.getRDisplacement())
-				/ 2) <= inches) {
+		if (((tranny.getLDisplacement() + tranny.getRDisplacement()) / 2) <= inches) {
 			keepRunning = true;
 			if ((Math.abs(yawError)) >= tolerance) {
 				if ((Math.abs(yawError * kp)) < maxError) {

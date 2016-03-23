@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj.Timer;
 public class Robot extends IterativeRobot {
 
 	RobotDrive drive;
+	int camWait = 0;
 	PowerDistributionPanel pdp;
 	boolean shootDone = false;
 	int arduinoCounterForAlison = 0; // dont blame john pls
@@ -81,15 +82,13 @@ public class Robot extends IterativeRobot {
 		shooter = new Shooter();
 
 		deLight = new Flashlight();
-		
+
 		fillet = new File("/media/sda1/camlog.csv");
 		try {
 			filletWrite = new FileWriter(fillet);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
-		
 
 		// shooter.initShooter(gatherer.shouldNotShoot());
 		if (Wiring.hasBallClamp) {
@@ -144,12 +143,13 @@ public class Robot extends IterativeRobot {
 			arduino.writeSequence(1);
 		System.out.println("AHRS: " + waffle.getAHRS());
 		waffle.resetAHRS();
+		sc.reset();
 		waffle.interpret();
 		// System.out.println("JFKDSLFIUESHF " +
 		// waffle.list.get(waffle.list.size() - 1).command);
 		leftM.setInverted(false);
 		rightM.setInverted(false);
-//		waffle.resetLength();
+		// waffle.resetLength();
 		// shooter.resetShooter(gatherer.shouldNotShoot());
 		tranny.resetEncoders();
 		// givenAngle = false;
@@ -183,7 +183,7 @@ public class Robot extends IterativeRobot {
 			if (waffle.isTurning() == false) {
 				desiredHeading = current.angle;
 				current.done = true;
-//				waffle.resetLength();
+				// waffle.resetLength();
 				tranny.resetEncoders();
 			}
 		} else if (current.command.equals("GO")) {
@@ -199,75 +199,71 @@ public class Robot extends IterativeRobot {
 			}
 		} else if (current.command.equals("SHOOT")) {
 
-			ahrsAngle = waffle.getCurrentAngle();
-			
-			if (!tick) {			
-				cameraAngle = sc.grabAngle();
-			} else {
+			System.out.println(waffle.getYawError());
+
+			switch (nate) {
+
+			case 0:
 				sc.send("s");
-				ahrsAngle = waffle.getAHRS().getYaw();
-			}
-				switch (nate) {
-				case 0:
-					if (cameraAngle != -1000) {
-						desiredYarAngle = ahrsAngle + cameraAngle;
-						
+				nate++;
+				break;
+			case 1:
+				cameraAngle = sc.grabAngle();
+				ahrsAngle = waffle.getCurrentAngle();
+				if (counter > 3) {
+					nate++;
+					counter = 0;
+				} else {
+					if (Math.abs(cameraAngle) < 30) {
+						counter++;
+						nate = 0;
 					} else {
-						desiredYarAngle = ahrsAngle;
-					}
-					
-					System.out.println("Checking for alignment...AHRS YAW:" + ahrsAngle + "...WILL ANGLE:" + cameraAngle + "...KEEPTURNING: " + waffle.isTurning());
-					if (((Math.abs(cameraAngle) <= Wiring.CAMERA_TOLERANCE)) && !waffle.isTurning()) { 
-						//took out pause, because this is to see if we're already lined up
-						
-						
-						
-						System.out.println("READY TO SHOOT");
-							
-						aimPause = 0;
-						nate = 10;// move to shoot state (nate = 2)
-
-					} else if(!waffle.isTurning() && (counter++ > 50)) {
-						
 						counter = 0;
-						
-					} else {
-						nate = 1;
-						waffle.turnToAngle(desiredYarAngle);
-						
 					}
-
-					break;
-				case 1:
-
-					if (waffle.isTurning()) {
-						waffle.turnToAngle(desiredYarAngle);
-						// System.out.println("KEEP TURNING");
-					} else {
-						nate = 0; //should be 0, to restart
-					}
-
-					break;
-				case 2:
-					if (!shooter.isShootDone()) {
-						 System.out.println("SHOOT RIGHT MEOW");
-						 
-						 //change this!!!!!
-						shooter.autoShoot(true, false); //this is unsafe, but correct.
-					} else {
-						nate = 3;
-
-					}
-					break;
-				case 3:
-					current.done = true;
-					tranny.resetEncoders();
-					break;
-					
-				case 10:
-					System.out.println("hellow i am a shooting robit.");
-					break;
 				}
+				break;
+			case 2:
+				desiredYarAngle = cameraAngle + ahrsAngle;
+				waffle.turnToAngle(desiredYarAngle);
+				nate++;
+				break;
+			case 3:
+				if (waffle.isTurning()) {
+					waffle.turnToAngle(desiredYarAngle);
+				} else {
+					nate++;
+				}
+				break;
+			case 4:
+				// System.out.println("running again");
+
+				if (camWait++ > 12) {
+					
+					
+					if(Math.abs(cameraAngle) <= Wiring.CAMERA_TOLERANCE){
+						nate++;
+						System.out.println("SHOOTING ROBITS" + cameraAngle);
+						shooter.autoShoot(true, false); //maybe change this to gatherer.shouldnotshoot (?)
+					} else {
+						nate = 0;
+					}
+			
+					camWait = 0;
+				}
+
+				break;
+			case 5:
+				if(!shooter.isShootDone()){
+					shooter.autoShoot(true, false);
+				} else {
+					nate++;
+				}
+				break;
+			case 6:
+//				System.out.println("");
+				break;
+
+			}
 
 		} else if (current.command.equals("STOP")) {
 			leftM.set(0);
@@ -312,7 +308,7 @@ public class Robot extends IterativeRobot {
 
 			if (waffle.getList().size() - 1 > listPos) {
 				listPos++;
-//				waffle.resetLength();
+				// waffle.resetLength();
 				waffle.setRunning(true);
 				waffle.setTurning(true);
 			} else {
@@ -322,7 +318,7 @@ public class Robot extends IterativeRobot {
 			}
 
 		}
-		
+
 		if (fillet.exists()) {
 			try {
 				filletWrite.write(String.valueOf(nate) + ",");
@@ -331,7 +327,7 @@ public class Robot extends IterativeRobot {
 				filletWrite.write(Double.toString(waffle.getRightM()) + ",");
 				filletWrite.write(String.valueOf(waffle.isTurning()) + ",");
 				filletWrite.write(String.valueOf(waffle.getYawError()));
-				if(shooter.isShooting()){
+				if (shooter.isShooting()) {
 					filletWrite.write("SHOOTING!,");
 				}
 				filletWrite.write("\n");
@@ -341,8 +337,7 @@ public class Robot extends IterativeRobot {
 		} else {
 			System.out.println("well crap, no file :(");
 		}
-			
-		
+
 		tick = !tick;
 	}
 
