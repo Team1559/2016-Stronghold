@@ -48,7 +48,8 @@ public class Robot extends IterativeRobot {
 	int counter = 0;
 
 	BallClamp clamp;
-	Gatherer gatherer;
+//	Gatherer gatherer;
+	GathererManualPID gatherer;
 	// USBCamera cam;
 	// CameraServer cs;
 	SensorCarnageProtection scp;
@@ -125,8 +126,7 @@ public class Robot extends IterativeRobot {
 		tranny.resetEncoders();
 
 		if (Wiring.hasGatherer) {
-			gatherer = new Gatherer(Wiring.GATHERER_LIFT,
-					Wiring.GATHERER_ROTATE, stick);
+			gatherer = new GathererManualPID(Wiring.GATHERER_ANALOG_INPUT, Wiring.GATHERER_ROTATE, stick);
 			// gatherer.initLifterPID(Wiring.GATHERER_PID_P,
 			// Wiring.GATHERER_PID_I, Wiring.GATHERER_PID_D);
 		}
@@ -168,8 +168,9 @@ public class Robot extends IterativeRobot {
 	double cameraAngle = 0.0;
 
 	public void autonomousPeriodic() {
-
-		gatherer.lowbarify();
+		
+		//TODO Add something to handle lowbar here ayy
+		
 		sc.sp.flush();
 		// clamp.updateBallClampAbsolute(shooter.isShooting());
 
@@ -273,8 +274,7 @@ public class Robot extends IterativeRobot {
 		} else if (current.command.equals("DEFENSE")) {
 			String id = current.id;
 			if (id.equals("lowbar")) {
-				gatherer.lowbarify(); // this should work to get us under the
-										// low bar.
+
 			}
 			if (!following) {
 				playbackSetup(id);
@@ -426,6 +426,7 @@ public class Robot extends IterativeRobot {
 		if (Wiring.hasGatherer) {
 			if (!coStick.getRawButton(1)) {
 				gatherer.manualControl();
+				System.out.println();
 			} else {
 				if (coStick.getRawAxis(1) > .5) {
 					gatherer.copilotManualControlDOWN();
@@ -533,7 +534,7 @@ public class Robot extends IterativeRobot {
 
 		// shooter.updateShooter(stick, /*gatherer.shouldNotShoot()*/false);
 
-		System.out.println(gatherer.getGyro().getAngle());
+//		System.out.println(gatherer.getGyro().getAngle()); //I was told to do this
 	}
 
 	public void disabledInit() {

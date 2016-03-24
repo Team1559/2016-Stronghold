@@ -96,4 +96,6 @@ public class Wiring {
 	public static final int FLASH_DIO = 3;//dio
 	public static final int FLASH_BUTT_ON = 7;
 	public static final int FLASH_BUTT_STROBE = 8;
+
+	public static final double GATHER_MID_TARGET = 50; //this will change!
 }
