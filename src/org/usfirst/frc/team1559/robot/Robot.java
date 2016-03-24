@@ -413,7 +413,7 @@ public class Robot extends IterativeRobot {
 		}
 		
 		if(climber.isArmed() && (coStick.getRawAxis(1) <= -.8)){
-			
+			//TODO finish this 
 		}
 		
 		if (Wiring.hasGatherer) {

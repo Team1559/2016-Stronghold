@@ -193,20 +193,20 @@ public class WFFL {
 		}
 
 		if (yawError < 0) {
-			kpturn = (yawError / 180) - .2;
+			kpturn = (yawError / 180) - 0.1;
 		} else {
-			kpturn = (yawError / 180) + .2;
+			kpturn = (yawError / 180) + 0.1;
 		}
 
 		double correctionTurn = kpturn; // DELETE " * yawError"
-		if (correctionTurn >= 0.5) {
-			correctionTurn = 0.5;
-		} else if (correctionTurn <= -0.5) {
-			correctionTurn = -0.5;
-		} else if (correctionTurn <= .3 && correctionTurn > 0) {
-			correctionTurn = .25;
-		} else if (correctionTurn >= -.3 && correctionTurn < 0) {
-			correctionTurn = -.25;
+		if (correctionTurn >= 0.65) {
+			correctionTurn = 0.65;
+		} else if (correctionTurn <= -0.65) {
+			correctionTurn = -0.65;
+		} else if (correctionTurn <= 0.35 && correctionTurn > 0.0) {
+			correctionTurn = 0.35;
+		} else if (correctionTurn >= -0.35 && correctionTurn < 0.0) {
+			correctionTurn = -0.35;
 		} else { // well crap clause
 			System.out.print("oh well (crap)");
 		}
