@@ -459,13 +459,21 @@ public class Robot extends IterativeRobot {
 		// shooter.updateShooter(stick, /*gatherer.shouldNotShoot()*/ false);
 		// //this is correct!
 
-		if (Wiring.hasBallClamp)
-			// clamp.updateBallClamp(shooter.isShooting());
-			if (coStick.getRawButton(3)) {
-				clamp.resetClampy();
-			} else {
-				clamp.updateBallClampAbsolute(shooter.isShooting());
+		if (Wiring.hasBallClamp){
+			
+			clamp.updateBallClampAbsolute(coStick.getRawButton(3) || shooter.isShooting());
+			
+			//kicker
+			if(clamp.isOpen()){
+				if(stick.getRawButton(3)){
+					clamp.kick();
+				} else {
+					clamp.resetKick();
+				}
 			}
+			
+		}
+			
 
 		// ADD THIS IN IF YOU WANT TO MANUALLY DRIVE THE BALL CLAMP
 		// clamp.updateBallClamp(shooter.shooting ||

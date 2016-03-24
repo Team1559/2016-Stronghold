@@ -26,27 +26,24 @@ public class BallClamp {
 	}
 
 	public void kick(){
-		resetClampy();
-		open();
 		kick.set(true);
 		unKick.set(false);
 	}
 	
 	public void resetKick(){
-		resetClampy();
 		kick.set(false);
 		unKick.set(true);
 	}
 	
 	public void close() {
-		servoLeft.set(0);
-		servoRight.set(1);
+		servoLeft.setAngle(66);
+		servoRight.setAngle(100);
 		open = false;
 	}
 
 	public void open() {
-		servoLeft.set(1);
-		servoRight.set(0);
+		servoLeft.setAngle(110);
+		servoRight.setAngle(53);
 		open = true;
 	}
 
