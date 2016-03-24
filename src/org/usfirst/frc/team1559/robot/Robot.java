@@ -176,7 +176,7 @@ public class Robot extends IterativeRobot {
 		gatherer.lowbarify();
 		
 		sc.sp.flush();
-		// clamp.updateBallClampAbsolute(shooter.isShooting());
+		 clamp.updateBallClampAbsolute(shooter.isShooting());
 
 		// int rawError = sc.getSerialIn();
 
