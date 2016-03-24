@@ -515,13 +515,7 @@ public class Robot extends IterativeRobot {
 
 	public void testPeriodic() {
 		
-		if(stick.getRawButton(1)){
-			angle+=10;
-		} else if(stick.getRawButton(2)){
-			angle-=10;
-		}
-		System.out.println(angle);
-		clamp.setManual(angle);
+		System.out.println(clamp.readSensor());
 		
 	}
 

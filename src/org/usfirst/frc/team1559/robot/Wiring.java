@@ -66,8 +66,8 @@ public class Wiring {
 	public static final int CLAMP_RIGHT_ID = 6;
 	public static final int CLAMP_BALL_SENSOR_ID = 0;
 	public static final double CLAMP_SENSOR_THRESHOLD = 2.5;
-	public static final double CLAMP_LOW = 2.2;
-	public static final double CLAMP_HIGH = 2.8;
+	public static final double CLAMP_LOW = 2.5;
+	public static final double CLAMP_HIGH = 3.0;
 	
 	// gatherer constants
 	public static final double GATHERER_SPEED = 1.0;
@@ -97,9 +97,9 @@ public class Wiring {
 	public static final int FLASH_BUTT_ON = 7;
 	public static final int FLASH_BUTT_STROBE = 8;
 
-	public static final double GATHER_MID_TARGET = 50; //this will change!
-	public static final double GATHER_HOME_TARGET = 0;
-	public static final double GATHER_BOTTOM_TARGET = 100;
+	public static final double GATHER_MID_TARGET = 2.8; //this will change!
+	public static final double GATHER_HOME_TARGET = 4.5;
+	public static final double GATHER_BOTTOM_TARGET = 2.3;
 
 	public static final int KICK_ME = 0;
 	public static final int UN_KICK_ME = 1;
