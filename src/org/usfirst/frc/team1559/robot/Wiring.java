@@ -100,4 +100,7 @@ public class Wiring {
 	public static final double GATHER_MID_TARGET = 50; //this will change!
 	public static final double GATHER_HOME_TARGET = 0;
 	public static final double GATHER_BOTTOM_TARGET = 100;
+
+	public static final int KICK_ME = 4;
+	public static final int UN_KICK_ME = 5;
 }

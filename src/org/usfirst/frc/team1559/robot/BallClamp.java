@@ -2,6 +2,7 @@ package org.usfirst.frc.team1559.robot;
 
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.Servo;
+import edu.wpi.first.wpilibj.Solenoid;
 
 public class BallClamp {
 
@@ -11,6 +12,7 @@ public class BallClamp {
 	private boolean ballIn = false;
 	private int clampy = 0;
 	private int counter = 0;
+	private Solenoid kick, unKick;
 	
 	
 	public BallClamp() {
@@ -19,8 +21,23 @@ public class BallClamp {
 		opSensor = new AnalogInput(Wiring.CLAMP_BALL_SENSOR_ID);
 		servoLeft.set(1);
 		servoRight.set(0);
+		kick = new Solenoid(Wiring.KICK_ME);
+		unKick = new Solenoid(Wiring.UN_KICK_ME);
 	}
 
+	public void kick(){
+		resetClampy();
+		open();
+		kick.set(true);
+		unKick.set(false);
+	}
+	
+	public void resetKick(){
+		resetClampy();
+		kick.set(false);
+		unKick.set(true);
+	}
+	
 	public void close() {
 		servoLeft.set(0);
 		servoRight.set(1);
