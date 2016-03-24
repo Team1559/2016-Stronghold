@@ -1,5 +1,7 @@
 package org.usfirst.frc.team1559.robot;
 
+import org.usfirst.frc.team1559.robot.Gatherer.ArmState;
+
 import edu.wpi.first.wpilibj.ADXL345_I2C;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -42,7 +44,7 @@ public class GathererManualPID {
 	private final double TOP_TARGET = 0;
 	private final double MID_TARGET = Wiring.GATHER_MID_TARGET; // Wiring.GATHERER_SAFE_SHOOT_ANGLE
 	private final double GATHER_TARGET = 88;
-	private final double BOTTOM_TARGET = 110;
+	private final double BOTTOM_TARGET = Wiring.GATHER_MID_TARGET;
 	private final double talonStallCurrent = 12.0;
 	private final double liftUp = 0.6;
 	private final double liftDown = -0.6;
@@ -90,6 +92,17 @@ public class GathererManualPID {
 	// return getSetpoint() - getAccelY();
 	// }
 
+	public void lowbarify(){
+		
+		if (getPot() <= BOTTOM_TARGET) {
+			gatherLift.set(liftStop);
+			arm = ArmState.ATBOT;
+		} else {
+			gatherLift.set(liftDown);
+		}
+		
+	}
+	
 	public void updatePID() {
 		error = setpoint - pot.getAverageValue();
 		

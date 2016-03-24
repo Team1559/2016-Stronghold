@@ -173,6 +173,7 @@ public class Robot extends IterativeRobot {
 	public void autonomousPeriodic() {
 		
 		//TODO Add something to handle lowbar here ayy
+		gatherer.lowbarify();
 		
 		sc.sp.flush();
 		// clamp.updateBallClampAbsolute(shooter.isShooting());
