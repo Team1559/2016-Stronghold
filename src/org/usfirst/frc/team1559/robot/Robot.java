@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.Timer;
 
 public class Robot extends IterativeRobot {
 
+	Climber climber;
 	RobotDrive drive;
 	int camWait = 0;
 	PowerDistributionPanel pdp;
@@ -96,6 +97,9 @@ public class Robot extends IterativeRobot {
 		if (Wiring.hasBallClamp) {
 			clamp = new BallClamp();
 		}
+		
+		if(Wiring.HAS_CLIMBER)
+			climber = new Climber();
 
 		// magneticSensor = new DigitalInput(Wiring.MAGNET);
 		// cam = new USBCamera("cam0");
@@ -404,8 +408,13 @@ public class Robot extends IterativeRobot {
 
 		
 		//kick me
+		if(coStick.getRawButton(4)){
+			climber.arm();
+		}
 		
-		
+		if(climber.isArmed() && (coStick.getRawAxis(1) <= -.8)){
+			
+		}
 		
 		if (Wiring.hasGatherer) {
 			if (!coStick.getRawButton(1)) {

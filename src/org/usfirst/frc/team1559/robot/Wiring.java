@@ -89,7 +89,8 @@ public class Wiring {
 	
 	public static final boolean hasGatherer = true;
 	public static final boolean hasArduino = false;
-	public static boolean hasBallClamp = true;
+	public static final boolean HAS_CLIMBER = true;
+	public static final boolean hasBallClamp = true;
 	
 	public static final double CAMERA_TOLERANCE = .61;
 	
@@ -103,4 +104,7 @@ public class Wiring {
 
 	public static final int KICK_ME = 0;
 	public static final int UN_KICK_ME = 1;
+
+	public static final int CLIMBER_TALON = 3; //change this!
+
 }
