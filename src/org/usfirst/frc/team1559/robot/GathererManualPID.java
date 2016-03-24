@@ -135,7 +135,7 @@ public class GathererManualPID {
 	public void manualControl() {
 		if (stick.getRawButton(Wiring.BTN_GATHER_UP_LEVEL)) {
 			gatherLift.set(liftUp);
-		} else if (stick.getRawButton(Wiring.BTN_GATHER_DOWN_LEVEL)) {
+		} else if (stick.getRawButton(Wiring.BTN_GATHER_DOWN_LEVEL) && (getPot() >= Wiring.GATHER_BOTTOM_TARGET)) {
 			gatherLift.set(liftDown);
 		} else {
 			gatherLift.set(liftStop);
