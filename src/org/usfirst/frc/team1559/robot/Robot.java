@@ -450,9 +450,6 @@ public class Robot extends IterativeRobot {
 				}
 				*/
 				
-				
-				
-				//in rememberence of the more greater typo 2k15
 				System.out.println(gatherer.getPot());
 			} else {
 				if (coStick.getRawAxis(1) > .5) {
@@ -492,6 +489,8 @@ public class Robot extends IterativeRobot {
 		if (Wiring.hasGatherer) {
 			if (stick.getRawButton(1)) {
 				gatherer.setSpark(0.5);
+			} else if(stick.getRawButton(4)) {
+				gatherer.setSpark(-0.5);
 			} else {
 				gatherer.setSpark(0.0);
 			}
