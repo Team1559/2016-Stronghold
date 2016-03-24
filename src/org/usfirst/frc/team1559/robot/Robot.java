@@ -375,6 +375,8 @@ public class Robot extends IterativeRobot {
 		// recordPeriodic();
 		// playbackIterative();
 
+		shooter.updateShooter(stick, false); //should not shoot if true
+		
 		if (tranny.getGear() == 1) {
 			drive.arcadeDrive(stick.getY() * Wiring.LOW_SPEED_MULTIPLIER,
 					-stick.getRawAxis(4) * Wiring.LOW_SPEED_MULTIPLIER);
