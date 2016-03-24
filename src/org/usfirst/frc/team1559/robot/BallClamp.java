@@ -100,6 +100,10 @@ public class BallClamp {
 		return opSensor.getAverageVoltage();
 	}
 	
+	public void setManual(double angle){
+		servoLeft.setAngle(angle);
+	}
+	
 	public boolean isOpen() {
 		return open;
 	}

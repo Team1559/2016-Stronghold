@@ -127,7 +127,7 @@ public class Robot extends IterativeRobot {
 		tranny.resetEncoders();
 
 		if (Wiring.hasGatherer) {
-			gatherer = new GathererManualPID(Wiring.GATHERER_ANALOG_INPUT, Wiring.GATHERER_ROTATE, stick);
+			gatherer = new GathererManualPID(Wiring.GATHERER_LIFT, Wiring.GATHERER_ROTATE, stick);
 			// gatherer.initLifterPID(Wiring.GATHERER_PID_P,
 			// Wiring.GATHERER_PID_I, Wiring.GATHERER_PID_D);
 		}
@@ -167,6 +167,8 @@ public class Robot extends IterativeRobot {
 	private boolean tick = true;
 	private double ahrsAngle = 0.0;
 	double cameraAngle = 0.0;
+	
+	private int angle = 0;
 
 	public void autonomousPeriodic() {
 		
@@ -399,6 +401,11 @@ public class Robot extends IterativeRobot {
 			tranny.limpShifting();
 		}
 
+		
+		//kick me
+		
+		
+		
 		if (Wiring.hasGatherer) {
 			if (!coStick.getRawButton(1)) {
 				gatherer.manualControl();
@@ -467,8 +474,6 @@ public class Robot extends IterativeRobot {
 		if (Wiring.hasGatherer) {
 			if (stick.getRawButton(1)) {
 				gatherer.setSpark(0.5);
-			} else if (stick.getRawButton(3)) {
-				gatherer.setSpark(-0.5);
 			} else {
 				gatherer.setSpark(0.0);
 			}
@@ -501,50 +506,15 @@ public class Robot extends IterativeRobot {
 	}
 
 	public void testPeriodic() {
-		// System.out.println("Gatherer Gyro:" + gatherer.getGyro().getAngle());
-		// System.out.println("BALL SENSOR " + clamp.opSensor.getVoltage());
-		// SmartDashboard.putBoolean("Gatherer LS",
-		// gatherer.isLimitSwitchTripped());
-		// System.out.println(gatherer.isLimitSwitchTripped());
-		// gatherer.manualControl();
-		// gatherer.updatePosition();
-		// gatherer.gathererTalon();
-		// if (stick.getRawButton(6)) {
-		// clamp.close();
-		// } else {
-		// clamp.open();
-		// }
-		// clamp.updateBallClamp(shooter.isShooting());
-		// System.out.println(clamp.readSensor());
-
-		// System.out.println(tranny.getLDisplacement() + "    " +
-		// tranny.getRDisplacement());
-
-		// System.out.println(shooter.shooting);
-		// if (stick.getRawButton(5) && clamp.open) {
-		// gatherer.setSpark(0.5);
-		// } else {
-		// gatherer.setSpark(0.0);
-		// }
-
-		// if (tranny.getGear() == 1) {
-		// drive.arcadeDrive(stick.getY() * Wiring.LOW_SPEED_MULTIPLIER,
-		// -stick.getRawAxis(4) * Wiring.LOW_SPEED_MULTIPLIER);
-		// } else {
-		// drive.arcadeDrive(stick.getY(), -stick.getRawAxis(4));
-		// }
-		//
-		// if (stick.getRawButton(1)) {
-		// tranny.gear1();
-		// } else if (stick.getRawButton(2)) {
-		// tranny.gear2();
-		// }
-		//
-		// System.out.println(leftM.getEncPosition());
-
-		// shooter.updateShooter(stick, /*gatherer.shouldNotShoot()*/false);
-
-//		System.out.println(gatherer.getGyro().getAngle()); //I was told to do this
+		
+		if(stick.getRawButton(1)){
+			angle+=10;
+		} else if(stick.getRawButton(2)){
+			angle-=10;
+		}
+		System.out.println(angle);
+		clamp.setManual(angle);
+		
 	}
 
 	public void disabledInit() {
