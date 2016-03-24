@@ -46,6 +46,7 @@ public class Robot extends IterativeRobot {
 	File fillet;
 	FileWriter filletWrite;
 	int counter = 0;
+	int gatherLevel = 0;
 
 	BallClamp clamp;
 //	Gatherer gatherer;
@@ -381,33 +382,6 @@ public class Robot extends IterativeRobot {
 			drive.arcadeDrive(stick.getY(), -stick.getRawAxis(4));
 		}
 
-		// //get cam angle
-		// angle = sc.grabAngle();
-		//
-		// if(angle != -1000){
-		// desiredYarAngle = waffle.ahrs.getYaw() + angle;
-		// } else {
-		// desiredYarAngle = waffle.ahrs.getYaw();
-		// }
-
-		// give him a huge light
-		// if((Math.abs(angle) <= Wiring.CAMERA_TOLERANCE)){
-		// SmartDashboard.putBoolean("AIMED", true);
-		// } else {
-		// SmartDashboard.putBoolean("AIMED", false);
-		// }
-
-		// auto aiming
-		// if(stick.getRawAxis(2) >= .9){
-		// SmartDashboard.putNumber("ERROR ANGLE", sc.grabAngle());
-		// }
-
-		// if(coStick.getRawButton(1)){
-		// scp.killGatherer();
-		// } else if(coStick.getRawButton(2)){
-		// scp.unKillGatherer();
-		// }
-
 		if (coStick.getRawButton(11)) {
 			scp.killEncoders();
 		} else if (coStick.getRawButton(12)) {
@@ -426,7 +400,41 @@ public class Robot extends IterativeRobot {
 		if (Wiring.hasGatherer) {
 			if (!coStick.getRawButton(1)) {
 				gatherer.manualControl();
-				System.out.println();
+				
+				
+				/*
+				gatherer.updatePID();
+				switch(gatherLevel){
+				case 0:
+					//at home
+					if(stick.getRawButton(Wiring.BTN_GATHER_DOWN_LEVEL)){
+						gatherer.setSetpoint(Wiring.GATHER_MID_TARGET);
+					} 
+					break;
+				case 1:
+					//mid
+					
+					if(stick.getRawButton(Wiring.BTN_GATHER_UP_LEVEL)){
+						gatherer.setSetpoint(Wiring.GATHER_HOME_TARGET);
+					} else if(stick.getRawButton(Wiring.BTN_GATHER_DOWN_LEVEL)){
+						gatherer.setSetpoint(Wiring.GATHER_BOTTOM_TARGET); //bottom lol (like butt)
+						
+					}
+					
+					break;
+				case 2:
+					//bott (butt) lol
+					if(stick.getRawButton(Wiring.BTN_GATHER_UP_LEVEL)){
+						gatherer.setSetpoint(Wiring.GATHER_MID_TARGET);
+					} 
+					break;
+				}
+				*/
+				
+				
+				
+				//in rememberence of the more greater typo 2k15
+				System.out.println(gatherer.getPot());
 			} else {
 				if (coStick.getRawAxis(1) > .5) {
 					gatherer.copilotManualControlDOWN();

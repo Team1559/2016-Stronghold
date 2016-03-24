@@ -98,4 +98,6 @@ public class Wiring {
 	public static final int FLASH_BUTT_STROBE = 8;
 
 	public static final double GATHER_MID_TARGET = 50; //this will change!
+	public static final double GATHER_HOME_TARGET = 0;
+	public static final double GATHER_BOTTOM_TARGET = 100;
 }
