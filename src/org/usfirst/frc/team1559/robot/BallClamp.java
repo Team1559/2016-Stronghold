@@ -72,7 +72,7 @@ public class BallClamp {
 				close();
 			} else {
 				open();
-				clampy = 2;
+				clampy = 0;
 			}
 			break;
 		case 2:

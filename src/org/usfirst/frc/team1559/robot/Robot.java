@@ -515,8 +515,9 @@ public class Robot extends IterativeRobot {
 
 	public void testPeriodic() {
 		
-		System.out.println(gatherer.getPot());
-		gatherer.manualControl();
+//		System.out.println(gatherer.getPot());
+//		gatherer.manualControl();
+		System.out.println(clamp.readSensor());
 		
 	}
 
