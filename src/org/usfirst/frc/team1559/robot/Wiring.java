@@ -97,9 +97,9 @@ public class Wiring {
 	public static final int FLASH_BUTT_ON = 7;
 	public static final int FLASH_BUTT_STROBE = 8;
 
-	public static final double GATHER_MID_TARGET = 2.8; //this will change!
-	public static final double GATHER_HOME_TARGET = 4.5;
-	public static final double GATHER_BOTTOM_TARGET = 2.3;
+	public static final double GATHER_MID_TARGET = 2300; //this will change!
+	public static final double GATHER_HOME_TARGET = 3850;
+	public static final double GATHER_BOTTOM_TARGET = 1776; //freedom
 
 	public static final int KICK_ME = 0;
 	public static final int UN_KICK_ME = 1;

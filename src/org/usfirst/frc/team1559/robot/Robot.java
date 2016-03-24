@@ -461,7 +461,7 @@ public class Robot extends IterativeRobot {
 
 		if (Wiring.hasBallClamp){
 			
-			clamp.updateBallClampAbsolute(coStick.getRawButton(3) || shooter.isShooting());
+			clamp.updateBallClampAbsolute(stick.getRawButton(3) || shooter.isShooting());
 			
 			//kicker
 			if(clamp.isOpen()){
@@ -515,7 +515,8 @@ public class Robot extends IterativeRobot {
 
 	public void testPeriodic() {
 		
-		System.out.println(clamp.readSensor());
+		System.out.println(gatherer.getPot());
+		gatherer.manualControl();
 		
 	}
 

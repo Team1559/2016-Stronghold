@@ -72,7 +72,7 @@ public class GathererManualPID {
 	ArmState arm = ArmState.ATTOP;
 	double target = TOP_TARGET;
 
-	private double setpoint = 0.0;
+	private double setpoint = Wiring.GATHER_HOME_TARGET;
 
 	public void setSetpoint(double setpoint) {
 		this.setpoint = setpoint;
@@ -92,7 +92,9 @@ public class GathererManualPID {
 
 	public void updatePID() {
 		error = setpoint - pot.getAverageValue();
+		
 		if (enabled) {
+			
 			sumI += error * kI;
 			result = (kP * error) + sumI;
 
@@ -100,6 +102,10 @@ public class GathererManualPID {
 				result = maxOutput;
 			} else if (result < minOutput) {
 				result = minOutput;
+			}
+			
+			if (isLimit()) {
+				result = 0;
 			}
 			gatherLift.set(result);
 		}
@@ -154,8 +160,12 @@ public class GathererManualPID {
 	
 	public double getPot(){
 		
-	double dankKush = pot.getAverageVoltage();
-	return dankKush;
+		double dankKush = pot.getAverageValue();
+		return dankKush;
 		
+	}
+	
+	public boolean isLimit() {
+		return diGathererTop.get() && setpoint == Wiring.GATHER_HOME_TARGET;
 	}
 }
