@@ -47,7 +47,7 @@ public class Wiring {
 	public static final int BTN_GATHERER_TO_MID = 5;
 	public static final int BTN_GATHERER_TO_BOT = 8;
 	public static final int BTN_SHOOT = 3;
-	public static final int GATHERER_ANALOG_INPUT = 1;
+	public static final int GATHERER_ANALOG_INPUT = 3;
 	public static final int PDP_CHANNEL_GATHERER = 3;
 	public static final double GATHERER_PID_P = -.1;
 	public static final double GATHERER_PID_I = 0;
