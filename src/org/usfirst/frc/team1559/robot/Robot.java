@@ -281,9 +281,10 @@ public class Robot extends IterativeRobot {
 			// System.out.println("Motor Stoppage achieved!");
 		} else if (current.command.equals("DEFENSE")) {
 			String id = current.id;
-			if (id.equals("lowbar")) {
-
+			if (id.equals("rock_wall")) {
+//				gatherer.homify();
 			}
+			
 			if (!following) {
 				playbackSetup(id);
 			}

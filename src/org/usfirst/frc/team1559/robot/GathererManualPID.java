@@ -155,6 +155,15 @@ public class GathererManualPID {
 		
 	}
 	
+	public void homify() {
+		if (getPot() >= TOP_TARGET - 10) {
+			gatherLift.set(liftStop);
+			arm = ArmState.ATTOP;
+		} else {
+			gatherLift.set(liftUp);
+		}
+	}
+	
 	public void stopDriving(){
 		gatherLift.set(liftStop);
 	}
