@@ -533,14 +533,18 @@ public class Robot extends IterativeRobot {
 	}
 
 	public void testInit() {
-
+		initRecord();
 	}
 
 	public void testPeriodic() {
 		
-//		System.out.println(gatherer.getPot());
-//		gatherer.manualControl();
-		System.out.println(clamp.readSensor());
+		//necessary
+		drive.arcadeDrive(stick.getY(), -stick.getRawAxis(4));
+		recordPeriodic();
+		
+		//nice to have
+		gatherer.manualControl();
+		
 		
 	}
 
