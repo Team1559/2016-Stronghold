@@ -178,6 +178,7 @@ public class Robot extends IterativeRobot {
 		
 		//TODO Add something to handle lowbar here ayy
 		gatherer.lowbarify();
+		//potentially add something to hold the gatherer at thit position
 		
 		sc.sp.flush();
 		 clamp.updateBallClampAbsolute(shooter.isShooting());
@@ -283,6 +284,7 @@ public class Robot extends IterativeRobot {
 			String id = current.id;
 			if (id.equals("rock_wall")) {
 //				gatherer.homify();
+				
 			}
 			
 			if (!following) {
