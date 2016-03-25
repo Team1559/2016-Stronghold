@@ -106,5 +106,7 @@ public class Wiring {
 	public static final int UN_KICK_ME = 1;
 
 	public static final int CLIMBER_TALON = 3; //change this!
+	
+	//public static final int PI_KILL_SWITCH = 8; //picked a random number for now
 
 }
