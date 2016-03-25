@@ -66,7 +66,7 @@ public class Wiring {
 	public static final int CLAMP_RIGHT_ID = 6;
 	public static final int CLAMP_BALL_SENSOR_ID = 0;
 	public static final double CLAMP_SENSOR_THRESHOLD = 2.5;
-	public static final double CLAMP_LOW = 2.8;
+	public static final double CLAMP_LOW = 2.95;
 	public static final double CLAMP_HIGH = 3.2;
 	
 	// gatherer constants
