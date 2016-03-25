@@ -10,7 +10,7 @@ public class RaspiKillSwitch {
 	
 	
 	public RaspiKillSwitch() {
-		output = new DigitalOutput(Wiring.PI_KILL_SWITCH);
+//		output = new DigitalOutput(Wiring.PI_KILL_SWITCH);
 	}
 	
 	
