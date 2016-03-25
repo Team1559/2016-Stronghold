@@ -177,7 +177,7 @@ public class Robot extends IterativeRobot {
 	public void autonomousPeriodic() {
 		
 		//TODO Add something to handle lowbar here ayy
-		gatherer.lowbarify();
+//		gatherer.lowbarify();
 		//potentially add something to hold the gatherer at thit position
 		
 		sc.sp.flush();
@@ -283,8 +283,9 @@ public class Robot extends IterativeRobot {
 		} else if (current.command.equals("DEFENSE")) {
 			String id = current.id;
 			if (id.equals("rock_wall")) {
-//				gatherer.homify();
-				
+				gatherer.homify();
+			} else {
+				gatherer.lowbarify();
 			}
 			
 			if (!following) {
