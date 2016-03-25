@@ -7,11 +7,11 @@ public class SerialClient {
 	private final int BAUDRATE = 115200;
 	private final String sendChar = "s";
 	SerialPort sp;
-
+//ECKECKECKEKCKECKEKCEKCKEKECkeKCKECkECKEeckECKECKECKECKECK *squaks* ECKKKKKKK
 	public SerialClient() {
 		sp = new SerialPort(BAUDRATE, Port.kMXP);
 	}
-
+// OUR ROBOT IS NAMED PETRE MEGERSsssssssssssssssssssssssssss
 	public double grabAngle() {
 		double ret = -2000;
 		try {

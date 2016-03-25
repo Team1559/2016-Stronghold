@@ -139,7 +139,7 @@ public class Robot extends IterativeRobot {
 		pdp = new PowerDistributionPanel(0);
 
 		scp = new SensorCarnageProtection();
-
+// whatever the heck you want
 	}
 
 	public void autonomousInit() {
@@ -219,6 +219,7 @@ public class Robot extends IterativeRobot {
 				break;
 			case 1:
 				cameraAngle = sc.grabAngle();
+				System.out.println(cameraAngle);
 				ahrsAngle = waffle.getCurrentAngle();
 				if (counter > 3) {
 					nate++;
@@ -361,6 +362,7 @@ public class Robot extends IterativeRobot {
 		// leftF.setInverted(isInverted);
 		// centerWithAngle();
 		// cs.startAutomaticCapture();
+//		initRecord();
 		rightM.setEncPosition(0);
 		leftM.setEncPosition(0);
 		leftM.setInverted(true);
@@ -385,7 +387,8 @@ public class Robot extends IterativeRobot {
 	public void teleopPeriodic() {
 		// recordPeriodic();
 		// playbackIterative();
-
+//		recordPeriodic();
+//Sqwilliam Megers
 		shooter.updateShooter(stick, false); //should not shoot if true
 		
 		if (tranny.getGear() == 1) {
