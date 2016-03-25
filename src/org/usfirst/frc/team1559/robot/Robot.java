@@ -413,10 +413,20 @@ public class Robot extends IterativeRobot {
 		//kick me
 		if(coStick.getRawButton(4)){
 			climber.arm();
+		} else {
+			climber.disarm();
 		}
 		
-		if(climber.isArmed() && (coStick.getRawAxis(1) <= -.8)){
-			//TODO finish this 
+		if(climber.isArmed()) {
+			if(coStick.getRawAxis(1) <= -.8) {
+				climber.drive();				
+			} else if (coStick.getRawAxis(1) >= 0.8){
+				climber.reverse();
+			} else {
+				climber.stopIt();
+			}
+		} else {
+			climber.stopIt();
 		}
 		
 		if (Wiring.hasGatherer) {
