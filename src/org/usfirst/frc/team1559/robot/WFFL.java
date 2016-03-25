@@ -208,7 +208,7 @@ public class WFFL {
 		} else if (correctionTurn >= -0.35 && correctionTurn < 0.0) {
 			correctionTurn = -0.35;
 		} else { // well crap clause
-			System.out.print("oh well (crap)");
+//			System.out.print("oh well (crap)");
 		}
 
 		// System.out.println(yawError);
