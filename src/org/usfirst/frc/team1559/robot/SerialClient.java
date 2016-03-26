@@ -7,24 +7,24 @@ public class SerialClient {
 	private final int BAUDRATE = 115200;
 	private final String sendChar = "s";
 	SerialPort sp;
-//ECKECKECKEKCKECKEKCEKCKEKECkeKCKECkECKEeckECKECKECKECKECK *squaks* ECKKKKKKK
+
 	public SerialClient() {
 		sp = new SerialPort(BAUDRATE, Port.kMXP);
 	}
-// OUR ROBOT IS NAMED PETRE MEGERSsssssssssssssssssssssssssss
+
 	public double grabAngle() {
-		double ret = -2000;
+		double result = -2000;
 		try {
-			// int bcount = sp.getBytesReceived();
-			// if (bcount > 0) {
 			String in = sp.readString();
+			System.out.println("its a string and its" + in);
 			if (in.endsWith("t")) {
 				in = in.substring(0, in.indexOf("t"));
 				try {
-					ret = Double.parseDouble(in);
+					result = Double.parseDouble(in);
 				} catch (Exception e) {
+					System.out.println("SerialClient: Pi's not passing back a number. Bad pi.");
+					e.printStackTrace();
 				}
-				// }
 			}
 
 		} catch (Exception e) {
@@ -32,7 +32,7 @@ public class SerialClient {
 			e.printStackTrace();
 		}
 
-		return ret;
+		return result;
 
 		// well everyone else was re-writing this so i figured why not
 
