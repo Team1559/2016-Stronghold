@@ -175,7 +175,7 @@ public class WFFL {
 	}
 
 	public void turnToAngle(double angle) {
-		double kpturn = 0.1; // change to .15?
+		double kpturn = 0.2; // change to .15?
 		yaw = ahrs.getYaw();
 
 		if ((angle == 180) && (yaw < -0.1)) {
@@ -193,16 +193,16 @@ public class WFFL {
 		}
 
 		if (yawError < 0) {
-			kpturn = (yawError / 180) - 0.1;
+			kpturn = (yawError / 90) - 0.2;
 		} else {
-			kpturn = (yawError / 180) + 0.1;
+			kpturn = (yawError / 90) + 0.2;
 		}
 
 		double correctionTurn = kpturn; // DELETE " * yawError"
-		if (correctionTurn >= 0.65) {
-			correctionTurn = 0.65;
-		} else if (correctionTurn <= -0.65) {
-			correctionTurn = -0.65;
+		if (correctionTurn >= 0.8) {
+			correctionTurn = 0.8;
+		} else if (correctionTurn <= -0.8) {
+			correctionTurn = -0.8;
 		} else if (correctionTurn <= 0.35 && correctionTurn > 0.0) {
 			correctionTurn = 0.35;
 		} else if (correctionTurn >= -0.35 && correctionTurn < 0.0) {

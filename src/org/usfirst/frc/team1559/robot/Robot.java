@@ -250,7 +250,7 @@ public class Robot extends IterativeRobot {
 				break;
 			case 4:
 				// System.out.println("running again");
-				if (camWait++ > 35) { //change this
+				if (camWait++ > 30) { //change this
 					
 					
 					if(Math.abs(cameraAngle) <= Wiring.CAMERA_TOLERANCE){
@@ -364,7 +364,7 @@ public class Robot extends IterativeRobot {
 		// leftF.setInverted(isInverted);
 		// centerWithAngle();
 		// cs.startAutomaticCapture();
-		initRecord();
+//		initRecord();
 		rightM.setEncPosition(0);
 		leftM.setEncPosition(0);
 		leftM.setInverted(true);
@@ -391,7 +391,7 @@ public class Robot extends IterativeRobot {
 	public void teleopPeriodic() {
 		// recordPeriodic();
 		// playbackIterative();
-		recordPeriodic();
+//		recordPeriodic();
 //Sqwilliam Megers
 		
 		shooter.updateShooter(stick, false); //should not shoot if true
