@@ -211,72 +211,72 @@ public class Robot extends IterativeRobot {
 
 			System.out.println(waffle.getYawError());
 
-			shooter.autoShoot(true, false);
+//			shooter.autoShoot(true, false);
 			
-//			switch (nate) {
-//
-//			case 0:
-//				sc.send("s");
-//				nate++;
-//				break;
-//			case 1:
-//				cameraAngle = sc.grabAngle();
-//				System.out.println(cameraAngle);
-//				ahrsAngle = waffle.getCurrentAngle();
-//				if (counter > 3) {
-//					nate++;
-//					counter = 0;
-//				} else {
-//					if (Math.abs(cameraAngle) < 30) {
-//						counter++;
-//						nate = 0;
-//					} else {
-//						counter = 0;
-//					}
-//				}
-//				break;
-//			case 2:
-//				desiredYarAngle = cameraAngle + ahrsAngle;
-//				waffle.turnToAngle(desiredYarAngle);
-//				nate++;
-//				break;
-//			case 3:
-//				if (waffle.isTurning()) {
-//					waffle.turnToAngle(desiredYarAngle);
-//				} else {
-//					nate++;
-//				}
-//				break;
-//			case 4:
-//				// System.out.println("running again");
-//
-//				if (camWait++ > 12) { //change this
-//					
-//					
-//					if(Math.abs(cameraAngle) <= Wiring.CAMERA_TOLERANCE){
-//						nate++;
-//						System.out.println("SHOOTING ROBITS" + cameraAngle);
-//						shooter.autoShoot(true, false); //maybe change this to gatherer.shouldnotshoot (?)
-//					} else {
-//						nate = 0;
-//					}
-//			
-//					camWait = 0;
-//				}
-//
-//				break;
-//			case 5:
-//				if(!shooter.isShootDone()){
-//					shooter.autoShoot(true, false);
-//				} else {
-//					nate++;
-//				}
-//				break;
-//			case 6:
-////				System.out.println("");
-//				break;
-//
-//			}
+			switch (nate) {
+
+			case 0:
+				sc.send("s");
+				nate++;
+				break;
+			case 1:
+				cameraAngle = sc.grabAngle();
+				System.out.println(cameraAngle);
+				ahrsAngle = waffle.getCurrentAngle();
+				if (counter > 3) {
+					nate++;
+					counter = 0;
+				} else {
+					if (Math.abs(cameraAngle) < 30) {
+						counter++;
+						nate = 0;
+					} else {
+						counter = 0;
+					}
+				}
+				break;
+			case 2:
+				desiredYarAngle = cameraAngle + ahrsAngle;
+				waffle.turnToAngle(desiredYarAngle);
+				nate++;
+				break;
+			case 3:
+				if (waffle.isTurning()) {
+					waffle.turnToAngle(desiredYarAngle);
+				} else {
+					nate++;
+				}
+				break;
+			case 4:
+				// System.out.println("running again");
+
+				if (camWait++ > 12) { //change this
+					
+					
+					if(Math.abs(cameraAngle) <= Wiring.CAMERA_TOLERANCE){
+						nate++;
+						System.out.println("SHOOTING ROBITS" + cameraAngle);
+						shooter.autoShoot(true, false); //maybe change this to gatherer.shouldnotshoot (?)
+					} else {
+						nate = 0;
+					}
+			
+					camWait = 0;
+				}
+
+				break;
+			case 5:
+				if(!shooter.isShootDone()){
+					shooter.autoShoot(true, false);
+				} else {
+					nate++;
+				}
+				break;
+			case 6:
+//				System.out.println("");
+				break;
+
+			}
 
 		} else if (current.command.equals("STOP")) {
 			leftM.set(0);
@@ -551,7 +551,7 @@ public class Robot extends IterativeRobot {
 //		drive.arcadeDrive(stick.getY(), -stick.getRawAxis(4));
 //		recordPeriodic();
 		
-		sc.send("S");
+		sc.send("s");
 		System.out.println(sc.grabAngle());
 		
 //		//nice to have
