@@ -37,13 +37,13 @@ public class BallClamp {
 	
 	public void close() {
 		servoLeft.setAngle(66);
-		servoRight.setAngle(100);
+		servoRight.setAngle(215);
 		open = false;
 	}
 
 	public void open() {
 		servoLeft.setAngle(110);
-		servoRight.setAngle(53);
+		servoRight.setAngle(130);
 		open = true;
 	}
 
@@ -98,7 +98,7 @@ public class BallClamp {
 	}
 	
 	public void setManual(double angle){
-		servoLeft.setAngle(angle);
+		servoRight.setAngle(angle);
 	}
 	
 	public boolean isOpen() {

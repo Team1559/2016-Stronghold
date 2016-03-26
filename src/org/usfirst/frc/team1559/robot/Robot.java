@@ -545,14 +545,25 @@ public class Robot extends IterativeRobot {
 		
 	}
 
+	int servoh = 0;
+	
 	public void testPeriodic() {
 		
 //		//necessary
 //		drive.arcadeDrive(stick.getY(), -stick.getRawAxis(4));
 //		recordPeriodic();
 		
-		sc.send("s");
-		System.out.println(sc.grabAngle());
+		System.out.println(servoh);
+		clamp.setManual(servoh);
+		
+		if(stick.getRawButton(1)){
+			servoh += 10;
+		} else if(stick.getRawButton(2)){
+			servoh -=10;
+		}
+		
+//		sc.send("s");
+//		System.out.println(sc.grabAngle());
 		
 //		//nice to have
 ////		gatherer.manualControl();
