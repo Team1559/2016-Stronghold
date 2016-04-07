@@ -108,5 +108,7 @@ public class Wiring {
 	public static final int CLIMBER_TALON = 3; // liam approved
 	
 	//public static final int PI_KILL_SWITCH = 8; //picked a random number for now
+	
+	public static final int CAMERA_ROTATION_OFFSET = 15; //(inches, like wffl)
 
 }
