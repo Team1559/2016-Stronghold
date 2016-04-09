@@ -67,31 +67,18 @@ public class SerialClient {
 
 	}
 
-	public double getAdjustedAngle(double d){
-		
-		
-		//this should compensate for the difference in rotation axes of the camera and the robot.
-		
-		//Note: D is the distance from the robot to the goal, and x is the offset distance from the center of the robot to the camera
-		/*												______________
-		 * PURE BEAUTY:									|  2	 2
-		 * 				   -1   (  Sin(180 - camAngle) \/ D	 +  x
-		 * RobotAngle = Sin    (   -----------------------------------   )
-		 * 											D
-		 */
-		
-		double camAngle = grabAngle();
+	public double getAdjustedAngle(double xPos, double yPos) {
+
+		double d = Wiring.CAMERA_ROTATION_OFFSET;
+		double camAngle = grabAngle(); //degrees
 		double ret = 0.0;
 		
-		ret = Math.sqrt(Math.pow(d, 2) + Math.pow(Wiring.CAMERA_ROTATION_OFFSET, 2));
-		ret *= Math.sin(180 - camAngle);
-		ret /= d;
+		ret = Math.sqrt(Math.pow(xPos, 2) + Math.pow(yPos, 2));
+		ret *= Math.sin(Math.toRadians(180 - camAngle));
+		ret /= Math.sqrt(Math.pow(xPos, 2) + (Math.pow(yPos + d, 2)));
+		ret = Math.asin(ret);
 		
-		ret = Math.asin(ret); //Maths Look Good Kobee, Daly would be proud
-		
-		return ret;
-
-		
+		return Math.toDegrees(ret);
 	}
 	
 	public void send(String msg) {

@@ -14,6 +14,7 @@ public class Command {
 	String id;
 	boolean active;
 	String pattern;
+	double xPos, yPos;
 	
 	boolean done;
 	
@@ -38,6 +39,14 @@ public class Command {
 		this.id = id;
 		this.active = active;
 		this.pattern = pattern;
+		
+	}
+	
+	public Command(String command, double xPos, double yPos){
+		
+		this.command = command;
+		this.xPos = xPos;
+		this.yPos = yPos;
 		
 	}
 	

@@ -222,13 +222,14 @@ public class Robot extends IterativeRobot {
 				break;
 			case 1:
 				cameraAngle = sc.grabAngle();
+//				cameraAngle = sc.getAdjustedAngle(xPos, yPos); //have to get xPos and yPos from wffl
 //				System.out.println(cameraAngle);
-				ahrsAngle = waffle.getCurrentAngle();
+				ahrsAngle = waffle.getCurrentAngle(); //git destroyed
 				if (counter > 3) {
 					nate++;
 					counter = 0;
 				} else {
-					if (Math.abs(cameraAngle) < 30) {
+					if (Math.abs(cameraAngle) < 30) { // ayyy lmao
 						counter++;
 						nate = 0;
 					} else {

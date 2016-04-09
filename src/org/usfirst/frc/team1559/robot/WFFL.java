@@ -117,7 +117,15 @@ public class WFFL {
 
 			// (String command, double dist, double speed, double time, double
 			// angle, String id, boolean active, String pattern)
-			list.add(new Command("SHOOT", 0, 0, 0, 0, "", false, ""));
+			
+			String temp = raw.substring(9);
+			int end = temp.indexOf("\"");
+			double x = Double.valueOf(temp.substring(0, end));
+			temp = temp.substring(end + 1);
+			temp = temp.substring(temp.indexOf("\"") + 1);
+			double y = Double.valueOf(temp.substring(0, temp.indexOf("\"")));			
+			
+			list.add(new Command("SHOOT", x, y));
 		} else if (command.equals("DEFENSE")) {
 			temp = raw.substring(12);
 			temp = temp.substring(0, temp.indexOf("\""));
