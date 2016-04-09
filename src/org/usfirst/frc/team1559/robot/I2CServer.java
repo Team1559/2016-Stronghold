@@ -12,7 +12,8 @@ public class I2CServer {
 	
 	public I2CServer() {
 		
-		I2CMaster = new I2C(I2C.Port.kOnboard,0);
+		I2CMaster = new I2C(I2C.Port.kOnboard,0x5);
+
 	}
 	
 	
