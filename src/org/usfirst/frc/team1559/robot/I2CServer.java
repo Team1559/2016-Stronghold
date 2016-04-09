@@ -21,7 +21,8 @@ public class I2CServer {
 		
 		boolean isData = true;
 		
-		byte[] biteMe = new byte[10];	
+		
+		byte[] biteMe = new byte[6];	
 		I2CMaster.readOnly(biteMe, biteMe.length);
 		
 		String data = new String("");

@@ -48,6 +48,8 @@ public class Robot extends IterativeRobot {
 	FileWriter filletWrite;
 	int counter = 0;
 	int gatherLevel = 0;
+	
+	I2CServer I2CServer;
 
 	BallClamp clamp;
 //	Gatherer gatherer;
@@ -543,9 +545,11 @@ public class Robot extends IterativeRobot {
 
 	public void testInit() {
 //		initRecord();
-		
+
+
 	}
 
+	String data = "";
 	int servoh = 0;
 	
 	public void testPeriodic() {
@@ -554,14 +558,14 @@ public class Robot extends IterativeRobot {
 //		drive.arcadeDrive(stick.getY(), -stick.getRawAxis(4));
 //		recordPeriodic();
 		
-		System.out.println(servoh);
-		clamp.setManual(servoh);
+		//System.out.println(servoh);
+		//clamp.setManual(servoh);
 		
-		if(stick.getRawButton(1)){
-			servoh += 10;
-		} else if(stick.getRawButton(2)){
-			servoh -=10;
-		}
+		//if(stick.getRawButton(1)){
+			//servoh += 10;
+		//} else if(stick.getRawButton(2)){
+			//servoh -=10;
+		//}
 		
 //		sc.send("s");
 //		System.out.println(sc.grabAngle());
@@ -569,6 +573,10 @@ public class Robot extends IterativeRobot {
 //		//nice to have
 ////		gatherer.manualControl();
 		
+		
+		//i2c stuff
+		data = I2CServer.read();
+		System.out.println(data);
 		
 	}
 
