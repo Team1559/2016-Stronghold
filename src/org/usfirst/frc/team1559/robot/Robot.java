@@ -48,6 +48,7 @@ public class Robot extends IterativeRobot {
 	FileWriter filletWrite;
 	int counter = 0;
 	int gatherLevel = 0;
+	I2CServer i2c;
 	
 	I2CServer I2CServer;
 
@@ -129,6 +130,8 @@ public class Robot extends IterativeRobot {
 
 		dio1 = new DigitalOutput(0);
 		dio2 = new DigitalOutput(1);
+		
+		i2c = new I2CServer();
 
 		tranny.resetEncoders();
 
@@ -575,7 +578,7 @@ public class Robot extends IterativeRobot {
 		
 		
 		//i2c stuff
-		data = I2CServer.read();
+		data = i2c.read();
 		System.out.println(data);
 		
 	}
