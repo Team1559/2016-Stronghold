@@ -256,7 +256,7 @@ public class Robot extends IterativeRobot {
 				break;
 			case 4:
 				// System.out.println("running again");
-				if (camWait++ > 30) { //change this
+				if (camWait++ > 17) { //change this
 					
 					
 					if(Math.abs(cameraAngle) <= Wiring.CAMERA_TOLERANCE){

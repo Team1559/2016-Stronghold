@@ -1,7 +1,7 @@
 package org.usfirst.frc.team1559.robot;
 
 import java.io.UnsupportedEncodingException;
-import java.util.Base64;
+
 import edu.wpi.first.wpilibj.I2C;
 
 

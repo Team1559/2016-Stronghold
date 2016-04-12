@@ -92,7 +92,7 @@ public class Wiring {
 	public static final boolean HAS_CLIMBER = true;
 	public static final boolean hasBallClamp = true;
 	
-	public static final double CAMERA_TOLERANCE = .61;
+	public static final double CAMERA_TOLERANCE = .48;
 	
 	public static final int FLASH_DIO = 3;//dio
 	public static final int FLASH_BUTT_ON = 7;

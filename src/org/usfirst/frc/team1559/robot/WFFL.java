@@ -27,7 +27,7 @@ public class WFFL {
 	private double kpBase = 0.001;
 	private final double maxError = 1;
 	private final double tolerance = .001;
-	private final double turnTolerance = .55;// originally .5
+	private final double turnTolerance = .4;// originally .5
 	private double yawError;
 	private AHRS ahrs;
 	private double time;
