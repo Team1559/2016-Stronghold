@@ -557,34 +557,21 @@ public class Robot extends IterativeRobot {
 	
 	public void testPeriodic() {
 		
-//		//necessary
-//		drive.arcadeDrive(stick.getY(), -stick.getRawAxis(4));
-//		recordPeriodic();
+		if(coStick.getRawButton(11)){
+			System.out.println("FWD");
+			deLight.configForward();
+		} else if(coStick.getRawButton(12)){
+			System.out.println("REV");
+			deLight.configBackward();
+		}
 		
-		//System.out.println(servoh);
-		//clamp.setManual(servoh);
-		
-		//if(stick.getRawButton(1)){
-			//servoh += 10;
-		//} else if(stick.getRawButton(2)){
-			//servoh -=10;
-		//}
-		
-//		sc.send("s");
-//		System.out.println(sc.grabAngle());
-		
-//		//nice to have
-////		gatherer.manualControl();
-		
-		
-		//i2c stuff
-		data = i2c.read();
-		System.out.println(data);
+		deLight.updateLight(coStick);
 		
 	}
 
 	public void disabledInit() {
 		// arduino.writeSequence(0);
+		deLight.turnOff();
 	}
 
 	public void disabledPeriodic() {

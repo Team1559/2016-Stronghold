@@ -2,13 +2,15 @@ package org.usfirst.frc.team1559.robot;
 
 import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.Relay;
 
 public class Flashlight {
 
-	DigitalOutput daLight;
+	Relay daLight;
 	int counterThing = 0;
 	public Flashlight(){
-		daLight = new DigitalOutput(Wiring.FLASH_DIO);
+		daLight = new Relay(Wiring.FLASH_RELAY);
+		configForward();
 		turnOff();
 	}
 	
@@ -16,26 +18,26 @@ public class Flashlight {
 		if(stick.getRawButton(Wiring.FLASH_BUTT_ON)){
 			turnOn();
 			System.out.println("ON!");
-		} else if(stick.getRawButton(Wiring.FLASH_BUTT_STROBE)){
-			counterThing++;
 		} else {
 			turnOff();
-			counterThing = 0;
-		}
-		if(counterThing % 2 == 1){
-			turnOn();
-		}
-		else if(counterThing % 2 == 0){
-			turnOff();
+			System.out.println("OFF!");
 		}
 	}
 	
 	public void turnOn(){
-		daLight.set(true);
+		daLight.set(Relay.Value.kOn);
 	}
 	
 	public void turnOff(){
-		daLight.set(false);
+		daLight.set(Relay.Value.kOff);
+	}
+	
+	public void configForward(){
+		daLight.setDirection(Relay.Direction.kForward);
+	}
+	
+	public void configBackward(){
+		daLight.setDirection(Relay.Direction.kReverse);
 	}
 	
 }
