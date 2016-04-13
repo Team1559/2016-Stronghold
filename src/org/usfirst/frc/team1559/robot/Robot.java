@@ -546,27 +546,35 @@ public class Robot extends IterativeRobot {
 		return error / 13.0;// 30 = half of horizontal fov of camera
 	}
 
+	
+	int servoh;
+	boolean left;
 	public void testInit() {
 //		initRecord();
-
+		servoh = 0;
+		left = true;
 
 	}
 
 	String data = "";
-	int servoh = 0;
+	
 	
 	public void testPeriodic() {
 		
 		if(coStick.getRawButton(11)){
-			System.out.println("FWD");
-			deLight.configForward();
-		} else if(coStick.getRawButton(12)){
-			System.out.println("REV");
-			deLight.configBackward();
+			left = !left;
+			System.out.println("Editing left servo: " + left);
 		}
 		
-		deLight.updateLight(coStick);
+		clamp.setManual(servoh, left);
 		
+		if(coStick.getRawButton(6)){
+			servoh += 5;
+		} else if(coStick.getRawButton(4)){
+			servoh -= 5;
+		}
+		
+		System.out.println(servoh);
 	}
 
 	public void disabledInit() {
