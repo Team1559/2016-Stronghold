@@ -555,8 +555,6 @@ public class Robot extends IterativeRobot {
 	boolean left;
 	public void testInit() {
 //		initRecord();
-		servoh = 45;
-		left = false;
 
 	}
 
@@ -564,21 +562,6 @@ public class Robot extends IterativeRobot {
 	
 	
 	public void testPeriodic() {
-		
-//		if(coStick.getRawButton(11)){
-//			left = !left;
-//			System.out.println("Editing left servo: " + left);
-//		}
-//		
-//		clamp.setManual(servoh, left);
-//		
-//		if(coStick.getRawButton(6)){
-//			servoh += 5;
-//		} else if(coStick.getRawButton(4)){
-//			servoh -= 5;
-//		}
-//		
-//		System.out.println(servoh);
 		
 		System.out.println(clamp.readSensor());
 		clamp.open();
