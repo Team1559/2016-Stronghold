@@ -7,7 +7,7 @@ import edu.wpi.first.wpilibj.Solenoid;
 
 public class BallClamp {
 
-	private PWM servoLeft, servoRight;
+	private SwoodServo servoLeft, servoRight;
 	private AnalogInput opSensor;
 	private boolean open = false;
 	private boolean ballIn = false;
@@ -17,8 +17,8 @@ public class BallClamp {
 	
 	
 	public BallClamp() {
-		servoLeft = new PWM(Wiring.CLAMP_LEFT_ID);
-		servoRight = new PWM(Wiring.CLAMP_RIGHT_ID);
+		servoLeft = new SwoodServo(Wiring.CLAMP_LEFT_ID, Wiring.MIN_PWM, Wiring.MAX_PWM);
+		servoRight = new SwoodServo(Wiring.CLAMP_RIGHT_ID, Wiring.MIN_PWM, Wiring.MAX_PWM);
 		opSensor = new AnalogInput(Wiring.CLAMP_BALL_SENSOR_ID);
 		int mid = (Wiring.MAX_PWM - Wiring.MIN_PWM)/2;
 		servoLeft.setBounds(Wiring.MAX_PWM, 0, Wiring.MIN_PWM + mid, 0, Wiring.MIN_PWM);
@@ -39,14 +39,14 @@ public class BallClamp {
 	}
 	
 	public void close() {
-		servoLeft.setPosition(1);
-		servoRight.setPosition(0);
+		servoLeft.setPosition(1.0);
+		servoRight.setPosition(0.0);
 		open = false;
 	}
 
 	public void open() {
-		servoLeft.setPosition(0);
-		servoRight.setPosition(1);
+		servoLeft.setPosition(0.0);
+		servoRight.setPosition(1.0);
 		open = true;
 	}
 
