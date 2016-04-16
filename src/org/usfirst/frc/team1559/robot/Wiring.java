@@ -88,11 +88,14 @@ public class Wiring {
 	public static final double CLAMP_LOW = 0.85;
 	public static final double CLAMP_HIGH = 1.03;
 	
-	public static final double LEFT_OUT_POS = 60;
-	public static final double LEFT_CLAMP_POS = 130;
-	public static final double RIGHT_OUT_POS = 130;
-	public static final double RIGHT_CLAMP_POS = 60;
+	//angles
+	public static final double LEFT_OUT_POS = 60; //60 deg
+	public static final double LEFT_CLAMP_POS = 130; //130 deg
+	public static final double RIGHT_OUT_POS = 130; //130 deg
+	public static final double RIGHT_CLAMP_POS = 60; //60 deg
 	
+	public static final int MAX_PWM = 1850;
+	public static final int MIN_PWM = 1200;
 	
 	//camera stuffs
 	public static final int HORIZONTAL_RESOLUTION = 800;

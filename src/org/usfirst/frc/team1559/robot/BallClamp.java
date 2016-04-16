@@ -1,12 +1,13 @@
 package org.usfirst.frc.team1559.robot;
 
 import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.PWM;
 import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.Solenoid;
 
 public class BallClamp {
 
-	private Servo servoLeft, servoRight;
+	private PWM servoLeft, servoRight;
 	private AnalogInput opSensor;
 	private boolean open = false;
 	private boolean ballIn = false;
@@ -16,15 +17,16 @@ public class BallClamp {
 	
 	
 	public BallClamp() {
-		servoLeft = new Servo(Wiring.CLAMP_LEFT_ID);
-		servoRight = new Servo(Wiring.CLAMP_RIGHT_ID);
+		servoLeft = new PWM(Wiring.CLAMP_LEFT_ID);
+		servoRight = new PWM(Wiring.CLAMP_RIGHT_ID);
 		opSensor = new AnalogInput(Wiring.CLAMP_BALL_SENSOR_ID);
-		servoLeft.set(1);
-		servoRight.set(0);
+		int mid = (Wiring.MAX_PWM - Wiring.MIN_PWM)/2;
+		servoLeft.setBounds(Wiring.MAX_PWM, 0, Wiring.MIN_PWM + mid, 0, Wiring.MIN_PWM);
+		servoRight.setBounds(Wiring.MAX_PWM, 0, Wiring.MIN_PWM + mid, 0, Wiring.MIN_PWM);
+		open();
 		kick = new Solenoid(Wiring.KICK_ME);
 		unKick = new Solenoid(Wiring.UN_KICK_ME);
 	}
-
 	public void kick(){
 		kick.set(true);
 		unKick.set(false);
@@ -36,14 +38,14 @@ public class BallClamp {
 	}
 	
 	public void close() {
-		servoLeft.setAngle(Wiring.LEFT_CLAMP_POS);
-		servoRight.setAngle(Wiring.RIGHT_CLAMP_POS);
+		servoLeft.setPosition(0);
+		servoRight.setPosition(1);
 		open = false;
 	}
 
 	public void open() {
-		servoLeft.setAngle(Wiring.LEFT_OUT_POS);
-		servoRight.setAngle(Wiring.RIGHT_OUT_POS);
+		servoLeft.setPosition(0);
+		servoRight.setPosition(1);
 		open = true;
 	}
 
@@ -95,15 +97,6 @@ public class BallClamp {
 
 	public double readSensor(){
 		return opSensor.getAverageVoltage();
-	}
-	
-	public void setManual(double angle, boolean left){
-		if(left){
-			servoLeft.setAngle(angle);
-		} else {
-			servoRight.setAngle(angle);
-		}
-		
 	}
 	
 	public boolean isOpen() {
