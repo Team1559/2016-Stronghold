@@ -14,21 +14,26 @@ public class Wiring {
 
 	public static final String WFFL_NAME = "/media/sda1/comp.wffl";
 	
+	
 	// Talon Slavery
 	public static final int LEFT_MASTER_TALON = 13;
 	public static final int RIGHT_MASTER_TALON = 12;
 	public static final int LEFT_SLAVE_TALON = 11;
 	public static final int RIGHT_SLAVE_TALON = 10;
+	
+	public static final int VOLTAGE_RAMP_RATE = 40;
+	public static final int PULSES_PER_INCH = 447;
 
+	
 	// Transmission
 	public static final int SHIFT_1 = 3;
 	public static final int SHIFT_2 = 4;
 	
-	// determined after consulting Mr. Petilli
 	public static final double SHIFT_UP_SPEED = 4.6; // m/s
 	public static final double SHIFT_DOWN_SPEED = 4.4; // m/s
 	public static final double LOW_SPEED_MULTIPLIER = 1.0 ; //Reccommended 2.2, Chris didn't like it....
 
+	
 	// Joysticks
 	public static final int JOYSTICK0 = 0;
 	public static final int JOYSTICK1 = 1;
@@ -36,23 +41,37 @@ public class Wiring {
 	public static final int JOYSTICK3 = 3;
 
 	// NAVx stuff
-	public static final double OPTIMAL_TURNT_SPEED = 1;
-
-	// driving stuff
-	public static final int VOLTAGE_RAMP_RATE = 40;
-	public static final int PULSES_PER_INCH = 447;
+	public static final double OPTIMAL_TURNT_SPEED = 1;	
 
 	// gatherer/shooter controls
 	public static final int BTN_GATHERER_TO_TOP = 7;
 	public static final int BTN_GATHERER_TO_MID = 5;
 	public static final int BTN_GATHERER_TO_BOT = 8;
 	public static final int BTN_SHOOT = 3;
-	public static final int GATHERER_ANALOG_INPUT = 3;
-	public static final int PDP_CHANNEL_GATHERER = 3;
+	
+	
+	//GATHERER PID, devices
 	public static final double GATHERER_PID_P = -.1;
 	public static final double GATHERER_PID_I = 0;
 	public static final double GATHERER_PID_D = 0;
 	public static final double GATHERER_PID_TOLERANCE = 1;
+	
+	public static final int GATHERER_ANALOG_INPUT = 3;
+	public static final int PDP_CHANNEL_GATHERER = 3;
+	public static final double GATHERER_SPEED = 1.0;
+	public static final int GATHERER_LIMIT_ID = 2;
+	public static final int GATHERER_LIFT = 2;
+	public static final int GATHERER_ROTATE = 1;
+	public static final int GATHERER_SAFE_SHOOT_ANGLE = 75;
+	
+	public static final int BTN_GATHER_UP_LEVEL = 6;
+	public static final int BTN_GATHER_DOWN_LEVEL = 5;
+	public static final int BTN_GATHERER_OVERRIDE = 4;
+	
+	public static final double GATHER_MID_TARGET = 2300; //this will change!
+	public static final double GATHER_HOME_TARGET = 3850;
+	public static final double GATHER_BOTTOM_TARGET = 1776; //freedom
+	
 	
 	// shooter constants
 	public static final int SHOOTER_UP_DELAY = 50;
@@ -69,46 +88,37 @@ public class Wiring {
 	public static final double CLAMP_LOW = 2.95;
 	public static final double CLAMP_HIGH = 3.2;
 	
-	// gatherer constants
-	public static final double GATHERER_SPEED = 1.0;
-	public static final int GATHERER_LIMIT_ID = 2;
-	public static final int GATHERER_LIFT = 2;
-	public static final int GATHERER_ROTATE = 1;
-	public static final int GATHERER_SAFE_SHOOT_ANGLE = 75;
-	public static final int BTN_GATHER_UP_LEVEL = 6;
-	public static final int BTN_GATHER_DOWN_LEVEL = 5;
-
-	public static final int BTN_GATHERER_OVERRIDE = 4;
 	
 	//camera stuffs
 	public static final int HORIZONTAL_RESOLUTION = 800;
 	public static final double HORIZONTAL_FOV = 60.0;
 	public static final int THRESHOLD = 40;
+	public static final double CAMERA_TOLERANCE = .48;
+	public static final int CAMERA_ROTATION_OFFSET = 15; //(inches, like wffl)
 
-//	public static final int BTN_BALL_CLAMP_OVERRIDE = 2;
 	
+	//Robot configuration
 	public static final boolean hasGatherer = true;
 	public static final boolean hasArduino = false;
 	public static final boolean HAS_CLIMBER = true;
 	public static final boolean hasBallClamp = true;
 	
-	public static final double CAMERA_TOLERANCE = .48;
 	
-	public static final int FLASH_RELAY = 3;//dio
+	//de-Light
+	public static final int FLASH_RELAY = 3;//should actually be a relay because spikes are H-Bridges
 	public static final int FLASH_BUTT_ON = 7;
 	public static final int FLASH_BUTT_STROBE = 8;
 
-	public static final double GATHER_MID_TARGET = 2300; //this will change!
-	public static final double GATHER_HOME_TARGET = 3850;
-	public static final double GATHER_BOTTOM_TARGET = 1776; //freedom
-
+	
+	//pneumatic kicker
 	public static final int KICK_ME = 0;
 	public static final int UN_KICK_ME = 1;
 
+	//climber
 	public static final int CLIMBER_TALON = 3; // liam approved
 	
 	//public static final int PI_KILL_SWITCH = 8; //picked a random number for now
 	
-	public static final int CAMERA_ROTATION_OFFSET = 15; //(inches, like wffl)
+	
 
 }
