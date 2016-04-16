@@ -27,6 +27,7 @@ public class BallClamp {
 		kick = new Solenoid(Wiring.KICK_ME);
 		unKick = new Solenoid(Wiring.UN_KICK_ME);
 	}
+	
 	public void kick(){
 		kick.set(true);
 		unKick.set(false);
@@ -38,8 +39,8 @@ public class BallClamp {
 	}
 	
 	public void close() {
-		servoLeft.setPosition(0);
-		servoRight.setPosition(1);
+		servoLeft.setPosition(1);
+		servoRight.setPosition(0);
 		open = false;
 	}
 
