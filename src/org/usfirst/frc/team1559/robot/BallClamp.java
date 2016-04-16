@@ -1,7 +1,6 @@
 package org.usfirst.frc.team1559.robot;
 
 import edu.wpi.first.wpilibj.AnalogInput;
-import edu.wpi.first.wpilibj.PWM;
 import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.Solenoid;
 
@@ -20,9 +19,6 @@ public class BallClamp {
 		servoLeft = new SwoodServo(Wiring.CLAMP_LEFT_ID, Wiring.MIN_PWM, Wiring.MAX_PWM);
 		servoRight = new SwoodServo(Wiring.CLAMP_RIGHT_ID, Wiring.MIN_PWM, Wiring.MAX_PWM);
 		opSensor = new AnalogInput(Wiring.CLAMP_BALL_SENSOR_ID);
-		int mid = (Wiring.MAX_PWM - Wiring.MIN_PWM)/2;
-		servoLeft.setBounds(Wiring.MAX_PWM, 0, Wiring.MIN_PWM + mid, 0, Wiring.MIN_PWM);
-		servoRight.setBounds(Wiring.MAX_PWM, 0, Wiring.MIN_PWM + mid, 0, Wiring.MIN_PWM);
 		open();
 		kick = new Solenoid(Wiring.KICK_ME);
 		unKick = new Solenoid(Wiring.UN_KICK_ME);

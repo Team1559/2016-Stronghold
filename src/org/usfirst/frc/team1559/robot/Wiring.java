@@ -94,8 +94,8 @@ public class Wiring {
 	public static final double RIGHT_OUT_POS = 130; //130 deg
 	public static final double RIGHT_CLAMP_POS = 60; //60 deg
 	
-	public static final int MAX_PWM = 2; //1850 uS
-	public static final int MIN_PWM = 1; //1200 uS
+	public static final double MAX_PWM = 1.850; //1850 uS
+	public static final double MIN_PWM = 1.200; //1200 uS
 	
 	//camera stuffs
 	public static final int HORIZONTAL_RESOLUTION = 800;
