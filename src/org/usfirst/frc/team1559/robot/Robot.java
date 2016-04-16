@@ -542,7 +542,7 @@ public class Robot extends IterativeRobot {
 		// }
 		arduinoCounterForAlison++;
 	}
-
+	//ted cruz = zodiac killer
 	// private final int CAMERA_BAND = 10;
 
 	public double centerWithAngle(int error) {
@@ -563,7 +563,8 @@ public class Robot extends IterativeRobot {
 	
 	public void testPeriodic() {
 		
-		System.out.println(clamp.readSensor());
+		System.out.println("L: " + tranny.getLDisplacement() + " R:" + tranny.getRDisplacement());
+		drive.arcadeDrive(stick.getY(), -stick.getRawAxis(4));
 		clamp.open();
 		
 	}
