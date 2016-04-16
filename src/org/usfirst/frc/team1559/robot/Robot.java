@@ -229,7 +229,7 @@ public class Robot extends IterativeRobot {
 				break;
 			case 1:
 //				cameraAngle = sc.grabAngle();
-				cameraAngle = sc.getAdjustedAngle(current.xPos, current.yPos); //have to get xPos and yPos from wffl
+				cameraAngle = sc.getAdjustedAngle(current.xPos, current.yPos + Wiring.WFFL_TARGET_OFFSET); //have to get xPos and yPos from wffl
 //				System.out.println(cameraAngle);
 				ahrsAngle = waffle.getCurrentAngle(); //git destroyed
 				if (counter > 3) {

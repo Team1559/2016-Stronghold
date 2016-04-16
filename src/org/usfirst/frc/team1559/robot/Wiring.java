@@ -124,6 +124,9 @@ public class Wiring {
 
 	//climber
 	public static final int CLIMBER_TALON = 3; // liam approved
+
+
+	public static final double WFFL_TARGET_OFFSET = 20; //inches
 	
 	//public static final int PI_KILL_SWITCH = 8; //picked a random number for now
 	
