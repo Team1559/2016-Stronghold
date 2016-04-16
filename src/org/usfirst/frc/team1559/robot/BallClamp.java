@@ -36,14 +36,14 @@ public class BallClamp {
 	}
 	
 	public void close() {
-		servoLeft.setAngle(66);
-		servoRight.setAngle(215);
+		servoLeft.setAngle(Wiring.LEFT_CLAMP_POS);
+		servoRight.setAngle(Wiring.RIGHT_CLAMP_POS);
 		open = false;
 	}
 
 	public void open() {
-		servoLeft.setAngle(110);
-		servoRight.setAngle(130);
+		servoLeft.setAngle(Wiring.LEFT_OUT_POS);
+		servoRight.setAngle(Wiring.RIGHT_OUT_POS);
 		open = true;
 	}
 

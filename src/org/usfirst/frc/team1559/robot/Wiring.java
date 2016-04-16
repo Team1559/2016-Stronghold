@@ -85,8 +85,13 @@ public class Wiring {
 	public static final int CLAMP_RIGHT_ID = 6;
 	public static final int CLAMP_BALL_SENSOR_ID = 0;
 	public static final double CLAMP_SENSOR_THRESHOLD = 2.5;
-	public static final double CLAMP_LOW = 2.95;
-	public static final double CLAMP_HIGH = 3.2;
+	public static final double CLAMP_LOW = 0.85;
+	public static final double CLAMP_HIGH = 1.03;
+	
+	public static final double LEFT_OUT_POS = 60;
+	public static final double LEFT_CLAMP_POS = 130;
+	public static final double RIGHT_OUT_POS = 130;
+	public static final double RIGHT_CLAMP_POS = 60;
 	
 	
 	//camera stuffs

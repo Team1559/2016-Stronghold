@@ -164,6 +164,8 @@ public class Robot extends IterativeRobot {
 		tranny.resetEncoders();
 		// givenAngle = false;
 		// gatherer.updateAutoPosition();
+		
+		clamp.open();
 	}
 
 	// private boolean givenAngle = false;
@@ -387,6 +389,8 @@ public class Robot extends IterativeRobot {
 			dio1.set(false);
 			dio2.set(true);
 		}
+		
+		clamp.open();
 
 		desiredYarAngle = 0;
 		
@@ -551,8 +555,8 @@ public class Robot extends IterativeRobot {
 	boolean left;
 	public void testInit() {
 //		initRecord();
-		servoh = 0;
-		left = true;
+		servoh = 45;
+		left = false;
 
 	}
 
@@ -561,20 +565,24 @@ public class Robot extends IterativeRobot {
 	
 	public void testPeriodic() {
 		
-		if(coStick.getRawButton(11)){
-			left = !left;
-			System.out.println("Editing left servo: " + left);
-		}
+//		if(coStick.getRawButton(11)){
+//			left = !left;
+//			System.out.println("Editing left servo: " + left);
+//		}
+//		
+//		clamp.setManual(servoh, left);
+//		
+//		if(coStick.getRawButton(6)){
+//			servoh += 5;
+//		} else if(coStick.getRawButton(4)){
+//			servoh -= 5;
+//		}
+//		
+//		System.out.println(servoh);
 		
-		clamp.setManual(servoh, left);
+		System.out.println(clamp.readSensor());
+		clamp.open();
 		
-		if(coStick.getRawButton(6)){
-			servoh += 5;
-		} else if(coStick.getRawButton(4)){
-			servoh -= 5;
-		}
-		
-		System.out.println(servoh);
 	}
 
 	public void disabledInit() {
