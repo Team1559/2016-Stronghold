@@ -258,7 +258,7 @@ public class Robot extends IterativeRobot {
 				break;
 			case 4:
 				// System.out.println("running again");
-				if (camWait++ > 17) { //change this
+				if (camWait++ > 19) { //change this
 					
 					
 					if(Math.abs(cameraAngle) <= Wiring.CAMERA_TOLERANCE){
@@ -267,6 +267,7 @@ public class Robot extends IterativeRobot {
 						shooter.autoShoot(true, false); //maybe change this to gatherer.shouldnotshoot (?)
 					} else {
 						nate = 0;
+						cameraAngle = -1000;
 					}
 			
 					camWait = 0;
@@ -564,15 +565,16 @@ public class Robot extends IterativeRobot {
 	
 	public void testPeriodic() {
 		
-		System.out.println("L: " + tranny.getLDisplacement() + " R:" + tranny.getRDisplacement());
-		drive.arcadeDrive(stick.getY(), -stick.getRawAxis(4));
-		clamp.open();
+		sc.send("s");
+		System.out.println(sc.grabAngle());
+		
 		
 	}
 
 	public void disabledInit() {
 		// arduino.writeSequence(0);
 		deLight.turnOff();
+		shooter.shootState = 0;
 	}
 
 	public void disabledPeriodic() {
