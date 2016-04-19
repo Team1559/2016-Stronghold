@@ -544,7 +544,8 @@ public class Robot extends IterativeRobot {
 	}
 	//ted cruz = zodiac killer
 	// private final int CAMERA_BAND = 10;
-
+	//petre megres zodax kill
+	
 	public double centerWithAngle(int error) {
 		System.out.println(error);
 		return error / 13.0;// 30 = half of horizontal fov of camera
