@@ -162,6 +162,8 @@ public class Robot extends IterativeRobot {
 		// waffle.resetLength();
 		// shooter.resetShooter(gatherer.shouldNotShoot());
 		tranny.resetEncoders();
+		
+		sc.sp.flush();
 		// givenAngle = false;
 		// gatherer.updateAutoPosition();
 		
@@ -187,7 +189,6 @@ public class Robot extends IterativeRobot {
 //		gatherer.lowbarify();
 		//potentially add something to hold the gatherer at thit position
 		
-		sc.sp.flush();
 		 clamp.updateBallClampAbsolute(shooter.isShooting());
 
 		// int rawError = sc.getSerialIn();
@@ -224,12 +225,14 @@ public class Robot extends IterativeRobot {
 			switch (nate) {
 
 			case 0:
+				System.out.println("Asked " + System.currentTimeMillis());
 				sc.send("s");
 				nate++;
 				break;
 			case 1:
 //				cameraAngle = sc.grabAngle();
 				cameraAngle = sc.getAdjustedAngle(current.xPos, current.yPos + Wiring.WFFL_TARGET_OFFSET); //have to get xPos and yPos from wffl
+				System.out.println("Answer " + System.currentTimeMillis());
 //				System.out.println(cameraAngle);
 				ahrsAngle = waffle.getCurrentAngle(); //git destroyed
 				if (counter > 3) {
@@ -257,6 +260,7 @@ public class Robot extends IterativeRobot {
 				}
 				break;
 			case 4:
+				// n80 b
 				// System.out.println("running again");
 				if (camWait++ > 19) { //change this
 					

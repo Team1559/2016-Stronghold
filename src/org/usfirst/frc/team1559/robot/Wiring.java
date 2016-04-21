@@ -101,7 +101,7 @@ public class Wiring {
 	public static final int HORIZONTAL_RESOLUTION = 800;
 	public static final double HORIZONTAL_FOV = 60.0;
 	public static final int THRESHOLD = 40;
-	public static final double CAMERA_TOLERANCE = .48;
+	public static final double CAMERA_TOLERANCE = .5;
 	public static final int CAMERA_ROTATION_OFFSET = 15; //(inches, like wffl)
 
 	
