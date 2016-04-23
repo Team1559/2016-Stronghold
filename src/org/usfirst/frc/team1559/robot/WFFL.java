@@ -211,10 +211,10 @@ public class WFFL {
 			correctionTurn = 0.8;
 		} else if (correctionTurn <= -0.8) {
 			correctionTurn = -0.8;
-		} else if (correctionTurn <= 0.2 && correctionTurn > 0.0) { //make this .35 on the real robot
-			correctionTurn = 0.2;
-		} else if (correctionTurn >= -0.2 && correctionTurn < 0.0) {
-			correctionTurn = -0.2;
+		} else if (correctionTurn <= 0.23 && correctionTurn > 0.0) { //make this .35 on the real robot
+			correctionTurn = 0.23;
+		} else if (correctionTurn >= -0.23 && correctionTurn < 0.0) {
+			correctionTurn = -0.23;
 		} else { // well crap clause
 //			System.out.print("oh well (crap)");
 		}
