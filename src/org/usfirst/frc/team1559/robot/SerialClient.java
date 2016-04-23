@@ -72,12 +72,18 @@ public class SerialClient {
 		double d = Wiring.CAMERA_ROTATION_OFFSET;
 		double camAngle = grabAngle(); //degrees
 		double ret = 0.0;
-		
-		ret = Math.sqrt(Math.pow(xPos, 2) + Math.pow(yPos, 2));
+
+		ret = Math.sqrt(Math.pow(yPos - d, 2) + Math.pow(xPos, 2));
 		ret *= Math.sin(Math.toRadians(180 - camAngle));
-		ret /= Math.sqrt(Math.pow(xPos, 2) + (Math.pow(yPos - d, 2)));
+		ret /= Math.sqrt(Math.pow(xPos, 2) + Math.pow(yPos, 2));
 		ret = Math.asin(ret);
-		
+
+//		===========THIS MATH ONLY WORKS IF WFFL GIVES THE DISTANCE TO CAMERA===================
+//		ret = Math.sqrt(Math.pow(xPos, 2) + Math.pow(yPos, 2));
+//		ret *= Math.sin(Math.toRadians(180 - camAngle));
+//		ret /= Math.sqrt(Math.pow(xPos, 2) + (Math.pow(yPos + d, 2)));
+//		ret = Math.asin(ret);
+//		
 		return Math.toDegrees(ret);
 	}
 	

@@ -394,8 +394,7 @@ public class Robot extends IterativeRobot {
 			dio1.set(false);
 			dio2.set(true);
 		}
-		
-		clamp.open();
+
 
 		desiredYarAngle = 0;
 		

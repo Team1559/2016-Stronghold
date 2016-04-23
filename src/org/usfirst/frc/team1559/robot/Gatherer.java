@@ -87,6 +87,10 @@ public class Gatherer {
 			gatherLift.set(liftUp);
 		}
 	}
+	//@TODO: Make this work.
+	public void gatherPos(){
+
+	}
 
 	public void gathererTalon() {
 		double angle = gyro.getAngle();
@@ -283,11 +287,10 @@ public class Gatherer {
 			gatherLift.set(liftUp);
 		} else if (stick.getRawButton(Wiring.BTN_GATHER_DOWN_LEVEL)) {
 			gatherLift.set(liftDown);
-		} else {
+		} else if (stick.getRawButton(Wiring.BTN_GATHER_DOWN_LEVEL) && stick.getRawButton(Wiring.BTN_GATHER_UP_LEVEL)) {
+			gatherPos();
+		}else {
 			gatherLift.set(liftStop);
-		}
-		if (!diGathererTop.get()) {
-			gyro.reset();
 		}
 	}
 	
