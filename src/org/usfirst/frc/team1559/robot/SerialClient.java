@@ -70,7 +70,7 @@ public class SerialClient {
 	public double getAdjustedAngle(double xPos, double yPos) {
 
 		double d = Wiring.CAMERA_ROTATION_OFFSET;
-		double camAngle = grabAngle(); //degrees
+		double camAngle = grabAngle() + Wiring.SHOOTER_SUCKS_CONSTANT; //degrees
 		double ret = 0.0;
 
 		ret = Math.sqrt(Math.pow(yPos - d, 2) + Math.pow(xPos, 2));

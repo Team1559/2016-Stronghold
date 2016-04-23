@@ -103,6 +103,7 @@ public class Wiring {
 	public static final int THRESHOLD = 40;
 	public static final double CAMERA_TOLERANCE = .5;
 	public static final int CAMERA_ROTATION_OFFSET = 15; //(inches, like wffl)
+	public static final double SHOOTER_SUCKS_CONSTANT = .5; //1/2 degree left (negative means right)
 
 	
 	//Robot configuration
