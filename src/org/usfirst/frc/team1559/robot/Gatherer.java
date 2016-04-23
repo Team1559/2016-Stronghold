@@ -71,7 +71,7 @@ public class Gatherer {
 	}
 
 	public void lowbarify() {
-		if (gyro.getAngle() >= BOTTOM_TARGET) {
+		if (gyro.getAngle() >= Wiring.GATHER_MID_TARGET) {
 			gatherLift.set(liftStop);
 			arm = ArmState.ATBOT;
 		} else {
@@ -86,10 +86,6 @@ public class Gatherer {
 		} else {
 			gatherLift.set(liftUp);
 		}
-	}
-	//@TODO: Make this work.
-	public void gatherPos(){
-
 	}
 
 	public void gathererTalon() {
@@ -288,7 +284,7 @@ public class Gatherer {
 		} else if (stick.getRawButton(Wiring.BTN_GATHER_DOWN_LEVEL)) {
 			gatherLift.set(liftDown);
 		} else if (stick.getRawButton(Wiring.BTN_GATHER_DOWN_LEVEL) && stick.getRawButton(Wiring.BTN_GATHER_UP_LEVEL)) {
-			gatherPos();
+			lowbarify();
 		}else {
 			gatherLift.set(liftStop);
 		}

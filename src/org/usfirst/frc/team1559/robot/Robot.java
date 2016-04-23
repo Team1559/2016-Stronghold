@@ -190,6 +190,7 @@ public class Robot extends IterativeRobot {
 		//potentially add something to hold the gatherer at thit position
 		
 		 clamp.updateBallClampAbsolute(shooter.isShooting());
+		 gatherer.lowbarify();
 
 		// int rawError = sc.getSerialIn();
 
@@ -524,9 +525,9 @@ public class Robot extends IterativeRobot {
 
 		if (Wiring.hasGatherer) {
 			if (stick.getRawButton(1)) {
-				gatherer.setSpark(0.5);
+				gatherer.setSpark(1.0);
 			} else if(stick.getRawButton(4)) {
-				gatherer.setSpark(-0.5);
+				gatherer.setSpark(-1.0);
 			} else {
 				gatherer.setSpark(0.0);
 			}

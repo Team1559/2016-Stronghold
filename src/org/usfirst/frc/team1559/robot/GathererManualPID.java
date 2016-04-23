@@ -94,11 +94,12 @@ public class GathererManualPID {
 
 	public void lowbarify(){
 		
-		if (getPot() <= BOTTOM_TARGET) {
+		if (getPot() == Wiring.GATHER_MID_TARGET) {
 			gatherLift.set(liftStop);
-			arm = ArmState.ATBOT;
-		} else {
+		} else if (getPot() > Wiring.GATHER_MID_TARGET){
 			gatherLift.set(liftDown);
+		} else if(getPot() < Wiring.GATHER_MID_TARGET){
+			gatherLift.set(liftUp);
 		}
 		
 	}
@@ -137,6 +138,8 @@ public class GathererManualPID {
 			gatherLift.set(liftUp);
 		} else if (stick.getRawButton(Wiring.BTN_GATHER_DOWN_LEVEL) && (getPot() >= Wiring.GATHER_BOTTOM_TARGET)) {
 			gatherLift.set(liftDown);
+		} else if(stick.getRawButton(Wiring.BTN_GATHER_DOWN_LEVEL) && stick.getRawButton(Wiring.BTN_GATHER_UP_LEVEL)){
+			lowbarify();
 		} else {
 			gatherLift.set(liftStop);
 		}
