@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Robot extends IterativeRobot {
 
@@ -408,7 +409,7 @@ public class Robot extends IterativeRobot {
 		// playbackIterative();
 //		recordPeriodic();
 //Sqwilliam Megers
-		
+		SmartDashboard.putNumber("LIGHT:", clamp.readSensor());
 		shooter.updateShooter(stick, false); //should not shoot if true
 		
 		if (tranny.getGear() == 1) {

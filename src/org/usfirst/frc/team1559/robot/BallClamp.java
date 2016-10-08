@@ -46,6 +46,7 @@ public class BallClamp {
 		open = true;
 	}
 
+	
 	public void resetClampy(){
 		clampy = 0;
 	}
@@ -55,7 +56,7 @@ public class BallClamp {
 		case 0:
 			//don't have ball :(
 			if(!override){
-				if (((opSensor.getAverageVoltage() >= Wiring.CLAMP_LOW) && (opSensor.getAverageVoltage() <= Wiring.CLAMP_HIGH))) {
+				if (((opSensor.getAverageVoltage() <= Wiring.CLAMP_LOW) && (opSensor.getAverageVoltage() >= Wiring.CLAMP_HIGH))) {
 //					ballIn = true;
 					close();
 					clampy++;
@@ -85,7 +86,7 @@ public class BallClamp {
 	}
 	
 	public void updateBallClamp(boolean override) {
-		if (((opSensor.getAverageVoltage() >= Wiring.CLAMP_LOW) && (opSensor.getAverageVoltage() <= Wiring.CLAMP_HIGH)) && !override) {
+		if ((opSensor.getAverageVoltage() >= Wiring.CLAMP_LOW) && /**(opSensor.getAverageVoltage() <= Wiring.CLAMP_HIGH)) &&*/ !override) {
 			close();
 		} else {
 			open();
