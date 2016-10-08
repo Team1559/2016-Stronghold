@@ -15,7 +15,7 @@ public class Flashlight {
 	}
 	
 	public void updateLight(Joystick stick){
-		if(stick.getRawButton(Wiring.FLASH_BUTT_ON)){
+		if(stick.getRawAxis(Wiring.FLASH_BUTT_ON) > 0.9){
 			turnOn();
 			System.out.println("ON!");
 		} else {
