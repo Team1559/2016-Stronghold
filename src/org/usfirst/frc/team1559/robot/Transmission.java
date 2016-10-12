@@ -65,12 +65,14 @@ public class Transmission {
 
 	public void updateShifting() {
 		double velocity = (getRVelocity() + (double) getLVelocity()) / 2;
-
+		
 		if (velocity >= Wiring.SHIFT_UP_SPEED && stick.getRawButton(9)) {
+			System.out.println("AlekTheSoccerKid");
 			gear2();
 		} else if ((velocity <= Wiring.SHIFT_DOWN_SPEED) || !stick.getRawButton(9)) {
 			gear1();
 		}
+		
 	}
 	
 	public void limpShifting() {

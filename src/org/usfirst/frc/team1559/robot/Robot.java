@@ -426,7 +426,7 @@ public class Robot extends IterativeRobot {
 		}
 		// SmartDashboard.putBoolean("BALL IN!", !clamp.isOpen());
 
-		deLight.updateLight(coStick);
+		deLight.updateLight(stick);
 
 		if (!scp.encodersDead()) {
 			tranny.updateShifting();

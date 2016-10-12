@@ -114,7 +114,7 @@ public class Wiring {
 	
 	
 	//de-Light
-	public static final int FLASH_RELAY = 3;//should actually be a relay because spikes are H-Bridges
+	public static final int FLASH_RELAY = 0;//should actually be a relay because spikes are H-Bridges
 	public static final int FLASH_BUTT_ON = 2;
 	public static final int FLASH_BUTT_STROBE = 8;
 
