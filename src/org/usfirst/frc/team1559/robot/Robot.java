@@ -38,7 +38,8 @@ public class Robot extends IterativeRobot {
 	Arduino arduino;
 	Transmission tranny;
 	int listPos = 0;
-	SerialClient sc = new SerialClient();// using serial now because it's good
+	//SerialClient sc = new SerialClient();// using serial now because it's good
+	SocketClient sc = new SocketClient(); //jk tho
 	double leftVelocity, rightVelocity;
 	Shooter shooter;
 	final boolean shooterInversion = false;
@@ -50,6 +51,7 @@ public class Robot extends IterativeRobot {
 	int counter = 0;
 	int gatherLevel = 0;
 	I2CServer i2c;
+	
 	
 	I2CServer I2CServer;
 
@@ -154,7 +156,7 @@ public class Robot extends IterativeRobot {
 			arduino.writeSequence(1);
 		System.out.println("AHRS: " + waffle.getAHRS());
 		waffle.resetAHRS();
-		sc.reset();
+		//sc.reset();
 		waffle.interpret();
 		// System.out.println("JFKDSLFIUESHF " +
 		// waffle.list.get(waffle.list.size() - 1).command);
@@ -164,7 +166,7 @@ public class Robot extends IterativeRobot {
 		// shooter.resetShooter(gatherer.shouldNotShoot());
 		tranny.resetEncoders();
 		
-		sc.sp.flush();
+		//sc.sp.flush();
 		// givenAngle = false;
 		// gatherer.updateAutoPosition();
 		
@@ -227,7 +229,7 @@ public class Robot extends IterativeRobot {
 			switch (nate) {
 
 			case 0:
-				System.out.println("Asked " + System.currentTimeMillis());
+				//System.out.println("Asked " + System.currentTimeMillis());
 				sc.send("s");
 				nate++;
 				break;
