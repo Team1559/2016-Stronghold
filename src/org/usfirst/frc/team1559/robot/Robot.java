@@ -585,6 +585,8 @@ public class Robot extends IterativeRobot {
 	}
 
 	public void disabledPeriodic() {
+		sc.send("s");
+		System.out.println(sc.grabAngle());
 		// roit gets rekt
 		// git noodled
 	}
