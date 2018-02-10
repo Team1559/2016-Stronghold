@@ -50,8 +50,8 @@ public class Gatherer {
 	public Gatherer(int liftId, int rotateId, Joystick joy) {
 		gatherLift = new Talon(liftId);
 		gatherRotate = new Spark(rotateId);
-		gyro = new AnalogGyro(Wiring.GATHERER_ANALOG_INPUT);
-		gyro.reset();
+		//gyro = new AnalogGyro(Wiring.GATHERER_ANALOG_INPUT);
+		//gyro.reset();
 		stick = joy;
 		diGathererTop = new DigitalInput(Wiring.GATHERER_LIMIT_ID);
 		dbUP = new DebounceButton(stick, Wiring.BTN_GATHER_UP_LEVEL);
@@ -68,6 +68,10 @@ public class Gatherer {
 
 	public void setSpark(double d) {
 		gatherRotate.set(d);
+	}
+	
+	public void setSparkInverted(boolean b) {
+		gatherRotate.setInverted(b);
 	}
 
 	public void lowbarify() {
@@ -237,7 +241,7 @@ public class Gatherer {
 			if (!diGathererTop.get()) {
 				gatherLift.set(liftStop);
 				arm = ArmState.ATTOP;
-				gyro.reset();
+				//gyro.reset();
 			}
 			break;
 		case MIDTOPUP:
@@ -260,7 +264,7 @@ public class Gatherer {
 			if (!diGathererTop.get()) {
 				gatherLift.set(liftStop);
 				arm = ArmState.ATTOP;
-				gyro.reset();
+				//gyro.reset();
 			}
 			break;
 		case STALLED:
@@ -284,7 +288,7 @@ public class Gatherer {
 		} else if (stick.getRawButton(Wiring.BTN_GATHER_DOWN_LEVEL)) {
 			gatherLift.set(liftDown);
 		} else if (stick.getRawButton(Wiring.BTN_GATHER_DOWN_LEVEL) && stick.getRawButton(Wiring.BTN_GATHER_UP_LEVEL)) {
-			lowbarify();
+			//lowbarify();
 		}else {
 			gatherLift.set(liftStop);
 		}
@@ -313,7 +317,7 @@ public class Gatherer {
 
 	public void updatePosition() {
 
-		if ((!diGathererTop.get() && pidController.getSetpoint() != TOP_TARGET) || gyro.getAngle() >= BOTTOM_TARGET) {// stop the errors cody!!
+		if ((!diGathererTop.get() && pidController.getSetpoint() != TOP_TARGET)) {// stop the errors cody!!
 			disableLifterPID();
 			gatherLift.set(0.0);
 		} else {
@@ -359,7 +363,7 @@ public class Gatherer {
 	 */
 	public void initLifterPID(double p, double i, double d) {
 		// Shaquisha
-		pidController = new PIDController(p, i, d, gyro, gatherLift);
+		//pidController = new PIDController(p, i, d, gyro, gatherLift);
 		pidController.setSetpoint(TOP_TARGET);
 		pidController.setAbsoluteTolerance(Wiring.GATHERER_PID_TOLERANCE);
 	}
