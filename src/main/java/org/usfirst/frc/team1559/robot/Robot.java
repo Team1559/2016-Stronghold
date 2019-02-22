@@ -10,37 +10,23 @@ package org.usfirst.frc.team1559.robot;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
-import edu.wpi.first.wpilibj.IterativeRobot;
+import org.usfirst.frc.team1559.robot.subsystems.DriveTrain;
+
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
+import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 
 
-public class Robot extends IterativeRobot {
-	private Joystick joy;
-	private DifferentialDrive drive;
-	private WPI_TalonSRX masterLeft, masterRight, slaveLeft, slaveRight;
-	private Shooter shooter;
-	private Gatherer gatherer;
-	private Transmission transmission;
-	
+public class Robot extends TimedRobot {
+	public boolean isShifted;
+	private DriveTrain drive;
+	private OperatorInterface oi;
+
 	@Override
 	public void robotInit() {
-		joy = new Joystick(1);
-		shooter = new Shooter();
-		gatherer = new Gatherer(Wiring.GATHERER_LIFT, Wiring.GATHERER_ROTATE, joy);
-		masterLeft = new WPI_TalonSRX(Wiring.LEFT_MASTER_TALON);
-		masterRight = new WPI_TalonSRX(Wiring.RIGHT_MASTER_TALON);
-		slaveLeft = new WPI_TalonSRX(Wiring.LEFT_SLAVE_TALON);
-		slaveLeft.set(ControlMode.Follower, 0);
-		slaveRight = new WPI_TalonSRX(Wiring.RIGHT_SLAVE_TALON);
-		slaveRight.set(ControlMode.Follower, 0);
-		drive = new DifferentialDrive(masterLeft, masterRight);
-		masterRight.setInverted(true);
-		masterLeft.setInverted(true);
-		slaveLeft.setInverted(true);
-		slaveRight.setInverted(true);
-		transmission = new Transmission(joy, masterRight, masterLeft);
+		isShifted = false;
+		drive = new DriveTrain();
 	}
 
 	@Override
@@ -55,7 +41,17 @@ public class Robot extends IterativeRobot {
 
 	@Override
 	public void teleopPeriodic() {
-		drive.arcadeDrive(joy.getY(), joy.getRawAxis(4));
+		drive.arcadeDrive(oi.getPilotY(), oi.getPilotZ());
+
+		if (oi.pilot.getRawButton(9)) {
+			isShifted = !isShifted;
+		}
+		if(isShifted) {
+			drive.setGear2();
+		} else {
+			drive.setGear1();
+		}
+		/*
 		transmission.limpShifting();
 		gatherer.manualControl();
 		shooter.updateShooter(joy, false);
@@ -66,6 +62,7 @@ public class Robot extends IterativeRobot {
 		} else {
 			gatherer.setSpark(0);
 		}
+		*/
 	}
 
 	@Override

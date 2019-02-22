@@ -1,5 +1,7 @@
-package org.usfirst.frc.team1559.robot;
+package org.usfirst.frc.team1559.robot.subsystems;
 
+
+import org.usfirst.frc.team1559.robot.Wiring;
 
 import edu.wpi.first.wpilibj.Joystick;
 	import edu.wpi.first.wpilibj.Solenoid;

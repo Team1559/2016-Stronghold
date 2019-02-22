@@ -15,11 +15,11 @@ public class Wiring {
 	public static final String WFFL_NAME = "/media/sda1/comp.wffl";
 	
 	
-	// Talon Slavery
-	public static final int LEFT_MASTER_TALON = 13;
-	public static final int RIGHT_MASTER_TALON = 12;
-	public static final int LEFT_SLAVE_TALON = 11;
-	public static final int RIGHT_SLAVE_TALON = 10;
+	// DriveTrain
+	public static final int FRONT_LEFT_LEAD_TALON = 13;
+	public static final int FRONT_RIGHT_LEAD_TALON = 12;
+	public static final int BACK_LEFT_FOLLOW_TALON = 11;
+	public static final int BACK_RIGHT_FOLLOW_TALON = 10;
 	
 	public static final int VOLTAGE_RAMP_RATE = 40;
 	public static final int PULSES_PER_INCH = 447;
@@ -35,10 +35,8 @@ public class Wiring {
 
 	
 	// Joysticks
-	public static final int JOYSTICK0 = 0;
-	public static final int JOYSTICK1 = 1;
-	public static final int JOYSTICK2 = 2;
-	public static final int JOYSTICK3 = 3;
+	public static final int PILOT_JOYSTICK = 0;
+	public static final int COPILOT_JOYSTICK = 1;
 
 	// NAVx stuff
 	public static final double OPTIMAL_TURNT_SPEED = 1;	

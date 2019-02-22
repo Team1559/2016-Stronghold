@@ -1,4 +1,7 @@
-package org.usfirst.frc.team1559.robot;
+package org.usfirst.frc.team1559.robot.subsystems;
+
+import org.usfirst.frc.team1559.robot.SwoodServo;
+import org.usfirst.frc.team1559.robot.Wiring;
 
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.Servo;
